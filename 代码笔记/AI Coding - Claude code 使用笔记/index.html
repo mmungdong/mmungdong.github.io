@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Claude Code 概述 - Claude Code Docs  1. 安装1.1. 下载1npm install -g @anthropic-ai&#x2F;claude-code  1.2. 配置 配置参考：Claude Code 设置 - Claude Code Docs  以 wsl 为例，在 ~&#x2F;.bashrc 中添加如下配置即可： 12345678# claude code# 设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI Coding - Claude code 使用笔记">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/AI%20Coding%20-%20Claude%20code%20%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="Claude Code 概述 - Claude Code Docs  1. 安装1.1. 下载1npm install -g @anthropic-ai&#x2F;claude-code  1.2. 配置 配置参考：Claude Code 设置 - Claude Code Docs  以 wsl 为例，在 ~&#x2F;.bashrc 中添加如下配置即可： 12345678# claude code# 设">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20251209231429114.png?imageSlim">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20251209231549393.png?imageSlim">
+<meta property="article:published_time" content="2025-11-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.079Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="VibeCoding">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20251209231429114.png?imageSlim">
+  
+  
+  
+  <title>AI Coding - Claude code 使用笔记 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AI Coding - Claude code 使用笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-11 00:00" pubdate>
+          2025年11月11日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AI Coding - Claude code 使用笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN">Claude Code 概述 - Claude Code Docs</a></p>
+</blockquote>
+<h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h1><h2 id="1-1-下载"><a href="#1-1-下载" class="headerlink" title="1.1. 下载"></a>1.1. 下载</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm install -g @anthropic-ai/claude-code<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-2-配置"><a href="#1-2-配置" class="headerlink" title="1.2. 配置"></a>1.2. 配置</h2><blockquote>
+<p>配置参考：<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/settings">Claude Code 设置 - Claude Code Docs</a></p>
+</blockquote>
+<p>以 wsl 为例，在 ~&#x2F;.bashrc 中添加如下配置即可：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">claude code</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">设置权限跳过模式，核心作用是绕过代码执行前的权限校验环节</span><br>alias claude=&#x27;claude --dangerously-skip-permissions&#x27;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">百炼 API EP</span><br>export ANTHROPIC_BASE_URL=https://dashscope.aliyuncs.com/apps/anthropic<br>export ANTHROPIC_AUTH_TOKEN=sk-**************<br><span class="hljs-meta prompt_"># </span><span class="language-bash">model <span class="hljs-built_in">id</span></span><br>export ANTHROPIC_MODEL=qwen3-coder-plus<br></code></pre></td></tr></table></figure>
+
+<p>vscode 中的 Claude Code for VS Code 插件配置：</p>
+<p>打开下面3个配置：</p>
+<ol>
+<li>保证 vscode 可以设置权限跳过模式</li>
+</ol>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20251209231429114.png?imageSlim" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<ol start="2">
+<li>初始化时使用权限跳过模式，Claude Code 在控制台中开启</li>
+</ol>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20251209231549393.png?imageSlim" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="1-3-使用-zcf-来配置-Claude-Code"><a href="#1-3-使用-zcf-来配置-Claude-Code" class="headerlink" title="1.3. 使用 zcf 来配置 Claude Code"></a>1.3. 使用 zcf 来配置 Claude Code</h2><blockquote>
+<p>🔗 <a target="_blank" rel="noopener" href="https://github.com/UfoMiao/zcf">GitHub - UfoMiao&#x2F;zcf: Zero-Config Code Flow for Claude code &amp; Codex</a><br>🔗 <a target="_blank" rel="noopener" href="https://zcf.ufomiao.com/zh-CN/">ZCF - Zero-Config Code Flow | ZCF</a></p>
+</blockquote>
+<p>前提：需要本地安装 node 环境</p>
+<p>快速启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npx zcf<br></code></pre></td></tr></table></figure>
+
+<p>会出现如下提示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs bash">[mungdong@dev ~]$ npx zcf<br>Need to install the following packages:<br>zcf@3.4.2<br>Ok to proceed? (y) y<br><br>✔ Select ZCF display language / 选择ZCF显示语言 1. 简体中文<br><br>╔════════════════════════════════════════════════════════════════╗<br>║                                                                ║<br>║   ███████╗  ██████╗ ███████╗                                   ║<br>║       ██╔╝  ██╔═══╝  ██╔═══╝                                   ║<br>║      ██╔╝   ██║      █████╗                                    ║<br>║    ██╔╝     ██║      ██╔══╝                                    ║<br>║   ███████╗  ╚██████╗ ██║                                       ║<br>║   ╚══════╝   ╚═════╝ ╚═╝        <span class="hljs-keyword">for</span> Claude Code                ║<br>║                                                                ║<br>║   Zero-Config Code Flow                                        ║<br>║                                                                ║<br>╚════════════════════════════════════════════════════════════════╝<br><br>  Version: 3.4.2  |  https://github.com/UfoMiao/zcf<br><br>请选择功能<br>  -------- Claude Code --------<br>  1. 完整初始化 - 安装 Claude Code + 导入工作流 + 配置 API 或 CCR 代理 + 配置 MCP 服务<br>  2. 导入工作流 - 仅导入/更新工作流相关文件<br>  3. 配置 API 或 CCR 代理 - 配置 API URL、认证信息或 CCR 代理<br>  4. 配置 MCP - 配置 MCP 服务（含 Windows 修复）<br>  5. 配置默认模型 - 设置默认模型（opus/sonnet/sonnet 1m/自定义）<br>  6. 配置 Claude 全局记忆 - 配置 AI 输出语言和输出风格<br>  7. 导入推荐环境变量和权限配置 - 导入隐私保护环境变量和系统权限配置<br><br>  --------- 其他工具 ----------<br>  R. CCR - 配置 Claude Code Router 以使用多个 AI 模型<br>  U. ccusage - Claude Code 用量分析<br>  L. CCometixLine - 基于 Rust 的高性能 Claude Code 状态栏工具，集成 Git 信息和实时使用量跟踪<br><br>  ------------ ZCF ------------<br>  8. 更改显示语言 / Select display language - 更改 ZCF 界面语言<br>  S. 切换代码工具 - 在支持的代码工具之间切换 (Claude Code, Codex)<br>  -. 卸载和删除配置 - 从系统中删除 Claude Code 配置和工具<br>  +. 检查更新 - 检查并更新 Claude Code、CCR 和 CCometixLine 的版本<br>  Q. 退出<br></code></pre></td></tr></table></figure>
+
+<p>如果是第一次使用选择 1 进行完整初始化，否则根据自己需要修改配置即可，它会帮助我们初始化好本地所有的 Claude Code 环境，而且会带有一些工作流以及 git worktree 的使用方法，相对来说还是挺不错的。具体可以查看官网，不做赘述。（注意选择 中文 时会耗费更多的 token）</p>
+<h2 id="1-4-基本使用常见命令"><a href="#1-4-基本使用常见命令" class="headerlink" title="1.4. 基本使用常见命令"></a>1.4. 基本使用常见命令</h2><ul>
+<li><p>&#x2F;resume ： 查看历史对话记录，选中后继续对话</p>
+</li>
+<li><p>&#x2F;context ： 输出当前会话的上下文长度，过长的话需要清理后再使用，否则会导致 Claude 出现幻觉，或者可以尝试清理掉不常用的 mcp</p>
+</li>
+<li><p>&#x2F;clear : 清理当前会话的上下文</p>
+</li>
+<li><p>&#x2F;stats : 可以查看用了多少 token</p>
+</li>
+<li><p>双击 ESC 键：当代码被 C C 在某次对话中改错的时候，可以双击 esc ，然后选择对应的对话记录，选择重新存储对应对话的代码记录即可</p>
+</li>
+<li><p>UltraThink 关键字：当设计某个复杂任务的时候，可以试试在提示词中加上 UltraThink 关键字，会消耗更多的 token 和时间，但是代码质量会得到提升</p>
+</li>
+<li><p>ctrl + s : 暂存提示词，它会自动保存提示词，当你在对话输入新的提示词并提交后，你保存的提示词会自动填充到对话框中，什么时候用：写长提示词时突然想起其他事，需要先查看某个文件再继续，临时被打断但不想丢失思路</p>
+</li>
+<li><p>&#x2F;export [文件名] ： 导出本次的精彩会话到指定文件中（这里的文件名不用写后缀，默认是txt 文件）</p>
+</li>
+</ul>
+<h1 id="2-插件配合-Claude-code-开发探索"><a href="#2-插件配合-Claude-code-开发探索" class="headerlink" title="2. 插件配合 Claude code 开发探索"></a>2. 插件配合 Claude code 开发探索</h1><h2 id="2-1-Claude-Code-SubAgents"><a href="#2-1-Claude-Code-SubAgents" class="headerlink" title="2.1. Claude Code SubAgents"></a>2.1. Claude Code SubAgents</h2><h3 id="2-1-1-github-com-wshobson-agents"><a href="#2-1-1-github-com-wshobson-agents" class="headerlink" title="2.1.1. github.com&#x2F;wshobson&#x2F;agents"></a>2.1.1. github.com&#x2F;wshobson&#x2F;agents</h3><blockquote>
+<p> 73个专家智能体让vibe coding效率翻倍</p>
+</blockquote>
+<p>在 Claude Code 对话框中安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">/plugin marketplace add wshobson/agents<br></code></pre></td></tr></table></figure>
+
+<p>或者直接用这个 prompt 让 Claude Code 帮助我们安装：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">https://github.com/wshobson/agents 把这些Agents 全部安装到我的 ClaudeCode CLI里, 跳过重复的。<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="2-2-自动化工作流"><a href="#2-2-自动化工作流" class="headerlink" title="2.2. 自动化工作流"></a>2.2. 自动化工作流</h2><h3 id="2-2-1-github-com-eyaltoledano-claude-task-master"><a href="#2-2-1-github-com-eyaltoledano-claude-task-master" class="headerlink" title="2.2.1. github.com&#x2F;eyaltoledano&#x2F;claude-task-master"></a>2.2.1. github.com&#x2F;eyaltoledano&#x2F;claude-task-master</h3><blockquote>
+<p>一个面向使用 Claude 进行人工智能驱动开发的任务管理系统，旨在与 Cursor AI 无缝协作。</p>
+</blockquote>
+<p>提示词（这里是直接把 agent 的权限下放给 Claude Code，让其充分使用）：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">用尽量多的agent 检查我们的项目,只检查,不修改代码。<br></code></pre></td></tr></table></figure>
+
+<p>TODO 需要整理自动化工作流相关的知识 github.com&#x2F;eyaltoledano&#x2F;claude-task-master</p>
+<h1 id="3-有了上述技能，我们应该如何使用-Claude-Code"><a href="#3-有了上述技能，我们应该如何使用-Claude-Code" class="headerlink" title="3. 有了上述技能，我们应该如何使用 Claude Code"></a>3. 有了上述技能，我们应该如何使用 Claude Code</h1><p>TODO</p>
+<h1 id="TODO-待归类"><a href="#TODO-待归类" class="headerlink" title="TODO 待归类"></a>TODO 待归类</h1><h2 id="2-1-2-OpenSpec"><a href="#2-1-2-OpenSpec" class="headerlink" title="2.1.2 OpenSpec"></a>2.1.2 OpenSpec</h2><blockquote>
+<p>项目地址： <a target="_blank" rel="noopener" href="https://github.com/Fission-AI/OpenSpec">GitHub - Fission-AI&#x2F;OpenSpec: Spec-driven development for AI coding assistants.</a></p>
+</blockquote>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://openspec.dev/">OpenSpec — A lightweight spec‑driven framework</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.chensoul.cc/posts/2025/11/07/openspec/">OpenSpec：让 AI 编码助手更懂你的项目规范 - Java、Spring、Spring Boot、MicroServices、Architecture、Kubernetes、DevOps</a></li>
+</ul>
+<h3 id="2-1-1-安装-OpenSpec"><a href="#2-1-1-安装-OpenSpec" class="headerlink" title="2.1.1 安装 OpenSpec"></a>2.1.1 安装 OpenSpec</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install -g @fission-ai/openspec@latest<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-1-2-OpenSpec-使用"><a href="#2-1-2-OpenSpec-使用" class="headerlink" title="2.1.2 OpenSpec 使用"></a>2.1.2 OpenSpec 使用</h3><ol>
+<li>进入到项目下，使用 OpenSpec 初始化项目：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># cd /path/to/your-project</span><br>openspec init<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>初始化过程中会发生什么：</strong></p>
+<ol>
+<li>提示你选择使用的 AI 工具（选择 Claude Code）</li>
+<li>自动配置 Claude Code 的斜杠命令（slash commands）</li>
+<li>在项目根目录创建 <code>AGENTS.md</code> 文件</li>
+<li>创建 <code>openspec/</code> 目录结构</li>
+</ol>
+</blockquote>
+<ol start="2">
+<li>填充项目信息，对于 OpenSpec 来说，所有的项目信息都保存在 <code>openspec/project.md</code> 下，这里使用 Claude Code 填充下项目要信息，提示词如下：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">请阅读 openspec/project.md 文件，帮我填写项目的技术栈、架构模式和编码规范<br></code></pre></td></tr></table></figure>
+
+<p>Claude Code 会分析你的项目并生成类似这样的内容：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># Project Context</span><br><br><span class="hljs-section">## Tech Stack</span><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**Backend**</span>: Node.js 18, Express.js<br><span class="hljs-bullet">-</span> <span class="hljs-strong">**Database**</span>: PostgreSQL 14<br><span class="hljs-bullet">-</span> <span class="hljs-strong">**Frontend**</span>: React 18, TypeScript<br><span class="hljs-bullet">-</span> <span class="hljs-strong">**Authentication**</span>: JWT, bcrypt<br><span class="hljs-bullet">-</span> <span class="hljs-strong">**Testing**</span>: Jest, Supertest<br><br><span class="hljs-section">## Architecture Patterns</span><br><span class="hljs-bullet">-</span> RESTful API design<br><span class="hljs-bullet">-</span> MVC pattern<br><span class="hljs-bullet">-</span> Repository pattern for data access<br><span class="hljs-bullet">-</span> Middleware-based request processing<br><br><span class="hljs-section">## Coding Conventions</span><br><span class="hljs-bullet">-</span> Use TypeScript for type safety<br><span class="hljs-bullet">-</span> Follow Airbnb JavaScript style guide<br><span class="hljs-bullet">-</span> Use async/await for asynchronous operations<br><span class="hljs-bullet">-</span> Comprehensive error handling with custom error classes<br><span class="hljs-bullet">-</span> Write unit tests for all business logic<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>需求开发示例：</li>
+</ol>
+<p>在开发需求前，先补充说明下 OpenSpec 为 Claude Code 都安装了哪些插件功能：</p>
+<blockquote>
+<p>&#x2F;openspec:proposal     Scaffold a new OpenSpec change and validate strictly. (project) [搭建一个新的 OpenSpec 变更并进行严格验证]<br>&#x2F;openspec:archive      Archive a deployed OpenSpec change and update specs. (project) [归档已部署的 OpenSpec 变更并更新规范]<br>&#x2F;openspec:apply        Implement an approved OpenSpec change and keep tasks in sync. (project) [实施已批准的 OpenSpec 变更并保持任务同步]</p>
+</blockquote>
+<p>TODO</p>
+<h2 id="2-2-superpowers-使用-Claude-Code-进行测试驱动开发"><a href="#2-2-superpowers-使用-Claude-Code-进行测试驱动开发" class="headerlink" title="2.2. superpowers - 使用 Claude Code 进行测试驱动开发"></a>2.2. superpowers - 使用 Claude Code 进行测试驱动开发</h2><blockquote>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/obra/superpowers">GitHub - obra&#x2F;superpowers: Claude Code superpowers: core skills library</a></p>
+</blockquote>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://www.badagi.org/posts/claude-code-17-awesome-open-source-projects">我花2天整理了GitHub上17个Claude Code优秀开源项目 | BadAGI.org</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.badagi.org/posts/claude-code-subagents-production-ready">生产级Claude Code SubAgents：73个专家智能体让vibe coding效率翻倍 | BadAGI.org</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/VibeCoding/" class="print-no-link">#VibeCoding</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AI Coding - Claude code 使用笔记</div>
+      <div>https://yangfanbin.cn/代码笔记/AI Coding - Claude code 使用笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/Redis%20%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86/" title="Redis 面试题整理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis 面试题整理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/AI%20Coding%20-%20codex%20%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="AI Coding - codex 使用指南">
+                        <span class="hidden-mobile">AI Coding - codex 使用指南</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

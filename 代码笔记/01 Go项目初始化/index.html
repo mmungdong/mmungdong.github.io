@@ -1,0 +1,802 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="📝 主旨内容 项目初始化的几种方式 初始化项目仓库 使用 Air 工具热加载 go 应用 添加版权声明文件 license 编写 Makefile 脚本  1. 项目初始化的几种方式Go 项目开发的第一步是初始化一个 Go 项目仓库。根据开发能力、项目类别、项目需求等，可以选择不同的项目初始化方式。一般而言有以下几种项目初始化方式，具体如下表所示。         初始化方式 方式描述   生成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01 Go项目初始化">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/01%20Go%E9%A1%B9%E7%9B%AE%E5%88%9D%E5%A7%8B%E5%8C%96/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="📝 主旨内容 项目初始化的几种方式 初始化项目仓库 使用 Air 工具热加载 go 应用 添加版权声明文件 license 编写 Makefile 脚本  1. 项目初始化的几种方式Go 项目开发的第一步是初始化一个 Go 项目仓库。根据开发能力、项目类别、项目需求等，可以选择不同的项目初始化方式。一般而言有以下几种项目初始化方式，具体如下表所示。         初始化方式 方式描述   生成">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628020649416.png">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628020718129.png">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628020813503.png">
+<meta property="article:published_time" content="2025-08-07T17:08:48.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.078Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="miniblog">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628020649416.png">
+  
+  
+  
+  <title>01 Go项目初始化 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="01 Go项目初始化"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-08-08 01:08" pubdate>
+          2025年8月8日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">01 Go项目初始化</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="📝-主旨内容"><a href="#📝-主旨内容" class="headerlink" title="📝 主旨内容"></a>📝 主旨内容</h1><ul>
+<li>项目初始化的几种方式</li>
+<li>初始化项目仓库</li>
+<li>使用 Air 工具热加载 go 应用</li>
+<li>添加版权声明文件 license</li>
+<li>编写 Makefile 脚本</li>
+</ul>
+<h1 id="1-项目初始化的几种方式"><a href="#1-项目初始化的几种方式" class="headerlink" title="1. 项目初始化的几种方式"></a>1. 项目初始化的几种方式</h1><p>Go 项目开发的第一步是初始化一个 Go 项目仓库。根据开发能力、项目类别、项目需求等，可以选择不同的项目初始化方式。一般而言有以下几种项目初始化方式，具体如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>初始化方式</strong></td>
+<td><strong>方式描述</strong></td>
+</tr>
+<tr>
+<td>生成工具</td>
+<td>借助项目开发脚手架自动生成项目模版，例如 kratos、nirvana、kubebuilder、osctl 等工具</td>
+</tr>
+<tr>
+<td>复制已有项目</td>
+<td>复制一个可以满足功能需求的现有项目，然后重命名项目目录并修改 Go 包导入路径，最后基于修改后的源代码进行开发</td>
+</tr>
+<tr>
+<td>从零初始化</td>
+<td>从头初始化一个 Go 项目，包括设计目录结构、代码结构以及进行源代码开发</td>
+</tr>
+</tbody></table>
+<h2 id="1-1-生成工具"><a href="#1-1-生成工具" class="headerlink" title="1.1 生成工具"></a>1.1 生成工具</h2><p>初始化 Go 项目最简单的方法是使用工具进行初始化。通过这些脚手架工具，可以快速生成一个 Go 项目模板，并基于该模板进行开发。目前业界有许多项目生成工具，如 osctl、kratos、nirvana、sponge 等。使用这些工具初始化 Go 项目的最大优点是方便、快捷，且能生成相对高质量的项目模板。然而，缺点也很明显：生成的项目模板的代码质量、目录结构、代码架构、功能列表及构建方式均依赖于工具本身的实现。</p>
+<p>本课程介绍的 miniblog 项目也有其匹配的项目生成工具 osctl。该工具可以生成与 miniblog 项目一致的代码，从代码质量、目录结构、简洁架构、设计思路到可选的功能列表，都与 miniblog 保持一致。</p>
+<h2 id="1-2-复制已有项目"><a href="#1-2-复制已有项目" class="headerlink" title="1.2 复制已有项目"></a>1.2 复制已有项目</h2><p>除了使用脚手架工具快速生成 Go 模板项目外，还可以直接复制一个已有的 Go 项目，然后修改项目的仓库名和 Go 包导入路径，替换与原项目名相关的字符串等方式来初始化一个 Go 项目。这种方式的<strong>缺点是改造工作量较大</strong>。<strong>优点是非常灵活</strong>，可以根据需求选择喜欢的 Go 项目，魔改之后，形成自己的 Go 项目。</p>
+<p>后面如果在开发一个新单体项目时，可以选择直接通过魔改 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog">miniblog</a> 来进行二开。</p>
+<p>如果项目复杂度过高，可以选择魔改 <a target="_blank" rel="noopener" href="https://github.com/onexstack/onex">onex</a> 项目来进行二开。</p>
+<p>魔改已有项目为一个新项目时，可以使用 Linux 命令批量修改，修改命令通常如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs Shell">cp -a miniblog myproj &amp;&amp; cd myproj # 复制 miniblog 项目为新的项目名：myproj<br><span class="hljs-meta prompt_"># </span><span class="language-bash">替换 Go 包导入路径</span><br>sed -i &#x27;s/github.com\/onexstack\/miniblog/github.com\/onexstack\/myproj/g&#x27; `grep -Rl github.com/onexstack/miniblog *`<br>sed -i &#x27;s/MiniBlog/MyProj/g&#x27; `grep -Rl MiniBlog *` # 替换大写的原项目标识符<br>sed -i &#x27;s/miniblog/myproj/g&#x27; `grep -Rl miniblog *` # 替换所有的 miniblog 项目标识符<br><span class="hljs-meta prompt_"># </span><span class="language-bash">查找并将 miniblog 目录改成新的项目名 myproj</span><br>find . -type d -name &#x27;miniblog&#x27; -execdir mv &#123;&#125; myproj \;<br>make build<br></code></pre></td></tr></table></figure>
+
+<p><strong>注： 代码中 myproj 需要替换为新项目名</strong></p>
+<h2 id="1-3-从零开发"><a href="#1-3-从零开发" class="headerlink" title="1.3 从零开发"></a>1.3 <strong>从零开发</strong></h2><p>还可以选择从零初始化一个 Go 项目。这种方式最大的缺点是工作量很大，项目目录结构、项目源码、项目代码结构等都需要从零设计并开发。但优点也很明显，可以完全根据自己的需求来设计和开发。</p>
+<blockquote>
+<p>[!important]</p>
+<h3 id="选择合适的项目初始化方法"><a href="#选择合适的项目初始化方法" class="headerlink" title="选择合适的项目初始化方法"></a>选择合适的项目初始化方法</h3><p>在实际开发中，可以根据需要选择合适的项目初始化方法。如果脚手架工具生成的代码，在目录结构设计、开发风格、代码质量、架构设计、功能列表等方面能够满足你的需求，则可以优先考虑使用工具来快速初始化 Go 项目。如果工具不能满足需求，建议基于一个优秀的 Go 项目进行魔改，例如，可以魔改 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog">https://github.com/onexstack/miniblog</a> 项目为一个新的项目。</p>
+</blockquote>
+<h1 id="2-初始化项目仓库"><a href="#2-初始化项目仓库" class="headerlink" title="2. 初始化项目仓库"></a>2. 初始化项目仓库</h1><h2 id="2-1-创建项目目录并添加-README-文件"><a href="#2-1-创建项目目录并添加-README-文件" class="headerlink" title="2.1 创建项目目录并添加 README 文件"></a>2.1 创建项目目录并添加 README 文件</h2><p>在开始初始化项目之前，需先设计好项目的名称。一个简洁、易懂且合适的项目名是开发高质量 Go 项目的第一步。通常，需要提前确认以下名称：</p>
+<ul>
+<li>**项目名称：**项目名要具有一定语义，说明该项目的功能，建议的格式为&#x3D;&#x3D;<strong>纯小写的精短名字</strong>&#x3D;&#x3D;。如果项目名字过长，可以按单词用中杠线（-）分割，但最好不要使用。以下是一些合格的名字：api、controllermanager、controller-manager。不建议命名为：controller_manager；</li>
+<li>**项目名称大小写：**还需确认项目名在代码中的大小写格式。统一大小写格式可以使整个代码命名格式保持统一。例如：controller-manager&#x2F;controllermanager 项目的小写格式为 controllermanager，大写格式为 ControllerManager；</li>
+<li>**项目名简写格式：**有些项目名出于易读性考虑，可能会较长。在编写代码时，<strong>如果引用了项目名，可能会导致代码行过长，为了使代码行简短易读，通常会采用简写模式</strong>。带中杠线分割的项目名的简短模式一般为每个单词的首字母，例如：controller-manager 为 cm。不带中杠线分割的项目名简写模式需要根据具体名字确定，且没有统一的命名规则，例如：controller 可以简写为 ctrl。</li>
+</ul>
+<p>通过执行以下命令来创建目录，并在项目目录中添加一个 README.md 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Shell">mkdir -p $GOPATH/src/github.com/onexstack/miniblog<br>cd $GOPATH/src/github.com/onexstack/miniblog<br>echo &#x27;## miniblog 项目&#x27; &gt;&gt; README.md<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>提示：<br>可以使用 <a target="_blank" rel="noopener" href="https://readme.so/">https://readme.so</a> 工具来协助生成 README 文件，通常 README 文件需要包含以下部分：Features、Installation、Usage&#x2F;Examples、Documentation、Feedback、Contributing、Authors、License、Related。</p>
+</blockquote>
+<h2 id="2-2-初始化目录为-Go-模块"><a href="#2-2-初始化目录为-Go-模块" class="headerlink" title="2.2 初始化目录为 Go 模块"></a>2.2 <strong>初始化目录为 Go 模块</strong></h2><p>miniblog 是一个 Go 项目，根据 Go 语法要求，还需要将该项目初始化为一个 Go 模块，并添加到 Go 工作区中。初始化命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Shell">go mod init # 初始化当前项目为一个 Go 模块<br>go work init . # 初始化当前目录为一个 Go 工作区<br>go work use . # 添加当前模块到 Go 工作区<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-3-初始化目录为-Git-仓库"><a href="#2-3-初始化目录为-Git-仓库" class="headerlink" title="2.3 初始化目录为 Git 仓库"></a>2.3 <strong>初始化目录为 Git 仓库</strong></h2><p>当前项目开发基本上都是使用 Git 来管理项目源码，因此，还需要将项目仓库初始化为一个 Git 仓库。</p>
+<p>在提交代码时，有些文件，例如备份文件、临时文件和日志文件不需要提交到项目仓库中，可以通过在项目目录下添加 .gitignore 文件来忽略这些文件。如果你不知道如何配置 .gitignore 文件中的内容，可以借助 .gitignore 文件生成工具来自动生成一个可用的 .gitignore 文件，例如 <a target="_blank" rel="noopener" href="https://www.toptal.com/developers/gitignore/">gitignore.io</a> 就是一个很好用的 .gitignore 文件生成工具。miniblog 项目使用的 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s01/.gitignore">.gitignore</a> 文件如下述代码所示。</p>
+<p>可以执行以下命令将 Go 项目仓库初始化为一个 Git 仓库：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs Shell">git init # 初始化当前目录为 Git 仓库<br>git config user.name mungdong# 设置仓库级别用户名<br>git config user.email 510195171@qq.com # 设置仓库级别邮箱<br>git config --global credential.helper store # 永久保存凭据<br>git add . # 添加所有被 Git 追踪的文件到暂存区<br>git remote add origin https://github.com/mmungdong/miniblog.git # 将本地仓库与远程仓库相关联<br>git commit -m &quot;feat: 第一次提交&quot; # 将暂存区内容添加到本地仓库中<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-4-创建需要的目录"><a href="#2-4-创建需要的目录" class="headerlink" title="2.4 创建需要的目录"></a>2.4 创建需要的目录</h2><p>初始化代码仓库后，我们可以根据前面设计的目录规范创建一些空目录，例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Shell">mkdir -p cmd configs docs scripts<br>ls -F<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628020649416.png" srcset="/img/loading.gif" lazyload></p>
+<p>提前创建符合目录规范的空目录，可以带来以下好处：</p>
+<ol>
+<li>提前规划目录相当于提前规划未来的功能，将未来要实现的功能以目录形式固化在项目仓库中，起到记录作用；</li>
+<li>有利于后续文件按照功能存放在预先规划好的目录中，使项目更加规范。否则，不同开发者可能会根据各自的开发习惯，创建各种各样的目录结构和命名。</li>
+</ol>
+<p>例如，可以将之前设计好的规范存放在 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/tree/master/docs/devel/zh-CN/conversions">docs&#x2F;devel&#x2F;zh-CN&#x2F;conversions</a> 目录中。由于 Git 不追踪空目录，为了让 Git 追踪空目录，我们可以在空目录下创建一个空文件 .keep，并在适当的时候执行以下命令删除这些临时文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Shell">find . -name .keep | xargs -i rm &#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>[!important]</p>
+<h3 id="命令拆解与作用"><a href="#命令拆解与作用" class="headerlink" title="命令拆解与作用"></a><strong>命令拆解与作用</strong></h3><ul>
+<li><code>**find . -name .keep**</code>：<ul>
+<li><code>find</code> 是用于查找文件和目录的命令，<code>.</code> 表示从当前目录开始搜索（也可替换为具体路径，如 <code>/home/user/project</code> ）。</li>
+<li><code>name .keep</code> 是按名称筛选，只找名为 <code>.keep</code> 的文件 &#x2F; 目录（这类文件常作为占位符，让 Git 等版本控制保留空目录 ）。</li>
+</ul>
+</li>
+<li><code>**xargs -i rm &#123;&#125;**</code>：<ul>
+<li><code>xargs</code> 把前一个命令（<code>find</code>）的输出，转成后续命令（<code>rm</code>）的参数。</li>
+<li><code>i</code> 是 <code>xargs</code> 的选项，让 <code>&#123;&#125;</code> 作为占位符，指代 <code>find</code> 找到的每个 <code>.keep</code> 文件路径。</li>
+<li><code>rm &#123;&#125;</code> 就是删除这些 <code>.keep</code> 文件，<code>&#123;&#125;</code> 会被实际路径替换，实现逐个删除。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>miniblog 项目的完整目录结构说明见 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/master/docs/devel/zh-CN/directory.md">docs&#x2F;devel&#x2F;zh-CN&#x2F;directory.md</a> 文件。</p>
+<h2 id="2-5-创建-Hello-World-程序并编译二进制文件"><a href="#2-5-创建-Hello-World-程序并编译二进制文件" class="headerlink" title="2.5 创建 Hello World 程序并编译二进制文件"></a>2.5 创建 Hello World 程序并编译二进制文件</h2><p>一个全新的项目，需要先编写一个最简单的 Hello World 程序，以检查开发和编译环境是否就绪。根据目录规范，需要在 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/tree/feature/s01/cmd/mb-apiserver">cmd&#x2F;mb-apiserver</a> 目录下创建 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s01/cmd/mb-apiserver/main.go">main.go</a> 文件，内容如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">package</span> main<br> <br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span><br> <br><span class="hljs-comment">// Go 程序的默认入口函数。阅读项目代码的入口函数.</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;Hello World!&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>执行以下命令编译并运行此 Hello World 程序：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs Shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">gofmt 用来格式化当前目录及其子目录中的所有 Go 源文件</span><br>gofmt -s -w ./<br><span class="hljs-meta prompt_"># </span><span class="language-bash">go build 命令用来编译Go源码</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">-o 指定输出的可执行文件名称</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">-v 选项用于显示详细的编译过程信息</span><br>go build -o _output/mb-apiserver -v cmd/mb-apiserver/main.go<br><span class="hljs-meta prompt_"># </span><span class="language-bash">运行编译生成的可执行文件</span><br>_output/mb-apiserver<br><span class="hljs-meta prompt_"># </span><span class="language-bash">输出： Hello World!</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628020718129.png" srcset="/img/loading.gif" lazyload></p>
+<p>编译 success ~~~</p>
+<p>main 文件所在的目录 mb-apiserver 也是 miniblog APIServer 的组件名。<strong>在 Go 项目开发中，通常在组件名中包含项目的简写前缀 mb-，通过 mb- 前缀，可以很容易地辨别该组件是 miniblog 的 APIServer 组件。此外，通过 mb- 前缀，也可以有效避免组件名与其他项目的组件名发生冲突。</strong></p>
+<h1 id="3-使用-Air-工具热加载-go-应用"><a href="#3-使用-Air-工具热加载-go-应用" class="headerlink" title="3. 使用 Air 工具热加载 go 应用"></a>3. 使用 Air 工具热加载 go 应用</h1><ul>
+<li>在 Go 项目开发过程中，经常需要修改代码、编译代码、重新启动程序，然后测试程序。若每次都手动操作，则效率较低。此时，可以借助程序热加载工具来自动编译并重启程序。在 Go 生态中，有许多此类工具，其中较为流行的是 <a target="_blank" rel="noopener" href="https://github.com/air-verse/air">Air</a> 工具。你可以直接参考 <a target="_blank" rel="noopener" href="https://github.com/air-verse/air/blob/master/README-zh_cn.md">Air 官方文档</a>了解如何使用 Air 工具。</li>
+</ul>
+<p>以下是安装和配置 Air 工具的步骤：</p>
+<ol>
+<li><strong>安装 Air 工具</strong></li>
+</ol>
+<p>安装命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Shell">go install github.com/air-verse/air@latest<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>配置 Air 工具</strong></li>
+</ol>
+<p>这里我们使用 Air 官方仓库中给出的示例配置：<a target="_blank" rel="noopener" href="https://github.com/air-verse/air/blob/master/air_example.toml">air_example.toml</a>。air_example.toml 中的示例配置基本能满足绝大部分项目需求，一般只需再配置 cmd、bin、args_bin 三个参数即可。</p>
+<p>在 miniblog 项目根目录下创建 .air.toml 文件，文件内容见 miniblog 仓库 feature&#x2F;s01 分支下的 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s01/.air.toml">.air.toml</a> 文件。.air.toml 基于 air_example.toml 文件修改了以下参数配置：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs TOML"><span class="hljs-comment"># air在运行时存储临时文件的目录</span><br><span class="hljs-attr">tmp_dir</span> = <span class="hljs-string">&quot;/tmp/air&quot;</span><br> <br><span class="hljs-section">[build]</span><br><span class="hljs-comment"># cmd 指定了监听文件有变化时，air 需要执行的命令。</span><br><span class="hljs-comment"># 这里指定了执行 make build 重新构建 mb-apiserver 二进制文件</span><br><span class="hljs-attr">cmd</span> = <span class="hljs-string">&quot;go build -o _output/mb-apiserver -v cmd/mb-apiserver/main.go&quot;</span> <br><span class="hljs-comment"># bin 指定了执行完 cmd 命令后，执行的二进制文件。</span><br><span class="hljs-comment"># 这里指定了执行 _output/ mb-apiserver 文件</span><br><span class="hljs-attr">bin</span> = <span class="hljs-string">&quot;_output/mb-apiserver&quot;</span><br><span class="hljs-comment"># args_bin 指定了运行二进制文件（bin/full_bin）时添加额外参数，这里设置为空</span><br><span class="hljs-attr">args_bin</span> = []<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>启动 Air 工具</strong></li>
+</ol>
+<p>配置完成后，在项目根目录下运行 air 命令:</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs TOML"><span class="hljs-comment"># 默认使用当前目录下的 .air.toml 配置，你可以通过 `-c` 选项指定配置，例如：`air -c .air.toml`</span><br>air<br></code></pre></td></tr></table></figure>
+
+<h1 id="4-添加版权声明文件-LICENSE-和版本声明"><a href="#4-添加版权声明文件-LICENSE-和版本声明" class="headerlink" title="4. 添加版权声明文件 LICENSE 和版本声明"></a>4. 添加版权声明文件 LICENSE 和版本声明</h1><p>如果项目是一个开源项目或计划在未来开源，则需要为项目添加版权声明，主要包括以下内容：</p>
+<ol>
+<li>存放在项目根目录下的 LICENSE 文件，用于声明项目所遵循的开源协议；</li>
+<li>项目源文件中的版权头信息，用于说明文件所遵循的开源协议。</li>
+</ol>
+<p>业界当前有上百种开源协议可供选择，常用的有六种，按从严格到宽松的顺序依次为：GPL、MPL、LGPL、Apache、BSD、MIT。</p>
+<p>miniblog 项目使用了最宽松的 <strong>MIT</strong> 协议。</p>
+<h2 id="4-1-miniblog-添加-LICENSE-文件"><a href="#4-1-miniblog-添加-LICENSE-文件" class="headerlink" title="4.1 miniblog 添加 LICENSE 文件"></a>4.1 miniblog 添加 LICENSE 文件</h2><p>一般项目的根目录下会存放一个 LICENSE 文件，用于声明开源项目所遵循的协议，因此我们也需要为 miniblog 初始化一个 LICENSE 文件。我们可以使用 license 工具来生成 LICENSE 文件，具体操作命令如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">go</span> install github.com/nishanths/license/v5@latest<br>license -list # 查看支持的代码协议<br># 在 miniblog 项目根目录下执行<br>license -n <span class="hljs-string">&#x27;mmungdong(懵懂) &lt;510195171@qq.com&gt;&#x27;</span> -o LICENSE mit<br></code></pre></td></tr></table></figure>
+
+<p>上述命令将在当前目录下生成一个名为 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s01/LICENSE">LICENSE</a> 的文件，该文件包含 MIT 开源协议声明。</p>
+<h2 id="4-2-给源文件添加版本声明"><a href="#4-2-给源文件添加版本声明" class="headerlink" title="4.2 给源文件添加版本声明"></a>4.2 给源文件添加版本声明</h2><p>除了添加整个项目的开源协议声明，还可以为每个源文件添加版权头信息，以声明文件所遵循的开源协议。miniblog 的版权头信息保存在 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s01/scripts/boilerplate.txt">scripts&#x2F;boilerplate.txt</a> 文件中。</p>
+<blockquote>
+<p>提示：<br>版权头信息保存的文件名，通常命名为 boilerplate。</p>
+</blockquote>
+<p>有了版权头信息，在新建文件时需要将这些信息放在文件头中。如果手动添加，不仅容易出错，还容易遗漏文件。最好的方法是通过自动化手段追加版权头信息。追加方法如下。</p>
+<ol>
+<li><strong>安装 addlicense 工具</strong></li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">go</span> install github.com/marmotedu/addlicense@latest<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>运行 addlicense 工具添加版权头信息</strong></li>
+</ol>
+<p>运行以下命令添加版权头信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Shell">addlicense -v -f ./scripts/boilerplate.txt --skip-dirs=third_party,_output .<br></code></pre></td></tr></table></figure>
+
+<p>可以看到 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s01/cmd/mb-apiserver/main.go#L1">main.go</a> 文件已经添加了版权头信息，内容如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-comment">// Copyright 2024 孔令飞 &lt;colin404@foxmail.com&gt;. All rights reserved.</span><br><span class="hljs-comment">// Use of this source code is governed by a MIT style</span><br><span class="hljs-comment">// license that can be found in the LICENSE file. The original repo for</span><br><span class="hljs-comment">// this file is https://github.com/onexstack/miniblog. The professional</span><br><span class="hljs-comment">// version of this repository is https://github.com/onexstack/onex.</span><br><br><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span><br><br><span class="hljs-comment">// Go 程序的默认入口函数。阅读项目代码的入口函数.</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;Hello World!&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="5-编写-Makefile-脚本"><a href="#5-编写-Makefile-脚本" class="headerlink" title="5. 编写 Makefile 脚本"></a>5. 编写 Makefile 脚本</h1><ul>
+<li>学习 Makefile 基本语法，可参考 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s01/docs/book/makefile.md">docs&#x2F;book&#x2F;makefile.md</a> 文件</li>
+<li>学习 Makefile 高级语法（如果有时间或感兴趣）：陈皓老师编写的<a target="_blank" rel="noopener" href="https://bobo-2.oss-cn-shenzhen.aliyuncs.com/2020/11/20201121024724910.pdf">《跟我一起写 Makefile（PDF 重制版）》</a></li>
+</ul>
+<p>miniblog 项目的 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s01/Makefile">Makefile</a> 文件位于项目根目录下，内容如下：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs Makefile"><span class="hljs-comment"># ==============================================================================</span><br><span class="hljs-comment"># 定义全局 Makefile 变量方便后面引用</span><br> <br>COMMON_SELF_DIR := <span class="hljs-variable">$(<span class="hljs-built_in">dir</span> $(<span class="hljs-built_in">lastword</span> <span class="hljs-variable">$(MAKEFILE_LIST)</span>)</span>)<br><span class="hljs-comment"># 项目根目录</span><br>PROJ_ROOT_DIR := <span class="hljs-variable">$(<span class="hljs-built_in">abspath</span> $(<span class="hljs-built_in">shell</span> cd <span class="hljs-variable">$(COMMON_SELF_DIR)</span>/ &amp;&amp; pwd -P)</span>)<br><span class="hljs-comment"># 构建产物、临时文件存放目录</span><br>OUTPUT_DIR := <span class="hljs-variable">$(PROJ_ROOT_DIR)</span>/_output<br> <br><span class="hljs-comment"># ==============================================================================</span><br><span class="hljs-comment"># 定义默认目标为 all</span><br>.DEFAULT_GOAL := all<br> <br><span class="hljs-comment"># 定义 Makefile all 伪目标，执行 `make` 时，会默认会执行 all 伪目标</span><br><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: all</span><br><span class="hljs-section">all: tidy format build add-copyright</span><br> <br><span class="hljs-comment"># ==============================================================================</span><br><span class="hljs-comment"># 定义其他需要的伪目标</span><br> <br><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: build</span><br><span class="hljs-section">build: tidy # 编译源码，依赖 tidy 目标自动添加/移除依赖包.</span><br>    @go build -v -o <span class="hljs-variable">$(OUTPUT_DIR)</span>/mb-apiserver <span class="hljs-variable">$(PROJ_ROOT_DIR)</span>/cmd/mb-apiserver/main.go<br> <br><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: format</span><br><span class="hljs-section">format: # 格式化 Go 源码.</span><br>    @gofmt -s -w ./<br> <br><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: add-copyright</span><br><span class="hljs-section">add-copyright: # 添加版权头信息.</span><br>    @addlicense -v -f <span class="hljs-variable">$(PROJ_ROOT_DIR)</span>/scripts/boilerplate.txt <span class="hljs-variable">$(PROJ_ROOT_DIR)</span> --skip-dirs=third_party,vendor,<span class="hljs-variable">$(OUTPUT_DIR)</span><br> <br><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: tidy</span><br><span class="hljs-section">tidy: # 自动添加/移除依赖包.</span><br>    @go mod tidy<br> <br><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: clean</span><br><span class="hljs-section">clean: # 清理构建产物、临时文件等.</span><br>    @-rm -vrf <span class="hljs-variable">$(OUTPUT_DIR)</span><br></code></pre></td></tr></table></figure>
+
+<p>在编写 Makefile 规则之后，可以执行 make <target> 命令以运行指定的 Makefile 规则。例如，可以执行 make build 命令编译 mb-apiserver 组件。</p>
+<p>项目支持了 Makefile 之后，未来所有的编译、单元测试等项目管理操作，都建议通过执行 Makefile 规则来完成。添加了 Makefile 之后，还需要更新 .air.toml 文件，将其中的 cmd 改成cmd &#x3D; “make build”。</p>
+<p>上述 Makefile 文件中的 Makefile 规则如下表所示:</p>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628020813503.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="📎-参考文章"><a href="#📎-参考文章" class="headerlink" title="📎 参考文章"></a>📎 参考文章</h1><ul>
+<li>[05 | 项目初始化（上）：如何初始化一个 Go 项目仓库?(<a target="_blank" rel="noopener" href="https://articles.zsxq.com/id_x2tuum620z3a.html">https://articles.zsxq.com/id_x2tuum620z3a.html</a>)</li>
+<li><a target="_blank" rel="noopener" href="https://articles.zsxq.com/id_0z7eii1hgsp0.html">06 | 项目初始化（下）：给新项目添加初始文件</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/golang/" class="print-no-link">#golang</a>
+      
+        <a href="/tags/miniblog/" class="print-no-link">#miniblog</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>01 Go项目初始化</div>
+      <div>https://yangfanbin.cn/代码笔记/01 Go项目初始化/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年8月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/04%20%E5%9F%BA%E7%A1%80%20go%20%E5%8C%85%E5%BC%80%E5%8F%91%20-%20%E9%94%99%E8%AF%AF%E5%8C%85/" title="04 基础 go 包开发 - 错误包">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">04 基础 go 包开发 - 错误包</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/%E4%B8%80%E6%96%87%E5%90%83%E9%80%8F%20k8s%20%E7%9A%84%20Lease%20%EF%BC%88%E7%A7%9F%E7%BA%A6%EF%BC%89/" title="一文吃透 k8s 的 Lease （租约）">
+                        <span class="hidden-mobile">一文吃透 k8s 的 Lease （租约）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

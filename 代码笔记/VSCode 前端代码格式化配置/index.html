@@ -1,0 +1,697 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言：  EditorConfig：管基础格式（缩进、换行、编码、行尾空格等） ESLint&#x2F;Prettier：管语法层面风格（命名、分号、语句换行等） 二者搭配使用，实现完整代码风格管控  1. EditorConfig轻量的跨编辑器 &#x2F; IDE 代码基础格式统一工具，解决团队 &#x2F; 跨设备开发时，不同编辑器格式规则不一致导致的代码风格混乱、Git 格式冲突问题。 作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VSCode 前端代码格式化配置">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/VSCode%20%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="前言：  EditorConfig：管基础格式（缩进、换行、编码、行尾空格等） ESLint&#x2F;Prettier：管语法层面风格（命名、分号、语句换行等） 二者搭配使用，实现完整代码风格管控  1. EditorConfig轻量的跨编辑器 &#x2F; IDE 代码基础格式统一工具，解决团队 &#x2F; 跨设备开发时，不同编辑器格式规则不一致导致的代码风格混乱、Git 格式冲突问题。 作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20260116224213525.png?imageSlim">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20260116225545606.png?imageSlim">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20260116225709667.png?imageSlim">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20260116232148841.png?imageSlim">
+<meta property="article:published_time" content="2026-01-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.080Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="前端">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20260116224213525.png?imageSlim">
+  
+  
+  
+  <title>VSCode 前端代码格式化配置 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="VSCode 前端代码格式化配置"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-16 00:00" pubdate>
+          2026年1月16日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">VSCode 前端代码格式化配置</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>前言：</p>
+<ul>
+<li><strong>EditorConfig</strong>：管<strong>基础格式</strong>（缩进、换行、编码、行尾空格等）</li>
+<li><strong>ESLint&#x2F;Prettier</strong>：管<strong>语法层面风格</strong>（命名、分号、语句换行等）</li>
+<li>二者搭配使用，实现完整代码风格管控</li>
+</ul>
+<h1 id="1-EditorConfig"><a href="#1-EditorConfig" class="headerlink" title="1. EditorConfig"></a>1. EditorConfig</h1><p>轻量的<strong>跨编辑器 &#x2F; IDE 代码基础格式统一工具</strong>，解决团队 &#x2F; 跨设备开发时，不同编辑器格式规则不一致导致的代码风格混乱、Git 格式冲突问题。</p>
+<p>作用如下：</p>
+<ul>
+<li>统一所有支持工具的基础代码格式（缩进、换行符、编码等）；</li>
+<li>支持按文件类型精细化配置规则；</li>
+<li>轻量无侵入，仅需项目根目录放配置文件，编辑器装插件即可生效。</li>
+</ul>
+<p>使用：</p>
+<ul>
+<li>在项目根目录下新建文件 <code>.editorconfig</code> , 文件内容如下：</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># EditorConfig 核心配置文件，用于统一跨编辑器/IDE的代码基础格式</span><br><span class="hljs-comment"># 规则优先级：特殊文件类型（如.md/.json）&gt; 全局规则（[*]）</span><br><br><span class="hljs-comment"># 核心标识：设为true表示这是项目根目录的配置文件，停止向上级目录查找.editorconfig</span><br><span class="hljs-attr">root</span> = <span class="hljs-literal">true</span><br><br><span class="hljs-comment"># ---------------------------------------------------------</span><br><span class="hljs-comment"># 所有文件的默认全局配置（无特殊声明的文件均遵循此规则）</span><br><span class="hljs-comment"># ---------------------------------------------------------</span><br><span class="hljs-section">[*]</span><br><span class="hljs-comment"># 字符编码：统一强制使用UTF-8，避免中文乱码、编码不一致问题</span><br><span class="hljs-attr">charset</span> = utf-<span class="hljs-number">8</span><br><span class="hljs-comment"># 缩进方式：全局默认使用空格（而非Tab），避免Tab宽度不一致导致格式混乱</span><br><span class="hljs-attr">indent_style</span> = space<br><span class="hljs-comment"># 缩进大小：全局默认2个空格缩进（前端项目常用规范）</span><br><span class="hljs-attr">indent_size</span> = <span class="hljs-number">2</span><br><span class="hljs-comment"># 行尾换行符：统一使用LF（Linux/Mac风格），避免Windows(CRLF)和Linux/Mac换行符混用导致Git冲突</span><br><span class="hljs-attr">end_of_line</span> = lf<br><span class="hljs-comment"># 文件末尾：强制添加一个空行，符合大多数编程语言的代码规范</span><br><span class="hljs-attr">insert_final_newline</span> = <span class="hljs-literal">true</span><br><span class="hljs-comment"># 行尾空格：默认自动删除行尾多余的空格（清理无效空白字符）</span><br><span class="hljs-attr">trim_trailing_whitespace</span> = <span class="hljs-literal">true</span><br><br><span class="hljs-comment"># ---------------------------------------------------------</span><br><span class="hljs-comment"># 针对不同语言/文件类型的覆盖配置（优先级高于全局规则）</span><br><span class="hljs-comment"># ---------------------------------------------------------</span><br><br><span class="hljs-comment"># Markdown 文件专属规则</span><br><span class="hljs-section">[*.md]</span><br><span class="hljs-comment"># 关闭行尾空格自动删除：因为标准Markdown中，行尾加2个空格代表手动换行（软换行）</span><br><span class="hljs-comment"># 若开启trim_trailing_whitespace，会破坏Markdown的换行语法</span><br><span class="hljs-attr">trim_trailing_whitespace</span> = <span class="hljs-literal">false</span><br><span class="hljs-comment"># 关闭最大行长度限制：Markdown注重阅读性，无需强制换行，保留自然排版</span><br><span class="hljs-attr">max_line_length</span> = <span class="hljs-literal">off</span><br><br><span class="hljs-comment"># JSON/YAML/YML 文件专属规则</span><br><span class="hljs-section">[*.&#123;json,yaml,yml&#125;]</span><br><span class="hljs-comment"># 强制缩进为2个空格：即使全局规则修改，这类文件也固定2空格（符合JSON/YAML的通用规范）</span><br><span class="hljs-attr">indent_size</span> = <span class="hljs-number">2</span><br><br><span class="hljs-comment"># Makefile 文件专属规则</span><br><span class="hljs-section">[Makefile]</span><br><span class="hljs-comment"># 强制使用Tab缩进：Makefile语法要求必须用Tab分隔命令，用空格会导致语法报错（非风格问题，是语法强制要求）</span><br><span class="hljs-attr">indent_style</span> = tab<br></code></pre></td></tr></table></figure>
+
+
+<p>参考： <a target="_blank" rel="noopener" href="https://editorconfig.org/#overview">EditorConfig</a></p>
+<p>vscode 使用 EditorConfig 需要下载插件：<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig">Site Unreachable</a></p>
+<h1 id="2-使用-prettier-工具"><a href="#2-使用-prettier-工具" class="headerlink" title="2. 使用 prettier 工具"></a>2. 使用 prettier 工具</h1><h2 id="2-1-VSCode-安装-prettier-插件"><a href="#2-1-VSCode-安装-prettier-插件" class="headerlink" title="2.1. VSCode 安装 prettier 插件"></a>2.1. VSCode 安装 prettier 插件</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode">Site Unreachable</a></li>
+</ul>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20260116224213525.png?imageSlim" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="2-2-使用方法"><a href="#2-2-使用方法" class="headerlink" title="2.2. 使用方法"></a>2.2. 使用方法</h2><ol>
+<li>安装 prettier</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs SHELL">npm install prettier -D<br></code></pre></td></tr></table></figure>
+
+
+<ol start="2">
+<li>在 <code>package.json</code> 中配置运行命令：</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;format&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;prettier --write .&quot;</span><br><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br></code></pre></td></tr></table></figure>
+
+<p>这样我们可以通过运行 <code>npm run format</code> 来对代码进行格式化。</p>
+<p>但是，这样太麻烦了，我们可以选择在保存文件的时候对代码自动进行格式化保存：</p>
+<p>VSCode 中设置：</p>
+<ol>
+<li>打开保存时格式化文件：</li>
+</ol>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20260116225545606.png?imageSlim" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<ol start="2">
+<li>配置通过 prettier 来对文件进行格式化：</li>
+</ol>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20260116225709667.png?imageSlim" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="2-3-配置"><a href="#2-3-配置" class="headerlink" title="2.3. 配置"></a>2.3. 配置</h2><p>配置 <code>.prettierrc</code> 文件：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-comment">// 缩进方式：false = 使用空格缩进（和 EditorConfig 的 indent_style = space 对应）</span><br>  <span class="hljs-attr">&quot;useTabs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-comment">// 缩进大小：2 个空格（和 EditorConfig 的 indent_size = 2 对应）</span><br>  <span class="hljs-attr">&quot;tabWidth&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-comment">// 每行最大长度：超过 80 个字符时自动换行，保持代码可读性</span><br>  <span class="hljs-attr">&quot;printWidth&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">80</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-comment">// 字符串引号：true = 统一使用单引号（如 &#x27;hello&#x27; 而非 &quot;hello&quot;，前端项目常见风格）</span><br>  <span class="hljs-attr">&quot;singleQuote&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-comment">// 尾逗号：&quot;none&quot; = 禁止在对象/数组最后一项后加逗号（如 &#123;a:1, b:2&#125; 而非 &#123;a:1, b:2,&#125;）</span><br>  <span class="hljs-attr">&quot;trailingComma&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;none&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-comment">// 语句分号：false = 禁止在语句末尾加分号（如 const a = 1 而非 const a = 1;，部分前端项目的风格选择）</span><br>  <span class="hljs-attr">&quot;semi&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>配置 <code>.prettierignore</code>,实际使用时选择自己需要的即可:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><code class="hljs text"># ------------------------------<br># 依赖与构建产物（自动生成，无需格式化）<br># ------------------------------<br>node_modules/<br>dist/<br>build/<br>out/<br>.next/          # Next.js 构建目录<br>.nuxt/          # Nuxt.js 构建目录<br>.output/        # VuePress/VitePress 构建目录<br>.eslintcache<br><br># ------------------------------<br># 包管理器与锁文件（由工具维护，禁止手动修改）<br># ------------------------------<br>package-lock.json<br>yarn.lock<br>pnpm-lock.yaml<br>pnpm-workspace.yaml<br>bun.lockb<br><br># ------------------------------<br># 静态资源与二进制文件（Prettier 无法处理）<br># ------------------------------<br>*.png<br>*.jpg<br>*.jpeg<br>*.gif<br>*.svg<br>*.webp<br>*.ico<br>*.woff<br>*.woff2<br>*.ttf<br>*.eot<br>*.mp4<br>*.avi<br>*.pdf<br>*.docx<br><br># ------------------------------<br># 配置与环境文件（格式敏感或自动生成）<br># ------------------------------<br>.env<br>.env.local<br>.env.development<br>.env.production<br>.editorconfig<br>.prettierrc<br>.eslintrc<br>.gitignore<br>.npmignore<br>Dockerfile<br>docker-compose.yml<br><br># ------------------------------<br># 日志、缓存与临时文件<br># ------------------------------<br>*.log<br>.cache/<br>.temp/<br>.tmp/<br>.DS_Store       # macOS 系统文件<br>Thumbs.db       # Windows 系统文件<br><br># ------------------------------<br># 版本控制与编辑器目录<br># ------------------------------<br>.git/<br>.vscode/<br>.idea/<br>.gradle/<br>.mvn/<br><br># ------------------------------<br># 特定场景（可选）<br># ------------------------------<br>CHANGELOG.md    # 手动维护的变更日志<br>*.min.js        # 已压缩的 JS 文件<br>*.min.css       # 已压缩的 CSS 文件<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="3-使用-ESLint"><a href="#3-使用-ESLint" class="headerlink" title="3. 使用 ESLint"></a>3. 使用 ESLint</h1><h2 id="3-1-安装插件"><a href="#3-1-安装插件" class="headerlink" title="3.1. 安装插件"></a>3.1. 安装插件</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint">Site Unreachable</a></li>
+</ul>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20260116232148841.png?imageSlim" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="3-2-安装依赖"><a href="#3-2-安装依赖" class="headerlink" title="3.2. 安装依赖"></a>3.2. 安装依赖</h2><p>安装 eslint 开发依赖基础包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs SHELL">npm install eslint -D<br></code></pre></td></tr></table></figure>
+
+<p>为了避免 eslint 的检测规则和 prettier 的配置冲突，还需要安装它俩的整合包，避免在 eslint 中检测到不合规，但是 prettier 的配置确是合规的，让 eslint 按照 prettier 的规则进行检测：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm install eslint-plugin-prettier eslint-config-prettier -D<br></code></pre></td></tr></table></figure>
+
+<p>在 <code>.eslintrc.json</code> 中需要加如下配置，其中我们常见的配置是 extends、plugins 和 rules：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = &#123;<br>  <span class="hljs-attr">extends</span>: [<br>    <span class="hljs-comment">// 保留项目原有基础配置（如 &#x27;eslint:recommended&#x27;、&#x27;plugin:vue/vue3-essential&#x27; 等）</span><br>    <span class="hljs-string">&#x27;plugin:prettier/recommended&#x27;</span> <span class="hljs-comment">// 整合 Prettier 规则，避免冲突</span><br>  ]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>参考 Next.js + TypeScript 完整 ESLint 配置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Next.js + TypeScript ESLint 完整配置</span><br><span class="hljs-comment"> * 核心原则：官方规范 + 类型安全 + Hooks 合规 + Prettier 协同</span><br><span class="hljs-comment"> */</span><br><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = &#123;<br>  <span class="hljs-comment">// ===================== 核心解析配置（TS/JSX/Next.js 适配） =====================</span><br>  <span class="hljs-comment">// 解析器：让 ESLint 能识别 Vue/React 单文件组件（这里适配 Next.js 的 JSX/TSX）</span><br>  <span class="hljs-attr">parser</span>: <span class="hljs-string">&#x27;@typescript-eslint/parser&#x27;</span>,<br>  <span class="hljs-comment">// 解析器选项：指定 ES 版本、模块类型、TS 配置文件路径</span><br>  <span class="hljs-attr">parserOptions</span>: &#123;<br>    <span class="hljs-attr">ecmaVersion</span>: <span class="hljs-string">&#x27;latest&#x27;</span>, <span class="hljs-comment">// 支持最新 ES 语法</span><br>    <span class="hljs-attr">sourceType</span>: <span class="hljs-string">&#x27;module&#x27;</span>, <span class="hljs-comment">// 启用 ES 模块（import/export）</span><br>    <span class="hljs-attr">project</span>: <span class="hljs-string">&#x27;./tsconfig.json&#x27;</span>, <span class="hljs-comment">// 关联项目的 TS 配置，确保类型检查准确</span><br>    <span class="hljs-attr">ecmaFeatures</span>: &#123;<br>      <span class="hljs-attr">jsx</span>: <span class="hljs-literal">true</span> <span class="hljs-comment">// 支持 JSX/TSX 语法（Next.js 核心）</span><br>    &#125;<br>  &#125;,<br><br>  <span class="hljs-comment">// ===================== 继承的规则集（基础规则来源） =====================</span><br>  <span class="hljs-attr">extends</span>: [<br>    <span class="hljs-comment">// 1. Next.js 官方核心规则：包含框架最佳实践 + Web Vitals 性能检查</span><br>    <span class="hljs-string">&#x27;next/core-web-vitals&#x27;</span>,<br>    <span class="hljs-comment">// 2. TypeScript ESLint 推荐规则：TS 语法/类型相关的基础检查</span><br>    <span class="hljs-string">&#x27;plugin:@typescript-eslint/recommended&#x27;</span>,<br>    <span class="hljs-comment">// 3. TypeScript ESLint 严格规则：增强 TS 类型安全（可选，追求高代码质量则保留）</span><br>    <span class="hljs-string">&#x27;plugin:@typescript-eslint/strict-type-checked&#x27;</span>,<br>    <span class="hljs-comment">// 4. React Hooks 官方规则：强制 Hooks 使用规范（如依赖数组完整）</span><br>    <span class="hljs-string">&#x27;plugin:react-hooks/recommended&#x27;</span>,<br>    <span class="hljs-comment">// 5. Prettier 协同规则：关闭 ESLint 中与 Prettier 冲突的规则，同时将 Prettier 格式问题转为 ESLint 警告</span><br>    <span class="hljs-string">&#x27;plugin:prettier/recommended&#x27;</span><br>  ],<br><br>  <span class="hljs-comment">// ===================== 启用的插件（扩展 ESLint 检查能力） =====================</span><br>  <span class="hljs-attr">plugins</span>: [<br>    <span class="hljs-string">&#x27;@typescript-eslint&#x27;</span>, <span class="hljs-comment">// TS 专属检查插件</span><br>    <span class="hljs-string">&#x27;react-hooks&#x27;</span>, <span class="hljs-comment">// React Hooks 检查插件</span><br>    <span class="hljs-string">&#x27;import&#x27;</span>, <span class="hljs-comment">// 模块导入规范检查（如未使用的 import、路径错误）</span><br>    <span class="hljs-string">&#x27;promise&#x27;</span> <span class="hljs-comment">// Promise 异步代码规范检查（如未处理 reject）</span><br>  ],<br><br>  <span class="hljs-comment">// ===================== 自定义规则（覆盖默认配置，适配实际开发） =====================</span><br>  <span class="hljs-attr">rules</span>: &#123;<br>    <span class="hljs-comment">// -------------------- React Hooks 规则（人性化调整） --------------------</span><br>    <span class="hljs-comment">// 关闭「禁止在 useEffect 中调用 setState」：Next.js 中常需在副作用中更新状态（如表单回显）</span><br>    <span class="hljs-string">&#x27;react-hooks/set-state-in-effect&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,<br>    <span class="hljs-comment">// 依赖数组不完整从 error 改为 warn：避免 Next.js 中 useRouter 等场景的假阳性报错</span><br>    <span class="hljs-string">&#x27;react-hooks/exhaustive-deps&#x27;</span>: <span class="hljs-string">&#x27;warn&#x27;</span>,<br><br>    <span class="hljs-comment">// -------------------- TypeScript 规则（宽松适配 + 类型安全） --------------------</span><br>    <span class="hljs-comment">// 关闭「必须使用接口而非类型别名」：TS 中 type 和 interface 场景不同，无需强制</span><br>    <span class="hljs-string">&#x27;@typescript-eslint/consistent-type-definitions&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,<br>    <span class="hljs-comment">// 关闭「未使用变量报错」：开发阶段临时注释的变量无需报错（改为警告）</span><br>    <span class="hljs-string">&#x27;@typescript-eslint/no-unused-vars&#x27;</span>: [<span class="hljs-string">&#x27;warn&#x27;</span>, &#123; <span class="hljs-attr">argsIgnorePattern</span>: <span class="hljs-string">&#x27;^_&#x27;</span> &#125;], <span class="hljs-comment">// 忽略下划线开头的变量（如 _props）</span><br>    <span class="hljs-comment">// 强制函数返回值类型定义：提升 TS 类型安全（仅警告，避免过度严格）</span><br>    <span class="hljs-string">&#x27;@typescript-eslint/explicit-function-return-type&#x27;</span>: <span class="hljs-string">&#x27;warn&#x27;</span>,<br>    <span class="hljs-comment">// 禁止 any 类型：逐步减少 any 提升代码质量（改为警告，兼容历史代码）</span><br>    <span class="hljs-string">&#x27;@typescript-eslint/no-explicit-any&#x27;</span>: <span class="hljs-string">&#x27;warn&#x27;</span>,<br><br>    <span class="hljs-comment">// -------------------- 通用代码质量规则 --------------------</span><br>    <span class="hljs-comment">// 禁止 console.log 等打印：生产环境需清理，开发阶段警告即可</span><br>    <span class="hljs-string">&#x27;no-console&#x27;</span>: [<span class="hljs-string">&#x27;warn&#x27;</span>, &#123; <span class="hljs-attr">allow</span>: [<span class="hljs-string">&#x27;warn&#x27;</span>, <span class="hljs-string">&#x27;error&#x27;</span>] &#125;], <span class="hljs-comment">// 允许 console.warn/error</span><br>    <span class="hljs-comment">// 禁止 debugger：开发阶段警告，防止提交到生产环境</span><br>    <span class="hljs-string">&#x27;no-debugger&#x27;</span>: <span class="hljs-string">&#x27;warn&#x27;</span>,<br><br>    <span class="hljs-comment">// -------------------- Prettier 协同规则 --------------------</span><br>    <span class="hljs-comment">// Prettier 格式问题转为警告（而非报错），避免打断开发流程</span><br>    <span class="hljs-string">&#x27;prettier/prettier&#x27;</span>: <span class="hljs-string">&#x27;warn&#x27;</span><br>  &#125;,<br><br>  <span class="hljs-comment">// ===================== 环境配置（指定代码运行环境，避免全局变量报错） =====================</span><br>  <span class="hljs-attr">env</span>: &#123;<br>    <span class="hljs-attr">browser</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// 支持浏览器全局变量（window、document）</span><br>    <span class="hljs-attr">node</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// 支持 Node.js 全局变量（process、__dirname）</span><br>    <span class="hljs-attr">es2025</span>: <span class="hljs-literal">true</span> <span class="hljs-comment">// 支持 ES2025 语法</span><br>  &#125;,<br><br>  <span class="hljs-comment">// ===================== 全局变量（避免未定义报错） =====================</span><br>  <span class="hljs-attr">globals</span>: &#123;<br>    <span class="hljs-title class_">React</span>: <span class="hljs-string">&#x27;readonly&#x27;</span>, <span class="hljs-comment">// React 全局变量只读</span><br>    <span class="hljs-attr">JSX</span>: <span class="hljs-string">&#x27;readonly&#x27;</span> <span class="hljs-comment">// JSX 全局变量只读</span><br>  &#125;,<br><br>  <span class="hljs-comment">// ===================== 忽略特定文件/目录（可选） =====================</span><br>  <span class="hljs-attr">ignorePatterns</span>: [<br>    <span class="hljs-string">&#x27;.next/&#x27;</span>, <span class="hljs-comment">// Next.js 构建目录</span><br>    <span class="hljs-string">&#x27;node_modules/&#x27;</span>, <span class="hljs-comment">// 依赖目录</span><br>    <span class="hljs-string">&#x27;public/&#x27;</span>, <span class="hljs-comment">// 静态资源目录</span><br>    <span class="hljs-string">&#x27;*.config.js&#x27;</span> <span class="hljs-comment">// 配置文件（如 next.config.js）</span><br>  ]<br>&#125;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%89%8D%E7%AB%AF/" class="print-no-link">#前端</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>VSCode 前端代码格式化配置</div>
+      <div>https://yangfanbin.cn/代码笔记/VSCode 前端代码格式化配置/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/Go%20%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E8%A6%81%E7%82%B9%E6%95%B4%E7%90%86/" title="Go 工程师面试要点整理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Go 工程师面试要点整理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%94%9F%E6%B4%BB%E5%B0%8F%E8%AE%B0/2026%20%E5%B9%B4%E7%9A%84%E5%87%8F%E8%82%A5%E6%97%A5%E8%AE%B0/" title="2026 年的减肥日记">
+                        <span class="hidden-mobile">2026 年的减肥日记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Github 上提交 pr 操作 先fork仓库到自己仓库  拉取自己仓库代码  拉出自己的开发分支  【重点】开发完成后，保证自己的分支只提交过一个commit（这里的commit指的是自己提交的coommit，多的commit则要进行压缩合并操作）  【重点】先同步远程仓库代码，也就是上自己仓库中找到同步的远程仓库，点一下“sync”，拉取自己仓库的主分支代码（这里的主分支默认为main），保">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git 常用操作整理">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/git%20%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="Github 上提交 pr 操作 先fork仓库到自己仓库  拉取自己仓库代码  拉出自己的开发分支  【重点】开发完成后，保证自己的分支只提交过一个commit（这里的commit指的是自己提交的coommit，多的commit则要进行压缩合并操作）  【重点】先同步远程仓库代码，也就是上自己仓库中找到同步的远程仓库，点一下“sync”，拉取自己仓库的主分支代码（这里的主分支默认为main），保">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-08-07T17:14:20.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.080Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>git 常用操作整理 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="git 常用操作整理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-08-08 01:14" pubdate>
+          2025年8月8日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">git 常用操作整理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Github-上提交-pr-操作"><a href="#Github-上提交-pr-操作" class="headerlink" title="Github 上提交 pr 操作"></a><strong>Github 上提交 pr 操作</strong></h2><ol>
+<li><p>先fork仓库到自己仓库</p>
+</li>
+<li><p>拉取自己仓库代码</p>
+</li>
+<li><p>拉出自己的开发分支</p>
+</li>
+<li><p>【<strong>重点</strong>】开发完成后，保证自己的分支只提交过一个commit（这里的commit指的是自己提交的coommit，多的commit则要进行压缩合并操作）</p>
+</li>
+<li><p>【<strong>重点】<strong>先同步远程仓库代码，也就是上自己仓库中找到同步的远程仓库，点一下</strong>“sync”</strong>，拉取自己仓库的主分支代码（这里的主分支默认为main），保证主分支代码是最新的</p>
+</li>
+<li><p>【**重点】**然后进行 rebase 操作，进入到自己的本地开发分支下面，执行 <code>git rebase main</code>,这样会把自己的开发分支基于main分支再映射一遍，可能会有冲突，如果到这里没有冲突，就可以提交到自己远程仓库，发起pr操作</p>
+</li>
+<li><p>【**重点】解冲突：**这里执行完rebase后，如果有冲突编辑器会按顺序让你确认需要提交的最终文件，假如a.go、b.go、c.go这3个文件有冲突，则先对a.go进行解冲突，解完后执行 <code>git add .</code> ,将解完的冲突提交到暂存区，执行 <code>git rebase --continue</code> 继续解下一个冲突, 按这样解完所有的冲突后就可以执行 push 动作，接着就可以到远程操作提交自己的pr，描述下自己的更改都做了什么了！</p>
+</li>
+</ol>
+<h2 id="追加文件修改到上一次提交"><a href="#追加文件修改到上一次提交" class="headerlink" title="追加文件修改到上一次提交"></a><strong>追加文件修改到上一次提交</strong></h2><ol>
+<li><p>修改你需要追加的文件</p>
+</li>
+<li><p>执行 <code>git add .</code></p>
+</li>
+<li><p>执行 <code>git commit --amend</code> 后进入修改上一次的commit message页面，修改完成后wq后保存退出</p>
+</li>
+<li><p>如果不需要修改上一次的commit message，则直接执行 <code>git commit --amend --no-edit</code></p>
+</li>
+</ol>
+<h2 id="代码回滚"><a href="#代码回滚" class="headerlink" title="代码回滚"></a><strong>代码回滚</strong></h2><ul>
+<li><strong>reset</strong>：将当前的 HEAD 指针指向该 commitID，并将<strong>该 commit 之后的修改的文件</strong>移动到<strong>工作区</strong></li>
+<li><strong>reset –hard</strong>：【注意】将当前的 HEAD 指针指向该 commitID，<strong>撤销该 commit 之后的所有文件更改</strong></li>
+<li><strong>reset –soft</strong>：将当前的 HEAD 指针指向该 commitID，并将<strong>该 commit 之后的修改的文件移动到暂存区</strong>修改完后查看 commit 没问题后执行 <code>git push -f</code> 强制推送到远端</li>
+<li><strong>revert</strong>：还原某次提交的文件到<strong>该次提交前的状态</strong></li>
+<li>回滚指定 commit 中的文件，场景：很早之前的一个commit中的一个文件发现修改错了，想要检出来重新提交</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Shell">git checkout &lt;commit-hash&gt; -- &lt;file-path&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="压缩提交的两种方式"><a href="#压缩提交的两种方式" class="headerlink" title="压缩提交的两种方式"></a><strong>压缩提交的两种方式</strong></h2><ol>
+<li><p>使用<strong>代码回滚</strong>中的 <strong>reset –soft</strong> 到指定要压缩的 commit 的前一个commit，这样所有的更改都会到暂存区，再重新编辑提交信息后进行提交。</p>
+</li>
+<li><p>使用 <code>git log</code> 查看要压缩的所有的提交的<strong>前一个commit</strong>,复制该commit ID，然后执行<code>git rebase -i [commit ID]</code>,进入压缩界面，将第一行的pick留下，其他行改为小写的s，然后wq保存退出，进入更改commit message界面，修改成你的message，然后wq保存退出，就ok了。</p>
+</li>
+</ol>
+<h2 id="合并冲突"><a href="#合并冲突" class="headerlink" title="合并冲突"></a><strong>合并冲突</strong></h2><h2 id="合并过程中遇到冲突但是不想处理冲突时需要退出"><a href="#合并过程中遇到冲突但是不想处理冲突时需要退出" class="headerlink" title="合并过程中遇到冲突但是不想处理冲突时需要退出"></a><strong>合并过程中遇到冲突但是不想处理冲突时需要退出</strong></h2><p>执行 <code>git merge --abort</code></p>
+<h2 id="检出-a-分支上的提交到-b-分支"><a href="#检出-a-分支上的提交到-b-分支" class="headerlink" title="检出 a 分支上的提交到 b 分支"></a><strong>检出 a 分支上的提交到 b 分支</strong></h2><p>假设我们现在需要把 a 分支上的一些提交（如哈希值为 32 到 35 的提交）检出到 b 分支：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs Shell">// 首先我们切换到 b 分支<br><span class="hljs-meta prompt_">$ </span><span class="language-bash">git choutout b</span><br><br>// 如果想搞成[]区间，使用 git cherry-pick 32^..35 相当于[32 35]包含32<br><span class="hljs-meta prompt_">$ </span><span class="language-bash">git cherry-pick 32^..35</span><br></code></pre></td></tr></table></figure>
+
+<p><code>git cherry-pick --continue</code>：用户解决代码冲突后，第一步将修改的文件重新加入暂存区（git add .），第二步使用下面的命令，让 Cherry pick 过程继续执行。</p>
+<p><code>git cherry-pick --abort</code>：发生代码冲突后，放弃合并，回到操作前的样子。</p>
+<p><code>git cherry-pick --quit</code>: 发生代码冲突后，退出 Cherry pick，但是不回到操作前的样子。</p>
+<p>📝参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/muzidigbig/article/details/122321393">https://blog.csdn.net/muzidigbig/article/details/122321393</a></p>
+<h2 id="合并分支时忽略空白行的冲突-使用频率低）"><a href="#合并分支时忽略空白行的冲突-使用频率低）" class="headerlink" title="合并分支时忽略空白行的冲突(使用频率低）"></a>合并分支时忽略空白行的冲突(使用频率低）</h2><ul>
+<li>Xignore-all-space: 在比较行时 <strong>完全忽略</strong> 空白修改</li>
+<li>Xignore-space-change:将一个空白符与多个连续的空白字符视作等价的</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">git merge -Xignore-space-change [branch name]</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="查看当前所有目录文件的-sha-2-值"><a href="#查看当前所有目录文件的-sha-2-值" class="headerlink" title="查看当前所有目录文件的 sha-2 值"></a><strong>查看当前所有目录文件的 sha-2 值</strong></h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Shell">git ls-files -s<br></code></pre></td></tr></table></figure>
+
+<p>📝参考：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44154094/article/details/114337077">https://blog.csdn.net/weixin_44154094&#x2F;article&#x2F;details&#x2F;114337077</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weiwosuoai/article/details/141179308?spm=1001.2014.3001.5501">动图展示 10 大 Git 命令，让你轻松掌握Git-CSDN博客</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/git/" class="print-no-link">#git</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>git 常用操作整理</div>
+      <div>https://yangfanbin.cn/代码笔记/git 常用操作整理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年8月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/git%20%E6%8F%90%E4%BA%A4%E8%A7%84%E8%8C%83/" title="git 提交规范">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">git 提交规范</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/%E4%BB%8E%E7%89%B9%E6%80%A7%E9%97%A8%E6%8E%A7%E4%B8%AD%E5%AD%A6%E4%B9%A0%E6%9D%83%E9%99%90%E8%AF%BB%E5%86%99%E9%99%90%E5%88%B6/" title="从特性门控中学习权限读写限制">
+                        <span class="hidden-mobile">从特性门控中学习权限读写限制</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

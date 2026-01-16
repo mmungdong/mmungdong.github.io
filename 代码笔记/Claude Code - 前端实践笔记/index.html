@@ -1,0 +1,702 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 插件 &amp; agents 安装123npx claude-code-templates@latest --agent&#x3D;development-team&#x2F;frontend-developer --yesnpx claude-code-templates@latest --agent&#x3D;development-tools&#x2F;code-reviewer --yes   2. 实战笔记2.1. N">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code - 前端实践笔记">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/Claude%20Code%20-%20%E5%89%8D%E7%AB%AF%E5%AE%9E%E8%B7%B5%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="1. 插件 &amp; agents 安装123npx claude-code-templates@latest --agent&#x3D;development-team&#x2F;frontend-developer --yesnpx claude-code-templates@latest --agent&#x3D;development-tools&#x2F;code-reviewer --yes   2. 实战笔记2.1. N">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.079Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="VibeCoding">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Claude Code - 前端实践笔记 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Claude Code - 前端实践笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-23 00:00" pubdate>
+          2025年12月23日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Claude Code - 前端实践笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-插件-agents-安装"><a href="#1-插件-agents-安装" class="headerlink" title="1. 插件 &amp; agents 安装"></a>1. 插件 &amp; agents 安装</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">npx claude-code-templates@latest --agent=development-team/frontend-developer --yes<br><br>npx claude-code-templates@latest --agent=development-tools/code-reviewer --yes<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="2-实战笔记"><a href="#2-实战笔记" class="headerlink" title="2. 实战笔记"></a>2. 实战笔记</h1><h2 id="2-1-Nextjs"><a href="#2-1-Nextjs" class="headerlink" title="2.1. Nextjs"></a>2.1. Nextjs</h2><p>框架选择：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs text">使用如下规则来进行项目初始化，并将必要的信息补充到 CLAUDE.md 中:<br><br>1. 代码提交规范：使用 Angular 规范<br>   <br>2. 该项目属于纯前端静态/全栈项目？<br>    <br>3. 使用如下框架来对项目进行初始化：<br>    <br>    - 框架：Nextjs<br>    <br>    - 语言：Typescript （tsconfig.json 中设置 strict: true ，开启 TypeScript 严格模式）<br>    <br>    - 路由模式：app<br>    <br>    - css：tailwindcss<br>    <br>    - UI框架：shadcn UI<br>    <br>    - 动画库：Framer Motion<br>    <br>    - 代码检查：ESLint （遵循 eslint-config-airbnb-typescript 规范）<br>    <br>    - 代码美化：prettier （安装 `eslint-config-prettier`（禁用 ESLint 中与 Prettier 冲突的规则）和 `eslint-plugin-prettier`（将 Prettier 作为 ESLint 规则运行），让两者协同工作。）<br>    <br>    - 状态管理：Zustand<br>    <br>    - 国际化：next-i18next<br>    <br>    - http客户端：封装 nextjs 中的 fetch：创建统一的请求工具（如 `src/lib/fetch.ts`），处理请求头、响应错误、状态码统一拦截<br>    <br>    - 工具库：radash<br>    <br>    - 日期：Day.js，Day.js 默认不支持时区处理，若项目有国际化时区需求（如显示不同地区的时间），需补充插件，安装 `dayjs/plugin/timezone` 和 `dayjs/plugin/utc` 插件，配置时区支持。<br>    <br>    - Zod: TypeScript-first 模式声明和验证<br>      <br>    - 表单：react-hook-form + Zod<br><br>4. 项目初始化完成后遵循 CLAUDE.md 的规范把项目的关键信息填写到 CLAUDE.md 中，要求每次完成需求后都需要用 ESLint 和 prettier 来检查代码并美化代码<br></code></pre></td></tr></table></figure>
+
+<p>AI 建议：待纠正</p>
+<p>你的前端项目技术栈选择整体上非常现代化且覆盖了主流场景，但从<strong>项目工程化、生产环境稳定性、用户体验、特殊场景支持</strong>等维度来看，仍有一些可以补充和优化的点，下面分维度梳理疏漏和建议：</p>
+<h3 id="一、工程化与开发效率维度"><a href="#一、工程化与开发效率维度" class="headerlink" title="一、工程化与开发效率维度"></a>一、工程化与开发效率维度</h3><h4 id="2-性能监控与埋点"><a href="#2-性能监控与埋点" class="headerlink" title="2. 性能监控与埋点"></a>2. <strong>性能监控与埋点</strong></h4><p>生产环境中，前端性能（如首屏加载、LCP、FID）和用户行为埋点是必要的，但你的栈中未涉及。</p>
+<ul>
+<li><strong>补充</strong>：<ul>
+<li><code>web-vitals</code>：Google 官方的性能指标库，可收集 Core Web Vitals（LCP、FID、CLS 等），Next.js 有内置的 <code>reportWebVitals</code> 函数可直接集成。</li>
+<li>埋点工具：根据需求选择（如百度统计、友盟，或自研埋点时用 <code>@umami/react</code>）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-图片-媒体优化"><a href="#3-图片-媒体优化" class="headerlink" title="3. 图片 &#x2F; 媒体优化"></a>3. <strong>图片 &#x2F; 媒体优化</strong></h4><p>Next.js 有内置的 <code>next/image</code>（图片优化）和 <code>next/video</code>（视频优化），但如果项目中有大量媒体资源，<strong>缺少对图片压缩、懒加载的精细化处理</strong>（虽然 <code>next/image</code> 已内置懒加载，但第三方图片 &#x2F; 图标仍需考虑）。</p>
+<ul>
+<li><strong>补充</strong>：<ul>
+<li><code>next-svg</code>：优化 SVG 图标（如将 SVG 作为组件导入，减少网络请求）。</li>
+<li><code>lqip-loader</code>：生成图片的低质量占位符（LQIP），提升用户体验。</li>
+</ul>
+</li>
+</ul>
+<h3 id="三、用户体验与交互维度"><a href="#三、用户体验与交互维度" class="headerlink" title="三、用户体验与交互维度"></a>三、用户体验与交互维度</h3><h4 id="2-加载状态与错误边界"><a href="#2-加载状态与错误边界" class="headerlink" title="2. 加载状态与错误边界"></a>2. <strong>加载状态与错误边界</strong></h4><p>项目中不可避免会有异步请求的加载状态、错误处理，以及组件级别的错误捕获，你的栈中未涉及。</p>
+<ul>
+<li><strong>补充</strong>：<ul>
+<li>加载状态：<code>react-content-loader</code>（骨架屏）、<code>nextjs-progressbar</code>（页面加载进度条）。</li>
+<li>错误边界：<code>react-error-boundary</code>（捕获组件渲染错误，避免整个页面崩溃），Next.js 也支持自定义 <code>error.tsx</code>（路由级别的错误处理）和 <code>loading.tsx</code>（路由级别的加载状态），但组件级别的错误仍需 error-boundary。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-无障碍访问（a11y）"><a href="#3-无障碍访问（a11y）" class="headerlink" title="3. 无障碍访问（a11y）"></a>3. <strong>无障碍访问（a11y）</strong></h4><p>现代前端项目需要考虑无障碍访问（如屏幕阅读器、键盘导航），你的栈中未涉及相关校验工具。</p>
+<ul>
+<li><strong>补充</strong>：<ul>
+<li><code>eslint-plugin-jsx-a11y</code>：ESLint 插件，检查 JSX 中的无障碍问题（如缺少 alt 属性、标签嵌套错误），建议集成到 ESLint 配置中。</li>
+<li><code>react-aria</code>：Adobe 出品的无障碍组件库，shadcn&#x2F;ui 底层已使用 <code>radix-ui</code>（同样注重无障碍），但自定义组件时可参考。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-滚动与拖拽交互"><a href="#4-滚动与拖拽交互" class="headerlink" title="4. 滚动与拖拽交互"></a>4. <strong>滚动与拖拽交互</strong></h4><p>如果项目中有复杂的滚动（如无限滚动）、拖拽功能，你的栈中未涉及。</p>
+<ul>
+<li><strong>补充</strong>：<ul>
+<li>无限滚动：<code>react-infinite-scroll-component</code>、<code>next-infinite-scroll</code>（适配 Next.js 路由）。</li>
+<li>拖拽：<code>react-beautiful-dnd</code>（简单拖拽）、<code>dnd-kit</code>（现代拖拽库，支持 TypeScript，性能更好）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="四、依赖管理与构建维度"><a href="#四、依赖管理与构建维度" class="headerlink" title="四、依赖管理与构建维度"></a>四、依赖管理与构建维度</h3><h4 id="1-依赖分析与体积优化"><a href="#1-依赖分析与体积优化" class="headerlink" title="1. 依赖分析与体积优化"></a>1. <strong>依赖分析与体积优化</strong></h4><p>项目打包后，需要分析 bundle 体积，移除无用代码，你的栈中未涉及。</p>
+<ul>
+<li><strong>补充</strong>：<ul>
+<li><code>@next/bundle-analyzer</code>：Next.js 官方的 bundle 分析工具，可查看各依赖的体积占比。</li>
+<li><code>purgecss</code>：移除未使用的 CSS（虽然 Tailwind CSS 已内置 PurgeCSS，但第三方 CSS 仍需处理）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-环境变量管理"><a href="#2-环境变量管理" class="headerlink" title="2. 环境变量管理"></a>2. <strong>环境变量管理</strong></h4><p>Next.js 支持 <code>.env</code> 文件，但<strong>缺少对环境变量的类型提示和验证</strong>（如开发 &#x2F; 生产环境的变量不一致导致的问题）。</p>
+<ul>
+<li><strong>补充</strong>：<ul>
+<li><code>zod</code> 本身可用于环境变量验证（如创建 <code>env.schema.ts</code>，验证 <code>process.env</code> 中的变量）。</li>
+<li><code>dotenv</code>（Next.js 已内置，但自定义脚本时可使用）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="五、特殊场景补充（根据项目需求可选）"><a href="#五、特殊场景补充（根据项目需求可选）" class="headerlink" title="五、特殊场景补充（根据项目需求可选）"></a>五、特殊场景补充（根据项目需求可选）</h3><ol>
+<li><strong>PWA（渐进式 Web 应用）</strong>：如果需要将项目打包为 PWA，补充 <code>next-pwa</code>。</li>
+<li><strong>图表可视化</strong>：如果有图表需求，补充 <code>recharts</code>（轻量级）、<code>echarts-for-react</code>（功能全）。</li>
+<li><strong>PDF &#x2F; 文件处理</strong>：如果需要预览 &#x2F; 生成 PDF，补充 <code>react-pdf</code>。</li>
+<li><strong>状态持久化</strong>：Zustand 本身支持持久化（<code>zustand-persist</code>），但如果需要更灵活的存储（如 localStorage&#x2F;sessionStorage&#x2F;indexedDB），补充 <code>localforage</code>。</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>你的技术栈已经覆盖了<strong>基础框架、样式、状态管理、国际化、工具库</strong>等核心部分，疏漏主要集中在<strong>工程化自动化、生产环境性能 &#x2F; 监控、表单处理、用户体验细节、特殊场景支持</strong>等方面。</p>
+<p>建议根据项目的 ** 规模（个人 &#x2F; 团队）、需求（是否需要 PWA &#x2F; 图表 &#x2F; 拖拽）、预算（第三方工具是否付费）** 来选择性补充：</p>
+<ul>
+<li><strong>小型项目</strong>：重点补充<strong>ESLint+Prettier 集成、react-hook-form+Zod、web-vitals、react-error-boundary</strong>即可。</li>
+<li><strong>中大型团队项目</strong>：建议补充<strong>husky+lint-staged+commitlint、MSW、bundle-analyzer、eslint-plugin-jsx-a11y、骨架屏、埋点工具</strong>等，提升工程化和用户体验。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/VibeCoding/" class="print-no-link">#VibeCoding</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Claude Code - 前端实践笔记</div>
+      <div>https://yangfanbin.cn/代码笔记/Claude Code - 前端实践笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/TypeScript%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="TypeScript 学习笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">TypeScript 学习笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/%E7%BC%96%E8%AF%91%20Redis%20&amp;%20%E6%A2%B3%E7%90%86%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84/" title="编译 Redis &amp; 梳理目录结构">
+                        <span class="hidden-mobile">编译 Redis &amp; 梳理目录结构</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

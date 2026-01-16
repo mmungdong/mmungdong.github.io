@@ -1,0 +1,645 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 安装 @openai&#x2F;codex - npm  需要预先安装 npm 环境，执行 npm install -g @openai&#x2F;codex 安装 codex 2. 配置 参考：  codex&#x2F;docs&#x2F;config.md at main · openai&#x2F;codex · GitHub codex&#x2F;docs&#x2F;example-confi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI Coding - codex 使用指南">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/AI%20Coding%20-%20codex%20%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="1. 安装 @openai&#x2F;codex - npm  需要预先安装 npm 环境，执行 npm install -g @openai&#x2F;codex 安装 codex 2. 配置 参考：  codex&#x2F;docs&#x2F;config.md at main · openai&#x2F;codex · GitHub codex&#x2F;docs&#x2F;example-confi">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.079Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>AI Coding - codex 使用指南 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AI Coding - codex 使用指南"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-09 00:00" pubdate>
+          2025年11月9日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AI Coding - codex 使用指南</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/@openai/codex">@openai&#x2F;codex - npm</a></li>
+</ul>
+<p>需要预先安装 npm 环境，执行 <code>npm install -g @openai/codex</code> 安装 codex</p>
+<h1 id="2-配置"><a href="#2-配置" class="headerlink" title="2. 配置"></a>2. 配置</h1><blockquote>
+<p>参考：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/main/docs/config.md">codex&#x2F;docs&#x2F;config.md at main · openai&#x2F;codex · GitHub</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/main/docs/example-config.md">codex&#x2F;docs&#x2F;example-config.md at main · openai&#x2F;codex · GitHub</a></li>
+</ol>
+</blockquote>
+<p>默认配置文件位置： <strong>~&#x2F;.codex&#x2F;config.toml</strong></p>
+<p>最小化可用配置（以阿里云百炼为例）：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs toml"><span class="hljs-attr">model</span> = <span class="hljs-string">&quot;Moonshot-Kimi-K2-Instruct&quot;</span><br><span class="hljs-attr">model_provider</span> = <span class="hljs-string">&quot;bailian&quot;</span><br><br><span class="hljs-section">[model_providers.bailian]</span><br><span class="hljs-attr">name</span> = <span class="hljs-string">&quot;bailian&quot;</span><br><span class="hljs-attr">base_url</span> = <span class="hljs-string">&quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span><br><span class="hljs-attr">env_key</span> = <span class="hljs-string">&quot;ALIYUN_BAILIAN_API_KEY&quot;</span><br><span class="hljs-attr">wire_api</span> = <span class="hljs-string">&quot;chat&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>最后在 <em>.bashrc</em> (以wsl为例)中导出百炼的key：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">aliyun</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">bailian</span><br>export ALIYUN_BAILIAN_API_KEY=sk-xxxxxxxxxxxxxx<br></code></pre></td></tr></table></figure>
+
+<p>至此，codex 配置成功！</p>
+<p>codex 配置文件详解：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br></pre></td><td class="code"><pre><code class="hljs toml"><span class="hljs-comment"># Codex example configuration (config.toml)</span><br><br><span class="hljs-comment"># 说明：这是Codex CLI的配置文件示例，采用TOML格式</span><br><br><span class="hljs-comment"># 作用：列出Codex所有可配置的键、默认值及简要说明，配置值与CLI内置默认值一致，可按需调整</span><br><br><span class="hljs-comment">#</span><br><br><span class="hljs-comment"># Notes（配置格式注意事项）</span><br><br><span class="hljs-comment"># - Root keys（根级配置项，如下面的model）必须放在tables（表，如[tui]）之前，否则TOML解析会报错</span><br><br><span class="hljs-comment"># - 默认值为&quot;unset&quot;（未设置）的可选配置项，会以注释形式展示并附带说明</span><br><br><span class="hljs-comment"># - MCP服务器、配置文件、模型提供商等配置为示例，使用时需根据实际需求删除或修改</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Core Model Selection （核心模型选择：配置Codex使用的AI模型及模型元数据）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Primary model used by Codex. Default differs by OS; non-Windows defaults here.</span><br><br><span class="hljs-comment"># Linux/macOS default: &quot;gpt-5-codex&quot;; Windows default: &quot;gpt-5&quot;.</span><br><br><span class="hljs-attr">model</span> = <span class="hljs-string">&quot;gpt-5-codex&quot;</span> <span class="hljs-comment"># Codex的主模型，用于处理日常代码生成、命令执行等核心逻辑；系统差异：Linux/macOS默认gpt-5-codex，Windows默认gpt-5</span><br><br><span class="hljs-comment"># Model used by the /review feature (code reviews). Default: &quot;gpt-5-codex&quot;.</span><br><br><span class="hljs-attr">review_model</span> = <span class="hljs-string">&quot;gpt-5-codex&quot;</span> <span class="hljs-comment"># 代码审查（/review命令）专用模型，默认与主模型一致为gpt-5-codex</span><br><br><span class="hljs-comment"># Provider id selected from [model_providers]. Default: &quot;openai&quot;.</span><br><br><span class="hljs-attr">model_provider</span> = <span class="hljs-string">&quot;openai&quot;</span> <span class="hljs-comment"># 模型提供商ID，需与下方[model_providers]中配置的提供商匹配，默认使用openai</span><br><br><span class="hljs-comment"># Optional manual model metadata. When unset, Codex auto-detects from model.</span><br><br><span class="hljs-comment"># Uncomment to force values.</span><br><br><span class="hljs-comment"># model_context_window = 128000 # tokens; default: auto for model → 模型上下文窗口大小（单位：tokens，即模型能处理的文本长度），默认自动识别当前模型的最大支持值，取消注释可强制设置</span><br><br><span class="hljs-comment"># model_max_output_tokens = 8192 # tokens; default: auto for model → 模型单次最大输出长度（单位：tokens），默认自动识别，取消注释可强制设置</span><br><br><span class="hljs-comment"># model_auto_compact_token_limit = 0 # disable/override auto; default: model family specific → 历史上下文自动压缩阈值（0表示禁用自动压缩），默认按模型家族（如GPT-5系列）预设值，取消注释可覆盖</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Reasoning &amp; Verbosity (Responses API capable models) （推理与冗余度：仅对支持Responses API的模型生效，控制模型思考逻辑和输出风格）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Reasoning effort: minimal | low | medium | high (default: medium)</span><br><br><span class="hljs-attr">model_reasoning_effort</span> = <span class="hljs-string">&quot;medium&quot;</span> <span class="hljs-comment"># 模型推理努力程度：值越高思考越细致（耗时越长），可选值minimal(最低)/low(低)/medium(中，默认)/high(高)</span><br><br><span class="hljs-comment"># Reasoning summary: auto | concise | detailed | none (default: auto)</span><br><br><span class="hljs-attr">model_reasoning_summary</span> = <span class="hljs-string">&quot;auto&quot;</span> <span class="hljs-comment"># 推理过程总结：是否输出模型的思考逻辑，可选值auto(自动，默认)/concise(简洁)/detailed(详细)/none(不输出)</span><br><br><span class="hljs-comment"># Text verbosity for GPT-5 family (Responses API): low | medium | high (default: medium)</span><br><br><span class="hljs-attr">model_verbosity</span> = <span class="hljs-string">&quot;medium&quot;</span> <span class="hljs-comment"># GPT-5系列模型的输出冗余度：值越高解释越详细，可选值low(简洁)/medium(中等，默认)/high(详细)</span><br><br><span class="hljs-comment"># Force-enable reasoning summaries for current model (default: false)</span><br><br><span class="hljs-attr">model_supports_reasoning_summaries</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 强制为当前模型启用推理总结（忽略模型是否原生支持），默认关闭</span><br><br><span class="hljs-comment"># Force reasoning summary format: none | experimental (default: none)</span><br><br><span class="hljs-attr">model_reasoning_summary_format</span> = <span class="hljs-string">&quot;none&quot;</span> <span class="hljs-comment"># 推理总结格式：none(默认格式)/experimental(实验性格式，需手动开启)</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Instruction Overrides （指令覆盖：自定义Codex的指令逻辑，优先级高于内置指令）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Additional user instructions appended after AGENTS.md. Default: unset.</span><br><br><span class="hljs-comment"># developer_instructions = &quot;&quot; # 附加开发者指令：追加在项目内置AGENTS.md指令之后，默认未设置，取消注释可填写（如强制模型遵循编码规范）</span><br><br><span class="hljs-comment"># Optional legacy base instructions override (prefer AGENTS.md). Default: unset.</span><br><br><span class="hljs-comment"># instructions = &quot;&quot; # 覆盖内置基础指令：旧版配置，不推荐使用，优先通过AGENTS.md或developer_instructions配置</span><br><br><span class="hljs-comment"># Inline override for the history compaction prompt. Default: unset.</span><br><br><span class="hljs-comment"># compact_prompt = &quot;&quot; # 覆盖历史上下文压缩提示词：控制模型如何&quot;精简&quot;旧对话内容，默认未设置</span><br><br><span class="hljs-comment"># Override built-in base instructions with a file path. Default: unset.</span><br><br><span class="hljs-comment"># experimental_instructions_file = &quot;/absolute/or/relative/path/to/instructions.txt&quot; # 从文件加载指令：用指定文件内容替代内置指令，需填绝对/相对路径，默认未设置</span><br><br><span class="hljs-comment"># Load the compact prompt override from a file. Default: unset.</span><br><br><span class="hljs-comment"># experimental_compact_prompt_file = &quot;/absolute/or/relative/path/to/compact_prompt.txt&quot; # 从文件加载压缩提示词：用指定文件内容覆盖默认压缩逻辑，默认未设置</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Approval &amp; Sandbox （审批与沙箱：核心安全配置，控制Codex执行命令、操作文件的权限）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># When to ask for command approval:</span><br><br><span class="hljs-comment"># - untrusted: only known-safe read-only commands auto-run; others prompt</span><br><br><span class="hljs-comment"># - on-failure: auto-run in sandbox; prompt only on failure for escalation</span><br><br><span class="hljs-comment"># - on-request: model decides when to ask (default)</span><br><br><span class="hljs-comment"># - never: never prompt (risky)</span><br><br><span class="hljs-attr">approval_policy</span> = <span class="hljs-string">&quot;on-request&quot;</span> <span class="hljs-comment"># 命令审批策略：</span><br><br><span class="hljs-comment"># untrusted：仅已知安全的只读命令（如ls、cat）自动执行，其他需审批；</span><br><br><span class="hljs-comment"># on-failure：先在沙箱自动执行，失败时才提示审批；</span><br><br><span class="hljs-comment"># on-request：模型自主判断是否需要审批（默认，平衡效率与安全）；</span><br><br><span class="hljs-comment"># never：所有操作不审批（极度危险）</span><br><br><span class="hljs-comment"># Filesystem/network sandbox policy for tool calls:</span><br><br><span class="hljs-comment"># - read-only (default)</span><br><br><span class="hljs-comment"># - workspace-write</span><br><br><span class="hljs-comment"># - danger-full-access (no sandbox; extremely risky)</span><br><br><span class="hljs-attr">sandbox_mode</span> = <span class="hljs-string">&quot;read-only&quot;</span> <span class="hljs-comment"># 沙箱模式（控制文件/网络访问权限）：</span><br><br><span class="hljs-comment"># read-only：只读模式（默认，可读文件，不可修改/删除，禁止网络）；</span><br><br><span class="hljs-comment"># workspace-write：工作目录可写（仅允许修改当前工作目录文件）；</span><br><br><span class="hljs-comment"># danger-full-access：完全访问（无沙箱，极度危险）</span><br><br><span class="hljs-comment"># Extra settings used only when sandbox_mode = &quot;workspace-write&quot;.</span><br><br><span class="hljs-section">[sandbox_workspace_write]</span> <span class="hljs-comment"># 仅当sandbox_mode设为workspace-write时生效的额外配置</span><br><br><span class="hljs-comment"># Additional writable roots beyond the workspace (cwd). Default: []</span><br><br><span class="hljs-attr">writable_roots</span> = [] <span class="hljs-comment"># 额外可写目录：除当前工作目录外，允许修改的目录列表，默认空（仅工作目录可写）</span><br><br><span class="hljs-comment"># Allow outbound network access inside the sandbox. Default: false</span><br><br><span class="hljs-attr">network_access</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 是否允许沙箱内访问网络（如curl、npm install），默认关闭</span><br><br><span class="hljs-comment"># Exclude $TMPDIR from writable roots. Default: false</span><br><br><span class="hljs-attr">exclude_tmpdir_env_var</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 是否排除$TMPDIR目录（不允许修改该环境变量指向的临时目录），默认不排除</span><br><br><span class="hljs-comment"># Exclude /tmp from writable roots. Default: false</span><br><br><span class="hljs-attr">exclude_slash_tmp</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 是否排除/tmp目录（不允许修改系统临时目录），默认不排除</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Shell Environment Policy for spawned processes （Shell环境策略：控制Codex启动子进程时继承的环境变量，避免泄露敏感信息）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-section">[shell_environment_policy]</span><br><br><span class="hljs-comment"># inherit: all (default) | core | none</span><br><br><span class="hljs-attr">inherit</span> = <span class="hljs-string">&quot;all&quot;</span> <span class="hljs-comment"># 环境变量继承策略：all(继承所有，默认)/core(仅继承核心变量如PATH)/none(不继承)</span><br><br><span class="hljs-comment"># Skip default excludes for names containing KEY/TOKEN (case-insensitive). Default: false</span><br><br><span class="hljs-attr">ignore_default_excludes</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 是否跳过默认排除规则（默认会过滤含KEY/TOKEN的敏感变量），默认不跳过</span><br><br><span class="hljs-comment"># Case-insensitive glob patterns to remove (e.g., &quot;AWS_*&quot;, &quot;AZURE_*&quot;). Default: []</span><br><br><span class="hljs-attr">exclude</span> = [] <span class="hljs-comment"># 额外排除的环境变量（大小写不敏感，支持通配符，如&quot;AWS_*&quot;过滤AWS密钥），默认空</span><br><br><span class="hljs-comment"># Explicit key/value overrides (always win). Default: &#123;&#125;</span><br><br><span class="hljs-attr">set</span> = &#123;&#125; <span class="hljs-comment"># 强制设置的环境变量（优先级最高，会覆盖继承的变量），默认空</span><br><br><span class="hljs-comment"># Whitelist; if non-empty, keep only matching vars. Default: []</span><br><br><span class="hljs-attr">include_only</span> = [] <span class="hljs-comment"># 环境变量白名单（非空时，仅保留列表中的变量），默认空</span><br><br><span class="hljs-comment"># Experimental: run via user shell profile. Default: false</span><br><br><span class="hljs-attr">experimental_use_profile</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 是否通过用户Shell配置文件（如.bashrc）启动子进程，实验性功能，默认关闭</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># History &amp; File Opener （历史记录与文件打开器：控制对话历史存储和文件链接跳转行为）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-section">[history]</span><br><br><span class="hljs-comment"># save-all (default) | none</span><br><br><span class="hljs-attr">persistence</span> = <span class="hljs-string">&quot;save-all&quot;</span> <span class="hljs-comment"># 历史记录持久化策略：save-all(保存所有，默认)/none(不保存)</span><br><br><span class="hljs-comment"># Maximum bytes for history file (currently not enforced). Example: 5242880</span><br><br><span class="hljs-comment"># max_bytes = 0 # 历史文件最大大小（单位：字节，目前未强制生效），默认0（无限制）</span><br><br><span class="hljs-comment"># URI scheme for clickable citations: vscode (default) | vscode-insiders | windsurf | cursor | none</span><br><br><span class="hljs-attr">file_opener</span> = <span class="hljs-string">&quot;vscode&quot;</span> <span class="hljs-comment"># 可点击文件链接的打开程序：vscode(默认，用VS Code打开)/vscode-insiders(VS Code内测版)/windsurf/cursor/none(仅显示路径)</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># UI, Notifications, and Misc （UI、通知及杂项：控制终端界面显示效果和通知行为）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-section">[tui]</span> <span class="hljs-comment"># 终端界面（TUI）相关配置</span><br><br><span class="hljs-comment"># Desktop notifications from the TUI: boolean or filtered list. Default: false</span><br><br><span class="hljs-comment"># Examples: true | [&quot;agent-turn-complete&quot;, &quot;approval-requested&quot;]</span><br><br><span class="hljs-attr">notifications</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 桌面通知：false(关闭，默认)/true(开启)/列表（如[&quot;approval-requested&quot;]，仅开启指定通知）</span><br><br><span class="hljs-comment"># Suppress internal reasoning events from output (default: false)</span><br><br><span class="hljs-attr">hide_agent_reasoning</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 是否隐藏模型推理过程日志，默认显示</span><br><br><span class="hljs-comment"># Show raw reasoning content when available (default: false)</span><br><br><span class="hljs-attr">show_raw_agent_reasoning</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 是否显示原始推理内容（未格式化的思考逻辑），默认不显示</span><br><br><span class="hljs-comment"># Disable burst-paste detection in the TUI (default: false)</span><br><br><span class="hljs-attr">disable_paste_burst</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 是否禁用批量粘贴检测（避免误触发大量操作），默认启用</span><br><br><span class="hljs-comment"># Track Windows onboarding acknowledgement (Windows only). Default: false</span><br><br><span class="hljs-attr">windows_wsl_setup_acknowledged</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># Windows WSL环境专用：标记已确认初始化配置，默认未确认</span><br><br><span class="hljs-comment"># External notifier program (argv array). When unset: disabled.</span><br><br><span class="hljs-comment"># Example: notify = [&quot;notify-send&quot;, &quot;Codex&quot;]</span><br><br><span class="hljs-comment"># notify = [ ] # 外部通知程序：接收Codex通知（如Linux用notify-send），默认禁用，取消注释可配置</span><br><br><span class="hljs-comment"># In-product notices (mostly set automatically by Codex).</span><br><br><span class="hljs-section">[notice]</span><br><br><span class="hljs-comment"># hide_full_access_warning = true # 是否隐藏&quot;完全访问模式&quot;（danger-full-access）的安全警告，默认显示</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Authentication &amp; Login （认证与登录：控制登录方式、凭证存储和ChatGPT服务连接）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Where to persist CLI login credentials: file (default) | keyring | auto</span><br><br><span class="hljs-attr">cli_auth_credentials_store</span> = <span class="hljs-string">&quot;file&quot;</span> <span class="hljs-comment"># CLI登录凭证存储位置：file(文件，默认)/keyring(系统密钥环如macOS Keychain)/auto(自动选择)</span><br><br><span class="hljs-comment"># Base URL for ChatGPT auth flow (not OpenAI API). Default:</span><br><br><span class="hljs-attr">chatgpt_base_url</span> = <span class="hljs-string">&quot;https://chatgpt.com/backend-api/&quot;</span> <span class="hljs-comment"># ChatGPT认证流程的基础URL（非OpenAI API地址），默认值固定</span><br><br><span class="hljs-comment"># Restrict ChatGPT login to a specific workspace id. Default: unset.</span><br><br><span class="hljs-comment"># forced_chatgpt_workspace_id = &quot;&quot; # 强制绑定ChatGPT工作区：仅允许在指定工作区内登录，默认未设置</span><br><br><span class="hljs-comment"># Force login mechanism when Codex would normally auto-select. Default: unset.</span><br><br><span class="hljs-comment"># Allowed values: chatgpt | api</span><br><br><span class="hljs-comment"># forced_login_method = &quot;chatgpt&quot; # 强制登录方式：覆盖Codex自动选择逻辑，可选chatgpt(网页登录)/api(API Key登录)，默认未设置</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Project Documentation Controls （项目文档控制：控制Codex读取项目内AGENTS.md文档的规则）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Max bytes from AGENTS.md to embed into first-turn instructions. Default: 32768</span><br><br><span class="hljs-attr">project_doc_max_bytes</span> = <span class="hljs-number">32768</span> <span class="hljs-comment"># AGENTS.md最大嵌入长度（32KB）：避免文档过大影响模型性能，默认32768字节</span><br><br><span class="hljs-comment"># Ordered fallbacks when AGENTS.md is missing at a directory level. Default: []</span><br><br><span class="hljs-attr">project_doc_fallback_filenames</span> = [] <span class="hljs-comment"># AGENTS.md不存在时的备选文档名列表（如[&quot;CODING_RULES.md&quot;]），默认空</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Tools (legacy toggles kept for compatibility) （工具：为兼容性保留的旧版工具开关）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-section">[tools]</span><br><br><span class="hljs-comment"># Enable web search tool (alias: web_search_request). Default: false</span><br><br><span class="hljs-attr">web_search</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用网络搜索工具（如查询最新API、技术文档），别名web_search_request，默认关闭</span><br><br><span class="hljs-comment"># Enable the view_image tool so the agent can attach local images. Default: true</span><br><br><span class="hljs-attr">view_image</span> = <span class="hljs-literal">true</span> <span class="hljs-comment"># 启用图片查看工具：允许模型读取、解析本地图片，默认开启</span><br><br><span class="hljs-comment"># (Alias accepted) You can also write:</span><br><br><span class="hljs-comment"># web_search_request = false # web_search的别名配置，效果一致</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Centralized Feature Flags (preferred) （集中式功能开关：推荐使用的新版功能开关，优先级高于[tools]）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-section">[features]</span><br><br><span class="hljs-comment"># Leave this table empty to accept defaults. Set explicit booleans to opt in/out.</span><br><br><span class="hljs-attr">unified_exec</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用统一执行工具（实验性），默认关闭</span><br><br><span class="hljs-attr">streamable_shell</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用流式Shell（实时输出命令结果），默认关闭</span><br><br><span class="hljs-attr">rmcp_client</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用Rust MCP客户端（支持OAuth认证），默认关闭</span><br><br><span class="hljs-attr">apply_patch_freeform</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用自由格式补丁应用，默认关闭</span><br><br><span class="hljs-attr">view_image_tool</span> = <span class="hljs-literal">true</span> <span class="hljs-comment"># 启用图片查看工具（同[tools].view_image），默认开启</span><br><br><span class="hljs-attr">web_search_request</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用网络搜索工具（同[tools].web_search），默认关闭</span><br><br><span class="hljs-attr">experimental_sandbox_command_assessment</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用沙箱命令风险评估（实验性），默认关闭</span><br><br><span class="hljs-attr">ghost_commit</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用&quot;幽灵提交&quot;（模拟提交，不实际写入代码库），默认关闭</span><br><br><span class="hljs-attr">enable_experimental_windows_sandbox</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用Windows实验性沙箱，默认关闭</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Experimental toggles (legacy; prefer [features]) （实验性开关：旧版，优先使用[features]）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Use experimental unified exec tool. Default: false</span><br><br><span class="hljs-attr">experimental_use_unified_exec_tool</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用实验性统一执行工具（同[features].unified_exec），默认关闭</span><br><br><span class="hljs-comment"># Use experimental Rust MCP client (enables OAuth for HTTP MCP). Default: false</span><br><br><span class="hljs-attr">experimental_use_rmcp_client</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用实验性Rust MCP客户端（同[features].rmcp_client），默认关闭</span><br><br><span class="hljs-comment"># Include apply_patch via freeform editing path (affects default tool set). Default: false</span><br><br><span class="hljs-attr">experimental_use_freeform_apply_patch</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用自由格式补丁应用（同[features].apply_patch_freeform），默认关闭</span><br><br><span class="hljs-comment"># Enable model-based sandbox command assessment. Default: false</span><br><br><span class="hljs-attr">experimental_sandbox_command_assessment</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 启用模型驱动的沙箱命令评估（同[features]中对应项），默认关闭</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># MCP (Model Context Protocol) servers （MCP服务器：连接外部工具服务，Codex可通过MCP调用外部能力）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Preferred store for MCP OAuth credentials: auto (default) | file | keyring</span><br><br><span class="hljs-attr">mcp_oauth_credentials_store</span> = <span class="hljs-string">&quot;auto&quot;</span> <span class="hljs-comment"># MCP服务OAuth凭证存储位置：auto(默认)/file/keyring</span><br><br><span class="hljs-comment"># Define MCP servers under this table. Leave empty to disable.</span><br><br><span class="hljs-section">[mcp_servers]</span> <span class="hljs-comment"># 定义MCP服务器列表（空则禁用MCP），以下为示例配置（需根据实际修改/删除）</span><br><br><span class="hljs-comment"># --- Example: STDIO transport --- （示例1：STDIO传输，通过本地命令启动MCP服务）</span><br><br><span class="hljs-comment"># [mcp_servers.docs]</span><br><br><span class="hljs-comment"># command = &quot;docs-server&quot; # required → 启动MCP服务的命令（必填）</span><br><br><span class="hljs-comment"># args = [&quot;--port&quot;, &quot;4000&quot;] # optional → 服务启动参数（可选）</span><br><br><span class="hljs-comment"># env = &#123; &quot;API_KEY&quot; = &quot;value&quot; &#125; # optional key/value pairs copied as-is → 服务环境变量（键值对，直接传递）</span><br><br><span class="hljs-comment"># env_vars = [&quot;ANOTHER_SECRET&quot;] # optional: forward these from the parent env → 从父进程继承的环境变量列表</span><br><br><span class="hljs-comment"># cwd = &quot;/path/to/server&quot; # optional working directory override → 服务工作目录（覆盖默认）</span><br><br><span class="hljs-comment"># startup_timeout_sec = 10.0 # optional; default 10.0 seconds → 服务启动超时时间（默认10秒）</span><br><br><span class="hljs-comment"># # startup_timeout_ms = 10000 # optional alias for startup timeout (milliseconds) → 超时时间别名（毫秒）</span><br><br><span class="hljs-comment"># tool_timeout_sec = 60.0 # optional; default 60.0 seconds → 工具调用超时时间（默认60秒）</span><br><br><span class="hljs-comment"># enabled_tools = [&quot;search&quot;, &quot;summarize&quot;] # optional allow-list → 允许调用的工具列表（白名单）</span><br><br><span class="hljs-comment"># disabled_tools = [&quot;slow-tool&quot;] # optional deny-list (applied after allow-list) → 禁止调用的工具列表（黑名单，优先级高于白名单）</span><br><br><span class="hljs-comment"># --- Example: Streamable HTTP transport --- （示例2：流式HTTP传输，连接远程MCP服务）</span><br><br><span class="hljs-comment"># [mcp_servers.github]</span><br><br><span class="hljs-comment"># url = &quot;https://github-mcp.example.com/mcp&quot; # required → MCP服务URL（必填）</span><br><br><span class="hljs-comment"># bearer_token_env_var = &quot;GITHUB_TOKEN&quot; # optional; Authorization: Bearer &lt;token&gt; → 承载令牌环境变量（用于Authorization请求头）</span><br><br><span class="hljs-comment"># http_headers = &#123; &quot;X-Example&quot; = &quot;value&quot; &#125; # optional static headers → 静态HTTP请求头（固定值）</span><br><br><span class="hljs-comment"># env_http_headers = &#123; &quot;X-Auth&quot; = &quot;AUTH_ENV&quot; &#125; # optional headers populated from env vars → 从环境变量读取的HTTP请求头</span><br><br><span class="hljs-comment"># startup_timeout_sec = 10.0 # optional → 启动超时时间</span><br><br><span class="hljs-comment"># tool_timeout_sec = 60.0 # optional → 工具调用超时时间</span><br><br><span class="hljs-comment"># enabled_tools = [&quot;list_issues&quot;] # optional allow-list → 允许调用的工具列表</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Model Providers (extend/override built-ins) （模型提供商：扩展或覆盖Codex内置的模型提供商）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Built-ins include:</span><br><br><span class="hljs-comment"># - openai (Responses API; requires login or OPENAI_API_KEY via auth flow)</span><br><br><span class="hljs-comment"># - oss (Chat Completions API; defaults to http://localhost:11434/v1)</span><br><br><span class="hljs-comment"># 内置模型提供商说明：</span><br><br><span class="hljs-comment"># - openai：对接OpenAI Responses API，需登录或配置OPENAI_API_KEY；</span><br><br><span class="hljs-comment"># - oss：对接Chat Completions API，默认指向本地http://localhost:11434/v1（如Ollama服务）</span><br><br><span class="hljs-section">[model_providers]</span> <span class="hljs-comment"># 模型提供商配置，以下为示例（需根据实际修改/删除）</span><br><br><span class="hljs-comment"># --- Example: override OpenAI with explicit base URL or headers --- （示例1：覆盖OpenAI提供商，指定base URL或请求头）</span><br><br><span class="hljs-comment"># [model_providers.openai]</span><br><br><span class="hljs-comment"># name = &quot;OpenAI&quot;</span><br><br><span class="hljs-comment"># base_url = &quot;https://api.openai.com/v1&quot; # default if unset → API基础URL（默认值）</span><br><br><span class="hljs-comment"># wire_api = &quot;responses&quot; # &quot;responses&quot; | &quot;chat&quot; (default varies) → 对接的API类型（responses/chat，默认随提供商变化）</span><br><br><span class="hljs-comment"># # requires_openai_auth = true # built-in OpenAI defaults to true → 是否需要OpenAI认证（内置OpenAI默认true）</span><br><br><span class="hljs-comment"># # request_max_retries = 4 # default 4; max 100 → 请求最大重试次数（默认4，最多100）</span><br><br><span class="hljs-comment"># # stream_max_retries = 5 # default 5; max 100 → 流式请求最大重试次数（默认5，最多100）</span><br><br><span class="hljs-comment"># # stream_idle_timeout_ms = 300000 # default 300_000 (5m) → 流式请求空闲超时时间（默认5分钟）</span><br><br><span class="hljs-comment"># # experimental_bearer_token = &quot;sk-example&quot; # optional dev-only direct bearer token → 实验性承载令牌（仅开发用）</span><br><br><span class="hljs-comment"># # http_headers = &#123; &quot;X-Example&quot; = &quot;value&quot; &#125; # 静态HTTP请求头</span><br><br><span class="hljs-comment"># # env_http_headers = &#123; &quot;OpenAI-Organization&quot; = &quot;OPENAI_ORGANIZATION&quot;, &quot;OpenAI-Project&quot; = &quot;OPENAI_PROJECT&quot; &#125; # 从环境变量读取的请求头</span><br><br><span class="hljs-comment"># --- Example: Azure (Chat/Responses depending on endpoint) --- （示例2：对接Azure OpenAI）</span><br><br><span class="hljs-comment"># [model_providers.azure]</span><br><br><span class="hljs-comment"># name = &quot;Azure&quot;</span><br><br><span class="hljs-comment"># base_url = &quot;https://YOUR_PROJECT_NAME.openai.azure.com/openai&quot; # Azure OpenAI基础URL（需替换项目名）</span><br><br><span class="hljs-comment"># wire_api = &quot;responses&quot; # or &quot;chat&quot; per endpoint → API类型（根据端点选择responses/chat）</span><br><br><span class="hljs-comment"># query_params = &#123; api-version = &quot;2025-04-01-preview&quot; &#125; # Azure必需的API版本查询参数</span><br><br><span class="hljs-comment"># env_key = &quot;AZURE_OPENAI_API_KEY&quot; # 存储Azure API Key的环境变量名</span><br><br><span class="hljs-comment"># # env_key_instructions = &quot;Set AZURE_OPENAI_API_KEY in your environment&quot; → 提示用户设置环境变量的说明</span><br><br><span class="hljs-comment"># --- Example: Local OSS (e.g., Ollama-compatible) --- （示例3：对接本地OSS服务，如Ollama）</span><br><br><span class="hljs-comment"># [model_providers.ollama]</span><br><br><span class="hljs-comment"># name = &quot;Ollama&quot;</span><br><br><span class="hljs-comment"># base_url = &quot;http://localhost:11434/v1&quot; # Ollama服务默认地址</span><br><br><span class="hljs-comment"># wire_api = &quot;chat&quot; # 对接Chat Completions API</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Profiles (named presets) （配置文件：命名的预设配置，可快速切换整套配置）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Active profile name. When unset, no profile is applied.</span><br><br><span class="hljs-comment"># profile = &quot;default&quot; # 激活的配置文件名：未设置则不启用任何配置文件，取消注释可指定（如&quot;default&quot;）</span><br><br><span class="hljs-section">[profiles]</span> <span class="hljs-comment"># 配置文件定义，以下为示例（需根据实际修改/删除）</span><br><br><span class="hljs-comment"># [profiles.default] # 名为&quot;default&quot;的配置文件</span><br><br><span class="hljs-comment"># model = &quot;gpt-5-codex&quot;</span><br><br><span class="hljs-comment"># model_provider = &quot;openai&quot;</span><br><br><span class="hljs-comment"># approval_policy = &quot;on-request&quot;</span><br><br><span class="hljs-comment"># sandbox_mode = &quot;read-only&quot;</span><br><br><span class="hljs-comment"># model_reasoning_effort = &quot;medium&quot;</span><br><br><span class="hljs-comment"># model_reasoning_summary = &quot;auto&quot;</span><br><br><span class="hljs-comment"># model_verbosity = &quot;medium&quot;</span><br><br><span class="hljs-comment"># chatgpt_base_url = &quot;https://chatgpt.com/backend-api/&quot;</span><br><br><span class="hljs-comment"># experimental_compact_prompt_file = &quot;compact_prompt.txt&quot;</span><br><br><span class="hljs-comment"># include_apply_patch_tool = false</span><br><br><span class="hljs-comment"># experimental_use_unified_exec_tool = false</span><br><br><span class="hljs-comment"># experimental_use_rmcp_client = false</span><br><br><span class="hljs-comment"># experimental_use_freeform_apply_patch = false</span><br><br><span class="hljs-comment"># experimental_sandbox_command_assessment = false</span><br><br><span class="hljs-comment"># tools_web_search = false</span><br><br><span class="hljs-comment"># tools_view_image = true</span><br><br><span class="hljs-comment"># features = &#123; unified_exec = false &#125;</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Projects (trust levels) （项目：标记特定项目目录的信任等级，仅支持&quot;trusted&quot;）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># Mark specific worktrees as trusted. Only &quot;trusted&quot; is recognized.</span><br><br><span class="hljs-section">[projects]</span><br><br><span class="hljs-comment"># [projects.&quot;/absolute/path/to/project&quot;] # 项目目录（需填绝对路径）</span><br><br><span class="hljs-comment"># trust_level = &quot;trusted&quot; # 信任等级：仅&quot;trusted&quot;有效，可信项目可放宽部分安全限制（如自动执行命令）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-comment"># OpenTelemetry (OTEL) – disabled by default （OpenTelemetry：可观测性配置，默认禁用，用于收集日志、指标）</span><br><br><span class="hljs-comment">################################################################################</span><br><br><span class="hljs-section">[otel]</span><br><br><span class="hljs-comment"># Include user prompt text in logs. Default: false</span><br><br><span class="hljs-attr">log_user_prompt</span> = <span class="hljs-literal">false</span> <span class="hljs-comment"># 是否在日志中包含用户提示词（可能含敏感信息），默认关闭</span><br><br><span class="hljs-comment"># Environment label applied to telemetry. Default: &quot;dev&quot;</span><br><br><span class="hljs-attr">environment</span> = <span class="hljs-string">&quot;dev&quot;</span> <span class="hljs-comment"># 遥测数据的环境标签（如&quot;dev&quot;/&quot;test&quot;/&quot;prod&quot;），默认&quot;dev&quot;</span><br><br><span class="hljs-comment"># Exporter: none (default) | otlp-http | otlp-grpc</span><br><br><span class="hljs-attr">exporter</span> = <span class="hljs-string">&quot;none&quot;</span> <span class="hljs-comment"># 导出器（指定遥测数据如何输出）：none(禁用，默认)/otlp-http(HTTP协议)/otlp-grpc(gRPC协议)</span><br><br><span class="hljs-comment"># Example OTLP/HTTP exporter configuration （OTLP/HTTP导出器示例）</span><br><br><span class="hljs-comment"># [otel]</span><br><br><span class="hljs-comment"># exporter = &#123; otlp-http = &#123;</span><br><br><span class="hljs-comment"># endpoint = &quot;https://otel.example.com/v1/logs&quot;, # OTEL服务地址</span><br><br><span class="hljs-comment"># protocol = &quot;binary&quot;, # &quot;binary&quot; | &quot;json&quot; → 传输协议</span><br><br><span class="hljs-comment"># headers = &#123; &quot;x-otlp-api-key&quot; = &quot;$&#123;OTLP_TOKEN&#125;&quot; &#125; # 认证请求头（从环境变量读OTLP_TOKEN）</span><br><br><span class="hljs-comment"># &#125;&#125;</span><br><br><span class="hljs-comment"># Example OTLP/gRPC exporter configuration （OTLP/gRPC导出器示例）</span><br><br><span class="hljs-comment"># [otel]</span><br><br><span class="hljs-comment"># exporter = &#123; otlp-grpc = &#123;</span><br><br><span class="hljs-comment"># endpoint = &quot;https://otel.example.com:4317&quot;, # OTEL服务地址（gRPC默认端口4317）</span><br><br><span class="hljs-comment"># headers = &#123; &quot;x-otlp-meta&quot; = &quot;abc123&quot; &#125; # 自定义请求头</span><br><br><span class="hljs-comment"># &#125;&#125;</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AI Coding - codex 使用指南</div>
+      <div>https://yangfanbin.cn/代码笔记/AI Coding - codex 使用指南/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/AI%20Coding%20-%20Claude%20code%20%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" title="AI Coding - Claude code 使用笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">AI Coding - Claude code 使用笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/miniblog%20%E7%AE%80%E6%B4%81%E6%9E%B6%E6%9E%84%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86/" title="miniblog 简洁架构开发流程梳理">
+                        <span class="hidden-mobile">miniblog 简洁架构开发流程梳理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

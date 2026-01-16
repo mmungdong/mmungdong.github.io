@@ -1,0 +1,841 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 日志记录记录日志通常涉及到以下几个方面：  日志记录方式 日志记录规范 日志保存方式  1.1 日志记录方式在 Go 项目开发中，通过日志包来记录日志。所以，在项目开发之前，需要准备一个易用、满足需求的 Go 日志包。准备日志包的方式有以下三种：  使用开源日志包：使用开源的日志包，例如 log、glog、logrus、zap 等。Docker、 ilium、Tyk 等项目使用了 logru">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03 基础 go 包开发 - 日志包">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/03%20%E5%9F%BA%E7%A1%80%20go%20%E5%8C%85%E5%BC%80%E5%8F%91%20-%20%E6%97%A5%E5%BF%97%E5%8C%85/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="1. 日志记录记录日志通常涉及到以下几个方面：  日志记录方式 日志记录规范 日志保存方式  1.1 日志记录方式在 Go 项目开发中，通过日志包来记录日志。所以，在项目开发之前，需要准备一个易用、满足需求的 Go 日志包。准备日志包的方式有以下三种：  使用开源日志包：使用开源的日志包，例如 log、glog、logrus、zap 等。Docker、 ilium、Tyk 等项目使用了 logru">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-08-07T17:11:02.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.078Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="miniblog">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>03 基础 go 包开发 - 日志包 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="03 基础 go 包开发 - 日志包"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-08-08 01:11" pubdate>
+          2025年8月8日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">03 基础 go 包开发 - 日志包</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-日志记录"><a href="#1-日志记录" class="headerlink" title="1. 日志记录"></a>1. 日志记录</h1><p>记录日志通常涉及到以下几个方面：</p>
+<ul>
+<li><strong>日志记录方式</strong></li>
+<li><strong>日志记录规范</strong></li>
+<li><strong>日志保存方式</strong></li>
+</ul>
+<h2 id="1-1-日志记录方式"><a href="#1-1-日志记录方式" class="headerlink" title="1.1 日志记录方式"></a>1.1 <strong>日志记录方式</strong></h2><p>在 Go 项目开发中，通过日志包来记录日志。所以，在项目开发之前，需要准备一个易用、满足需求的 Go 日志包。准备日志包的方式有以下三种：</p>
+<ol>
+<li><strong>使用开源日志包</strong>：使用开源的日志包，例如 log、glog、logrus、zap 等。Docker、 ilium、Tyk 等项目使用了 logrus，etcd 则使用了 log 和 zap；</li>
+<li><strong>定制化开源日志包</strong>：基于开源日志包封装一个满足特定需求的日志包。例如，Kubernetes 使用的 klog 是基于 glog 开发的。有些项目封装的日志包还会兼容多种类别的 Logger；</li>
+<li><strong>自研日志包</strong>：根据需求，从零开发一个日志包。</li>
+</ol>
+<p>目前已有许多开源日志包，社区比较受欢迎的开源日志包有 logrus、zap、zerolog、apex&#x2F;log、log15 等。其中最受欢迎的两个日志包是 logrus 和 zap。k8s 使用的时 klog 进行记录。</p>
+<p>一般项目中基于 logrus 或者 zap 两个包进行使用基本足够：</p>
+<ul>
+<li>logrus 功能强大、使用简单，不仅实现了日志包的基本功能，还有很多高级特性，适合一些大型项目，尤其是需要结构化日志记录的项目。因为 logrus 封装了<strong>很多能力</strong>，<strong>性能一般</strong>。</li>
+<li>zap 提供了很强大的日志功能，性能高，内存分配次数少，适合对日志性能要求很高的项目。另外，zap 包中的子包 zapcore，<strong>提供了很多底层的日志接口，适合用来做二次封装</strong>。</li>
+</ul>
+<p>logrus、 zap、 klog 对比：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>特性对比</strong></td>
+<td>logrus （1）</td>
+<td>zap （2）</td>
+<td>klog （3）</td>
+</tr>
+<tr>
+<td><strong>日志级别</strong></td>
+<td>支持 Debug、Info、Warn、Error、Fatal、Panic</td>
+<td>支持 Debug、Info、Warn、Error、DPanic、Panic、Fatal</td>
+<td>支持 Info、Warning、Error、Fatal、Panic</td>
+</tr>
+<tr>
+<td><strong>结构化日志</strong></td>
+<td>支持，通过 Fields 添加结构化字段</td>
+<td>支持，性能优化，可直接将复杂类型作为字段</td>
+<td>支持，但不如 logrus 和 zap 灵活</td>
+</tr>
+<tr>
+<td><strong>日志格式</strong></td>
+<td>默认文本格式，可自定义为 JSON</td>
+<td>提供 Console 和 JSON 编码器，可灵活配置</td>
+<td>默认文本格式，可自定义为 JSON</td>
+</tr>
+<tr>
+<td><strong>日志输出</strong></td>
+<td>支持控制台、文件等</td>
+<td>支持控制台、文件、网络等</td>
+<td>支持控制台、文件</td>
+</tr>
+<tr>
+<td><strong>调用堆栈</strong></td>
+<td>支持，可输出堆栈信息</td>
+<td>支持，可在特定级别输出堆栈</td>
+<td>支持，可在日志中输出堆栈信息</td>
+</tr>
+<tr>
+<td><strong>插件支持</strong></td>
+<td>支持，可通过插件扩展功能</td>
+<td>支持，可通过 Hooks 机制扩展</td>
+<td>不支持</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>性能对比</strong></td>
+<td>logrus （3）</td>
+<td>zap （1）</td>
+<td>klog （2）</td>
+</tr>
+<tr>
+<td><strong>性能表现</strong></td>
+<td>性能一般，适合中小规模项目</td>
+<td>性能极高，适合对性能要求极高的项目</td>
+<td>性能较好，但不如 zap</td>
+</tr>
+<tr>
+<td><strong>内存分配</strong></td>
+<td>内存分配较多，性能瓶颈</td>
+<td>使用 <code>sync.Pool</code>，内存分配少</td>
+<td>内存分配适中</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>易用性</strong></td>
+<td>logrus （1）</td>
+<td>zap （3）</td>
+<td>klog （2）</td>
+</tr>
+<tr>
+<td><strong>学习成本</strong></td>
+<td>较低，适合新手</td>
+<td>较高，功能丰富</td>
+<td>较低，基于 glog 封装</td>
+</tr>
+<tr>
+<td><strong>使用复杂度</strong></td>
+<td>使用简单，适合快速开发</td>
+<td>功能强大但配置复杂</td>
+<td>使用简单，适合 Kubernetes</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>适用场景</strong></td>
+<td>logrus</td>
+<td>zap</td>
+<td>klog</td>
+</tr>
+<tr>
+<td><strong>适用项目</strong></td>
+<td>中小型项目、对结构化日志有需求的项目</td>
+<td>高性能要求、大规模分布式系统</td>
+<td>Kubernetes 生态</td>
+</tr>
+<tr>
+<td><strong>二次封装</strong></td>
+<td>不太适合，功能封装较多</td>
+<td>非常适合，底层接口丰富</td>
+<td>不适合，主要用于 Kubernetes</td>
+</tr>
+</tbody></table>
+<p>综上：</p>
+<ul>
+<li><strong>logrus</strong>：功能强大且灵活，适合中小规模项目，尤其是对结构化日志有需求的场景。</li>
+<li><strong>zap</strong>：性能卓越，适合对性能要求极高的项目，尤其是分布式系统。</li>
+<li><strong>klog</strong>：适合 Kubernetes 生态，使用简单，但功能相对有限。</li>
+</ul>
+<p>如果是 Kubernetes 生态，应该选用 klog，平时开发直接选用 zap 即可。</p>
+<p>定制化开源日志包以及自研日志包大概都接触不上，所以暂时不赘述。</p>
+<h2 id="1-2-日志记录规范"><a href="#1-2-日志记录规范" class="headerlink" title="1.2 日志记录规范"></a><strong>1.2 日志记录规范</strong></h2><p>miniblog 也制定了相应的日志规范，具体规范内容见 <a target="_blank" rel="noopener" href="https://github.com/mmungdong/miniblog/blob/master/docs/devel/zh-CN/conversions/logging.md">docs&#x2F;devel&#x2F;zh-CN&#x2F;conversions&#x2F;logging.md</a>。该日志规范可以在后续的开发过程中根据需求不断更新和迭代。</p>
+<p>在 miniblog 的日志规范中，有以下两点规范需要注意：</p>
+<ol>
+<li>错误日志应在最初发生错误的位置打印。这样做一方面可以避免上层代码缺失关键的日志信息（因为上层代码可能无法获取错误发生处的详细信息），另一方面可以减少日志漏打的情况（距离错误发生位置越远，越容易忽略错误的存在，从而导致日志未被打印）；</li>
+<li>当调用第三方报函数或放发报错时，需要在错误处打印日志，例如：</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">if</span> err := os.Chdir(<span class="hljs-string">&quot;/root&quot;</span>); err != <span class="hljs-literal">nil</span> &#123;<br>    log.Errorf(<span class="hljs-string">&quot;change dir failed: %v&quot;</span>, err)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>对于嵌套的 Error，可在 Error 产生的最初位置打印 Error 日志，上层如果不需要添加必要的信息，可以直接返回下层的 Error。例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;flag&quot;</span><br>    <span class="hljs-string">&quot;fmt&quot;</span><br>    <span class="hljs-string">&quot;github.com/golang/glog&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    flag.Parse()<br>    <span class="hljs-keyword">defer</span> glog.Flush()<br>    <span class="hljs-keyword">if</span> err := loadConfig(); err != <span class="hljs-literal">nil</span> &#123;<br>        glog.Error(err)<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 正例：直接返回错误</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">loadConfig</span><span class="hljs-params">()</span></span> <span class="hljs-type">error</span> &#123;<br>    <span class="hljs-keyword">return</span> decodeConfig() <span class="hljs-comment">// 直接返回</span><br>&#125;<br><br><span class="hljs-comment">// 正例：如果需要基于函数返回的错误，封装更多的信息，可以封装返回的 err。否则，建议直接返回 err</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">decodeConfig</span><span class="hljs-params">()</span></span> <span class="hljs-type">error</span> &#123;<br>    <span class="hljs-keyword">if</span> err := readConfig(); err != <span class="hljs-literal">nil</span> &#123;<br>        <span class="hljs-comment">// 添加必要的信息，用户名称</span><br><br>        <span class="hljs-keyword">return</span> fmt.Errorf(<span class="hljs-string">&quot;could not decode configuration data for user %s: %v&quot;</span>, <span class="hljs-string">&quot;colin&quot;</span>, err) <br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">readConfig</span><span class="hljs-params">()</span></span> <span class="hljs-type">error</span> &#123;<br>    glog.Errorf(<span class="hljs-string">&quot;read: end of input.&quot;</span>)<br>    <span class="hljs-keyword">return</span> fmt.Errorf(<span class="hljs-string">&quot;read: end of input&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在最初产生错误的位置打印日志，可以很方便地追踪到错误产生的根源，并且错误日志只打印一次，可以减少重复的日志打印，减少排障时重复日志干扰，也可以提高代码的简洁度。当然，在开发中也可以根据需要对错误补充一些有用的信息，以记录错误产生的其他影响。</p>
+<h2 id="1-3-日志保存方式"><a href="#1-3-日志保存方式" class="headerlink" title="1.3 日志保存方式"></a>1.3 <strong>日志保存方式</strong></h2><p>我们可以将日志保存到任意需要的位置，常见的保存位置包括以下几种：</p>
+<ol>
+<li>**标准输出：**通常用于开发和测试阶段，主要目的是便于调试和查看；</li>
+<li>**日志文件：**这是生产环境中最常见的日志保存方式。保存的日志通常会被 Filebeat、Fluentd 等日志采集组件收集，并存储到 Elasticsearch 等系统中；</li>
+<li>**消息中间件：**例如 Kafka。日志包会调用 API 接口将日志保存到 Kafka 中。为了提高性能，通常会使用异步任务队列异步保存。然而，在这种情况下，需要开发异步上报逻辑，且服务重启时可能导致日志丢失，因此这种方式较少被采用。</li>
+</ol>
+<p>当前比较受欢迎的日志包（如 zap、logrus 等）都支持将日志同时保存到多个位置。例如，miniblog 项目的日志包底层封装了 zap，zap 支持同时将日志输出到标准输出和日志文件中。</p>
+<p>如果应用采用容器化部署，建议优先将日志输出到标准输出。容器平台通常具备采集容器日志的能力，采集日志时可以选择从标准输出采集或从容器内的日志文件中采集。如果选择从日志文件采集，则需要配置日志采集路径；而如果选择从标准输出采集，则无需额外配置，可以直接复用容器平台现有的能力，从而实现日志记录与日志采集的完全解耦。在 Kubernetes 最新的日志设计方案中，也建议应用直接将日志输出到标准输出。</p>
+<h1 id="2-miniblog-日志包"><a href="#2-miniblog-日志包" class="headerlink" title="2. miniblog 日志包"></a>2. miniblog 日志包</h1><h2 id="2-1-miniblog-日志包开发"><a href="#2-1-miniblog-日志包开发" class="headerlink" title="2.1 miniblog 日志包开发"></a>2.1 <strong>miniblog 日志包开发</strong></h2><p>这里不做过多说明，详情参考文章：<a target="_blank" rel="noopener" href="https://articles.zsxq.com/id_ozc2krpnuap6.html">10 | 基础 Go 包开发：日志包设计和实现</a></p>
+<h2 id="2-2-miniblog-日志包使用"><a href="#2-2-miniblog-日志包使用" class="headerlink" title="2.2 miniblog 日志包使用"></a>2.2 <strong>miniblog 日志包使用</strong></h2><h3 id="2-2-1-开箱即用前需要知道的知识点"><a href="#2-2-1-开箱即用前需要知道的知识点" class="headerlink" title="2.2.1 开箱即用前需要知道的知识点"></a>2.2.1 开箱即用前需要知道的知识点</h3><p><strong>日志级别和记录方法：</strong></p>
+<ol>
+<li>**日志级别：**在记录日志时，按严重性由低到高通常包括 Debug、Info、Warn、Error、Panic、Fatal 级别。Warn 级别在有些日志包中也叫 Warning 级别；</li>
+<li>**日志记录方法：**每个日志级别，根据记录方式，又包括非格式化记录、格式化记录和结构化记录三种方式。形如 Info(msg string) 的方法为非格式化记录方式。形如 Infof(format string, args …any) 的方法为格式化记录方式。形如 Infow(msg string, kvs …any) 的方法为结构化记录方式。Infow 方法名中的 w 代表“with”，即“带有”额外的上下文信息。这些方法与没有 w 的方法（如 Debug，Info 等）相比，允许你在日志消息后面附加额外的键值对（key-value），从而提供更详细的上下文信息。</li>
+</ol>
+<p>miniblog 在设计时，为了满足项目不同日志级别的记录需求，实现了 Debug、Info、Warn、Error、Panic、Fatal 级别的记录方法。</p>
+<p>在 Go 项目开发中，建议的日志记录方式为<strong>结构化记录方式（带有 w 后缀的，例如</strong> Infow**）**。</p>
+<p><strong>格式化记录方式可以通过结构化记录方式来替代</strong>，例如：log.Infof(“Failed to create user: %s”, username) 可替换为 log.Infow(“Failed to create user”, “username”, username)。</p>
+<p><strong>所以，miniblog 项目为了方便日志记录，降低开发者理解日志记录方法的负担，只实现了结构化记录方法。</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-comment">// Logger 定义了 miniblog 项目的日志接口。</span><br><span class="hljs-comment">// 该接口包含了项目中支持的日志记录方法，提供对不同日志级别的支持。</span><br><span class="hljs-keyword">type</span> Logger <span class="hljs-keyword">interface</span> &#123;<br>    <span class="hljs-comment">// Debugw 用于记录调试级别的日志，通常用于开发阶段，包含详细的调试信息。</span><br>    Debugw(msg <span class="hljs-type">string</span>, kvs ...any)<br><br>    <span class="hljs-comment">// Infow 用于记录信息级别的日志，表示系统的正常运行状态。</span><br>    Infow(msg <span class="hljs-type">string</span>, kvs ...any)<br><br>    <span class="hljs-comment">// Warnw 用于记录警告级别的日志，表示可能存在问题但不影响系统正常运行。</span><br>    Warnw(msg <span class="hljs-type">string</span>, kvs ...any)<br><br>    <span class="hljs-comment">// Errorw 用于记录错误级别的日志，表示系统运行中出现的错误，需要开发人员介入处理。</span><br>    Errorw(msg <span class="hljs-type">string</span>, kvs ...any)<br><br>    <span class="hljs-comment">// Panicw 用于记录严重错误级别的日志，表示系统无法继续运行，记录日志后会触发 panic。</span><br>    Panicw(msg <span class="hljs-type">string</span>, kvs ...any)<br><br>    <span class="hljs-comment">// Fatalw 用于记录致命错误级别的日志，表示系统无法继续运行，记录日志后会直接退出程序。</span><br>    Fatalw(msg <span class="hljs-type">string</span>, kvs ...any)<br><br>    <span class="hljs-comment">// Sync 用于刷新日志缓冲区，确保日志被完整写入目标存储。</span><br>    Sync()<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>将日志包 log 放置在 internal&#x2F;pkg 目录下的原因在于，日志包封装了一些定制化的逻辑，不适合对外暴露，所以不适合放在 pkg&#x2F; 目录下。但是日志包又是项目内的共享包，所以需要放在 internal&#x2F;pkg 目录下。</p>
+<p>通过定义 Logger 接口，可以体现<strong>接口即规范</strong>的编程哲学。这意味着，通过 Logger 接口可以清晰地表明 zapLogger 需要实现哪些方法，并明确日志调用者应调用哪些方法。在 Go 项目中，通常将日志接口命名为 Logger。</p>
+<h2 id="2-3-miniblog-日志包开箱即用"><a href="#2-3-miniblog-日志包开箱即用" class="headerlink" title="2.3 miniblog 日志包开箱即用"></a>2.3 miniblog 日志包开箱即用</h2><h3 id="2-3-1-初始化日志包"><a href="#2-3-1-初始化日志包" class="headerlink" title="2.3.1 初始化日志包"></a>2.3.1 初始化日志包</h3><p>日志配置,实际开发项目中如有特殊配置项再更新改配置：<a target="_blank" rel="noopener" href="https://github.com/mmungdong/miniblog/blob/master/internal/pkg/log/options.go">https://github.com/mmungdong/miniblog/blob/master/internal/pkg/log/options.go</a></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-comment">// Copyright 2024 孔令飞 &lt;colin404@foxmail.com&gt;. All rights reserved.</span><br><span class="hljs-comment">// Use of this source code is governed by a MIT style</span><br><span class="hljs-comment">// license that can be found in the LICENSE file. The original repo for</span><br><span class="hljs-comment">// this file is https://github.com/onexstack/miniblog. The professional</span><br><span class="hljs-comment">// version of this repository is https://github.com/onexstack/onex.</span><br><br><span class="hljs-keyword">package</span> log<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;go.uber.org/zap/zapcore&quot;</span><br>)<br><br><span class="hljs-comment">// Options 定义了日志配置的选项结构体.</span><br><span class="hljs-comment">// 通过该结构体，可以自定义日志的输出格式、级别以及其他相关配置.</span><br><span class="hljs-keyword">type</span> Options <span class="hljs-keyword">struct</span> &#123;<br>	<span class="hljs-comment">// DisableCaller 指定是否禁用 caller 信息.</span><br>	<span class="hljs-comment">// 如果设置为 false（默认值），日志中会显示调用日志所在的文件名和行号，例如：&quot;caller&quot;:&quot;main.go:42&quot;.</span><br>	DisableCaller <span class="hljs-type">bool</span><br>	<span class="hljs-comment">// DisableStacktrace 指定是否禁用堆栈信息.</span><br>	<span class="hljs-comment">// 如果设置为 false（默认值），在日志级别为 panic 或更高时，会打印堆栈跟踪信息.</span><br>	DisableStacktrace <span class="hljs-type">bool</span><br>	<span class="hljs-comment">// Level 指定日志级别.</span><br>	<span class="hljs-comment">// 可选值包括：debug、info、warn、error、dpanic、panic、fatal.</span><br>	<span class="hljs-comment">// 默认值为 info.</span><br>	Level <span class="hljs-type">string</span><br>	<span class="hljs-comment">// Format 指定日志的输出格式.</span><br>	<span class="hljs-comment">// 可选值包括：console（控制台格式）和 json（JSON 格式）.</span><br>	<span class="hljs-comment">// 默认值为 console.</span><br>	Format <span class="hljs-type">string</span><br>	<span class="hljs-comment">// OutputPaths 指定日志的输出位置.</span><br>	<span class="hljs-comment">// 默认值为标准输出（stdout），也可以指定文件路径或其他输出目标.</span><br>	OutputPaths []<span class="hljs-type">string</span><br>&#125;<br><br><span class="hljs-comment">// NewOptions 创建并返回一个带有默认值的 Options 对象.</span><br><span class="hljs-comment">// 该方法用于初始化日志配置选项，提供默认的日志级别、格式和输出位置.</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewOptions</span><span class="hljs-params">()</span></span> *Options &#123;<br>	<span class="hljs-keyword">return</span> &amp;Options&#123;<br>		<span class="hljs-comment">// 默认启用 caller 信息</span><br>		DisableCaller: <span class="hljs-literal">false</span>,<br>		<span class="hljs-comment">// 默认启用堆栈信息</span><br>		DisableStacktrace: <span class="hljs-literal">false</span>,<br>		<span class="hljs-comment">// 默认日志级别为 info</span><br>		Level: zapcore.InfoLevel.String(),<br>		<span class="hljs-comment">// 默认日志输出格式为 console</span><br>		Format: <span class="hljs-string">&quot;console&quot;</span>,<br>		<span class="hljs-comment">// 默认日志输出位置为标准输出</span><br>		OutputPaths: []<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;stdout&quot;</span>&#125;,<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs YAML"><span class="hljs-comment"># 日志配置</span><br><span class="hljs-attr">log:</span><br>  <span class="hljs-comment"># 是否开启 caller，如果开启会在日志中显示调用日志所在的文件和行号</span><br>  <span class="hljs-attr">disable-caller:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-comment"># 是否禁止在 panic 及以上级别打印堆栈信息</span><br>  <span class="hljs-attr">disable-stacktrace:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-comment"># 指定日志级别，可选值：debug, info, warn, error, dpanic, panic, fatal</span><br>  <span class="hljs-comment"># 生产环境建议设置为 info</span><br>  <span class="hljs-attr">level:</span> <span class="hljs-string">debug</span><br>  <span class="hljs-comment"># 指定日志显示格式，可选值：console, json</span><br>  <span class="hljs-comment"># 生产环境建议设置为 json</span><br>  <span class="hljs-attr">format:</span> <span class="hljs-string">json</span><br>  <span class="hljs-comment"># 指定日志输出位置，多个输出，用 `逗号 + 空格` 分开。stdout：标准输出</span><br>  <span class="hljs-attr">output-paths:</span> [<span class="hljs-string">/tmp/miniblog.log</span>, <span class="hljs-string">stdout</span>]<br></code></pre></td></tr></table></figure>
+
+<p>初始化日志包：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">import</span> (<br>    ...<br>    <span class="hljs-string">&quot;github.com/onexstack/miniblog/internal/pkg/log&quot;</span><br>    ...<br>)<br>...<br><span class="hljs-comment">// run 是主运行逻辑，负责初始化日志、解析配置、校验选项并启动服务器。</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">run</span><span class="hljs-params">(opts *options.ServerOptions)</span></span> <span class="hljs-type">error</span> &#123;<br>    <span class="hljs-comment">// 如果传入 --version，则打印版本信息并退出</span><br>    version.PrintAndExitIfRequested()<br>    <br>    <span class="hljs-comment">// 初始化日志</span><br>    log.Init(logOptions())<br>    <span class="hljs-keyword">defer</span> log.Sync() <span class="hljs-comment">// 确保日志在退出时被刷新到磁盘</span><br>    ...<br>&#125;<br><br><span class="hljs-comment">// logOptions 从 viper 中读取日志配置，构建 *log.Options 并返回.</span><br><span class="hljs-comment">// 注意：viper.Get&lt;Type&gt;() 中 key 的名字需要使用 . 分割，以跟 YAML 中保持相同的缩进.</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">logOptions</span><span class="hljs-params">()</span></span> *log.Options &#123;<br>    opts := log.NewOptions()<br>    <span class="hljs-keyword">if</span> viper.IsSet(<span class="hljs-string">&quot;log.disable-caller&quot;</span>) &#123;<br>        opts.DisableCaller = viper.GetBool(<span class="hljs-string">&quot;log.disable-caller&quot;</span>)<br>    &#125;<br>    <span class="hljs-keyword">if</span> viper.IsSet(<span class="hljs-string">&quot;log.disable-stacktrace&quot;</span>) &#123;<br>        opts.DisableStacktrace = viper.GetBool(<span class="hljs-string">&quot;log.disable-stacktrace&quot;</span>)<br>    &#125;<br>    <span class="hljs-keyword">if</span> viper.IsSet(<span class="hljs-string">&quot;log.level&quot;</span>) &#123;<br>        opts.Level = viper.GetString(<span class="hljs-string">&quot;log.level&quot;</span>)<br>    &#125;<br>    <span class="hljs-keyword">if</span> viper.IsSet(<span class="hljs-string">&quot;log.format&quot;</span>) &#123;<br>        opts.Format = viper.GetString(<span class="hljs-string">&quot;log.format&quot;</span>)<br>    &#125;<br>    <span class="hljs-keyword">if</span> viper.IsSet(<span class="hljs-string">&quot;log.output-paths&quot;</span>) &#123;<br>        opts.OutputPaths = viper.GetStringSlice(<span class="hljs-string">&quot;log.output-paths&quot;</span>)<br>    &#125;<br>    <span class="hljs-keyword">return</span> opts<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在 run 函数中，添加了 log.Init(logOptions()) 函数调用，用来在应用运行时，初始化日志实例，并在 miniblog 应用退出时，调用 log.Sync() 将缓存中的日志写入磁盘中。</p>
+</blockquote>
+<h1 id="🤗-总结归纳"><a href="#🤗-总结归纳" class="headerlink" title="🤗 总结归纳"></a>🤗 总结归纳</h1><ul>
+<li>整理日志记录打印以及保存方式</li>
+<li>miniblog 日志包开箱即用说明方式</li>
+</ul>
+<h1 id="📎-参考文章"><a href="#📎-参考文章" class="headerlink" title="📎 参考文章"></a>📎 参考文章</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://articles.zsxq.com/id_ozc2krpnuap6.html">10 | 基础 Go 包开发：日志包设计和实现</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/golang/" class="print-no-link">#golang</a>
+      
+        <a href="/tags/miniblog/" class="print-no-link">#miniblog</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>03 基础 go 包开发 - 日志包</div>
+      <div>https://yangfanbin.cn/代码笔记/03 基础 go 包开发 - 日志包/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年8月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/%E5%BC%80%E5%8F%91%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/" title="开发参考手册">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">开发参考手册</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/vscode%20%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6/" title="vscode 常用插件">
+                        <span class="hidden-mobile">vscode 常用插件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

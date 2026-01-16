@@ -1,0 +1,666 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. Go 基础1.1. go 包的管理方式1.1.1. GOPATH （go version &lt; 1.5）1.1.1.1 GOPATH 模式是什么？ 2009.11.10 随 go 语言诞生 通过统一包的存放路径来管理 不支持依赖包的版本控制  1.1.1.2. GOPATH 模式 和 GOPATH 路径的区别 GOPATH 模式是指我们通过 GOPATH 来管理我们的包 GOPATH 路">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go 工程师面试要点整理">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/Go%20%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E8%A6%81%E7%82%B9%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="1. Go 基础1.1. go 包的管理方式1.1.1. GOPATH （go version &lt; 1.5）1.1.1.1 GOPATH 模式是什么？ 2009.11.10 随 go 语言诞生 通过统一包的存放路径来管理 不支持依赖包的版本控制  1.1.1.2. GOPATH 模式 和 GOPATH 路径的区别 GOPATH 模式是指我们通过 GOPATH 来管理我们的包 GOPATH 路">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20251228145238820.png?imageSlim">
+<meta property="article:published_time" content="2026-01-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.079Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="面试题">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20251228145238820.png?imageSlim">
+  
+  
+  
+  <title>Go 工程师面试要点整理 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Go 工程师面试要点整理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-16 00:00" pubdate>
+          2026年1月16日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          622 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          6 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Go 工程师面试要点整理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-Go-基础"><a href="#1-Go-基础" class="headerlink" title="1. Go 基础"></a>1. Go 基础</h1><h2 id="1-1-go-包的管理方式"><a href="#1-1-go-包的管理方式" class="headerlink" title="1.1. go 包的管理方式"></a>1.1. go 包的管理方式</h2><h3 id="1-1-1-GOPATH-（go-version-1-5）"><a href="#1-1-1-GOPATH-（go-version-1-5）" class="headerlink" title="1.1.1. GOPATH （go version &lt; 1.5）"></a>1.1.1. GOPATH （go version &lt; 1.5）</h3><h4 id="1-1-1-1-GOPATH-模式是什么？"><a href="#1-1-1-1-GOPATH-模式是什么？" class="headerlink" title="1.1.1.1 GOPATH 模式是什么？"></a>1.1.1.1 GOPATH 模式是什么？</h4><ul>
+<li>2009.11.10 随 go 语言诞生</li>
+<li>通过统一包的存放路径来管理</li>
+<li>不支持依赖包的版本控制</li>
+</ul>
+<h4 id="1-1-1-2-GOPATH-模式-和-GOPATH-路径的区别"><a href="#1-1-1-2-GOPATH-模式-和-GOPATH-路径的区别" class="headerlink" title="1.1.1.2. GOPATH 模式 和 GOPATH 路径的区别"></a>1.1.1.2. GOPATH 模式 和 GOPATH 路径的区别</h4><ul>
+<li>GOPATH 模式是指我们通过 GOPATH 来管理我们的包</li>
+<li>GOPATH 路径值的是 GOPATH 这个环境变量的路径</li>
+</ul>
+<h4 id="1-1-1-3-GOROOT-和-GOPATH-路径的区别"><a href="#1-1-1-3-GOROOT-和-GOPATH-路径的区别" class="headerlink" title="1.1.1.3. GOROOT 和 GOPATH 路径的区别"></a>1.1.1.3. GOROOT 和 GOPATH 路径的区别</h4><ul>
+<li>GOROOT 是 Golang 的安装目录</li>
+<li>GOPATH 是 Go 语言指定的工作空间<br>注意：GOROOT 和 GOPATH 不能是同一个目录</li>
+</ul>
+<h4 id="1-1-1-4-GOPATH-默认值"><a href="#1-1-1-4-GOPATH-默认值" class="headerlink" title="1.1.1.4. GOPATH 默认值"></a>1.1.1.4. GOPATH 默认值</h4><p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/blog20251228145238820.png?imageSlim" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>GOPATH 模式下，我们的工程代码必须放在<code>GOPATH/src</code>目录下。</p>
+<h4 id="1-1-1-5-go-get"><a href="#1-1-1-5-go-get" class="headerlink" title="1.1.1.5. go get"></a>1.1.1.5. go get</h4><ol>
+<li><p><strong>步骤 1：克隆远程代码到指定目录</strong></p>
+<p> 将远程代码克隆到<code>$GOPATH/src</code>目录下。</p>
+<p> 这是 GOPATH 模式的强制要求：Go 的工具链仅会识别<code>$GOPATH/src</code>作为源码根目录，远程代码只有存放在此目录，才能被后续的编译、安装命令识别。</p>
+</li>
+<li><p><strong>步骤 2：执行<code>go install</code>命令</strong></p>
+<p> <code>go install</code>在 GOPATH 模式下的作用是：编译当前源码，并将生成的可执行文件输出到<code>$GOPATH/bin</code>目录（可全局调用），同时将编译后的包文件（<code>.a</code>格式）存入<code>$GOPATH/pkg</code>目录（避免重复编译）。</p>
+</li>
+<li><p><strong>步骤 3：使用<code>-d</code>参数的场景</strong></p>
+<p> 执行<code>go get</code>时指定<code>-d</code>参数，可实现 “仅下载不安装”—— 即只获取远程代码及依赖的源码，但不执行编译和安装操作，适用于仅需要获取源码的场景。</p>
+</li>
+</ol>
+<h4 id="1-1-1-6-go-install"><a href="#1-1-1-6-go-install" class="headerlink" title="1.1.1.6. go install"></a>1.1.1.6. go install</h4><ol>
+<li><p><strong>可执行程序的输出</strong></p>
+<p> 若目标代码是包含<code>main</code>包的可执行程序（能生成二进制文件），<code>go install</code>会将编译后的可执行文件存储到<code>$GOPATH/bin</code>目录。</p>
+</li>
+</ol>
+<ul>
+<li>作用：<code>$GOPATH/bin</code>下的可执行文件可直接全局调用（需将该目录加入系统环境变量），方便快速运行程序。</li>
+</ul>
+<ol start="2">
+<li><p><strong>普通包的输出</strong></p>
+<p> 若目标代码是普通包（非<code>main</code>包，用于被其他代码引入），<code>go install</code>会将编译生成的<code>.a</code>后缀静态库文件，存放至<code>$GOPATH/pkg</code>目录。</p>
+</li>
+</ol>
+<ul>
+<li>作用：<code>.a</code>文件是包的编译产物，后续依赖该包的代码可直接使用此文件，避免重复编译，提升项目的构建效率。</li>
+</ul>
+<h4 id="1-1-1-7-怎么判断一个包能生成可执行行文件？"><a href="#1-1-1-7-怎么判断一个包能生成可执行行文件？" class="headerlink" title="1.1.1.7. 怎么判断一个包能生成可执行行文件？"></a>1.1.1.7. 怎么判断一个包能生成可执行行文件？</h4><p>main 包中存在 main 函数的情况下。</p>
+<h3 id="1-1-2-GOVENDER-go-version-1-5"><a href="#1-1-2-GOVENDER-go-version-1-5" class="headerlink" title="1.1.2. GOVENDER (go version &gt;&#x3D; 1.5)"></a>1.1.2. GOVENDER (go version &gt;&#x3D; 1.5)</h3><h3 id="1-1-3-GOModules-go-version-1-11"><a href="#1-1-3-GOModules-go-version-1-11" class="headerlink" title="1.1.3. GOModules (go version &gt;&#x3D; 1.11)"></a>1.1.3. GOModules (go version &gt;&#x3D; 1.11)</h3>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/golang/" class="print-no-link">#golang</a>
+      
+        <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" class="print-no-link">#面试题</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Go 工程师面试要点整理</div>
+      <div>https://yangfanbin.cn/代码笔记/Go 工程师面试要点整理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/VSCode%20%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E9%85%8D%E7%BD%AE/" title="VSCode 前端代码格式化配置">
+                        <span class="hidden-mobile">VSCode 前端代码格式化配置</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,807 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 什么是 web 应用？1.1. web 应用，web 服务和 web 服务器的概念 **Web 服务：**Web 服务是一种通过网络提供的功能服务，其通信基于标准的 HTTP、RPC 或其他协议。Web 服务遵循客户端-服务器模型，客户端使用 Web 服务支持的协议向服务端发送请求，服务端处理请求后返回相应的数据包。在通信过程中，为了确保双方能够理解对方的信息，需要使用统一约定的通信协议和数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="05 Go web 服务器实现">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/05%20Go%20web%20%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="1. 什么是 web 应用？1.1. web 应用，web 服务和 web 服务器的概念 **Web 服务：**Web 服务是一种通过网络提供的功能服务，其通信基于标准的 HTTP、RPC 或其他协议。Web 服务遵循客户端-服务器模型，客户端使用 Web 服务支持的协议向服务端发送请求，服务端处理请求后返回相应的数据包。在通信过程中，为了确保双方能够理解对方的信息，需要使用统一约定的通信协议和数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628022119291.png">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628022826784.png">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628023146515.png">
+<meta property="og:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628023814532.png">
+<meta property="article:published_time" content="2025-08-07T17:10:27.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.079Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="miniblog">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628022119291.png">
+  
+  
+  
+  <title>05 Go web 服务器实现 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="05 Go web 服务器实现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-08-08 01:10" pubdate>
+          2025年8月8日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          52 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">05 Go web 服务器实现</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-什么是-web-应用？"><a href="#1-什么是-web-应用？" class="headerlink" title="1. 什么是 web 应用？"></a>1. 什么是 web 应用？</h1><h2 id="1-1-web-应用，web-服务和-web-服务器的概念"><a href="#1-1-web-应用，web-服务和-web-服务器的概念" class="headerlink" title="1.1. web 应用，web 服务和 web 服务器的概念"></a>1.1. web 应用，web 服务和 web 服务器的概念</h2><ul>
+<li>**Web 服务：**Web 服务是一种通过网络提供的功能服务，其通信基于标准的 HTTP、RPC 或其他协议。Web 服务遵循客户端-服务器模型，客户端使用 Web 服务支持的协议向服务端发送请求，服务端处理请求后返回相应的数据包。在通信过程中，为了确保双方能够理解对方的信息，需要使用统一约定的通信协议和数据交换格式。</li>
+<li>**Web 应用：**Web 应用是基于 Web 技术开发的具体应用程序，它是 Web 服务的实现者，运行在 Web 服务器上。Web 应用可以利用 Web 服务实现特定的功能，例如通过远程 API 获取数据。</li>
+<li>**Web 服务器：**Web 服务器指提供 Web 服务的软件或硬件设备，是 Web 应用运行和管理所需的基础架构和环境。Web 服务器负责配置、监控和维护 Web 应用，同时在客户端与 Web 应用之间充当通信桥梁。客户端向 Web 服务器发送请求，服务器将请求转发到具体的 Web 应用进行处理，并将结果返回给客户端。</li>
+</ul>
+<p>总结来看，Web 应用是基于 Web 技术开发的具体应用程序，其中包含了多个 Web 服务。Web 应用可以部署在 Web 服务器上，而 Web 服务器则为 Web 应用提供运行与管理所需的基础设施。</p>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628022119291.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="1-2-如何实现一个-web-服务器"><a href="#1-2-如何实现一个-web-服务器" class="headerlink" title="1.2. 如何实现一个 web 服务器"></a>1.2. 如何实现一个 web 服务器</h2><p>为了高效开发一个 Web 服务，通常需要进行以下技术选型：</p>
+<ol>
+<li>**通信协议：**根据具体的业务场景和需求选择合适的通信协议；</li>
+<li>**数据交换格式：**根据具体的业务场景和需求选择适用的数据交换格式。在选择数据交换格式时，还需考虑通信协议的支持情况，因为不同的通信协议支持的数据交换格式可能不同；</li>
+<li>**Web 框架：**由于 Web 服务通常包含多个 API 接口，选择合适的 Web 框架可以提高开发效率和代码复用率。我们可以选择从零自行设计开发一个框架，也可以直接使用业界成熟的开源 Web 框架。在选择 Web 框架时，需要考虑通信协议和数据交换格式，因为每个 Web 框架支持的通信协议和数据交换格式可能有所不同。一款优秀的 Web 框架通常能够满足所需的通信协议和数据交换格式。</li>
+</ol>
+<h2 id="1-3-如何选择合适的通信协议和数据交换格式"><a href="#1-3-如何选择合适的通信协议和数据交换格式" class="headerlink" title="1.3. 如何选择合适的通信协议和数据交换格式"></a>1.3. <strong>如何选择合适的通信协议和数据交换格式</strong></h2><p>开发 Web 服务的第一步是根据业务场景和需求选择适用的通信协议与数据交换格式，二者的定义如下：</p>
+<ol>
+<li>**通信协议：**通信协议是规定计算机或设备之间通信规则的协议，定义了数据传输的格式、传输方式、错误检测及纠正机制等。常见的通信协议包括 HTTP、RPC、WebSocket、TCP&#x2F;IP、FTP 等。不同的通信协议支持的数据交换格式也会有所不同；</li>
+<li>**数据交换格式：**数据交换格式（也称数据序列化格式）是为不同系统之间传输和解析数据制定的规范，定义了数据的结构、编码方式及解析方法。常见的数据交换格式包括 JSON、Protobuf、XML 等。</li>
+</ol>
+<p>首先，我们需要根据业务场景和需求，选择合适的通信协议。在 Go 项目开发中，常用的通信协议包括 HTTP、RPC 和 WebSocket，其中使用最频繁的是 HTTP 和 RPC。在实际开发中，通常选择 REST API 接口规范来开发 API 接口，这些 API 接口的底层通信基于 HTTP 协议。而实现 RPC 通信时，则通常使用 gRPC 框架。gRPC 是由谷歌开源的一个 RPC 框架。</p>
+<blockquote>
+<p>提示</p>
+<p>RPC 也可以理解为一种通信协议，但它是基于其他协议（例如 TCP、UDP、HTTP）封装而成的通信协议。</p>
+</blockquote>
+<p>接下来，根据所选的通信协议，选择最佳适配的数据交换格式。HTTP 和 RPC 各自有其推荐使用的数据交换格式，这可以视为事实上的标准。在无特殊需求的情况下，一般不需要改变这种适配关系：HTTP 协议通常采用 JSON 数据格式，而 RPC 通常采用 Protobuf 数据格式。</p>
+<blockquote>
+<p>HTTP 和 RPC 在不同的场景下各有适配。在企业应用开发中，通常会结合两种通信协议，共同构建一个高效的 Go 应用：</p>
+<ol>
+<li>**对外：**REST（基于 HTTP 协议）+JSON 的组合。由于 REST API 接口规范清晰直观，JSON 数据格式易于理解和使用，并且客户端和服务端通过 HTTP 协议通信时无需使用相同的编程语言，因此 REST+JSON 更适合用于对外提供 API 接口；</li>
+<li>**对内：**gRPC（基于 RPC 协议）+Protobuf 的组合。由于 RPC 协议调用便捷、Protobuf 格式的数据传输效率更高，因此 gRPC+Protobuf 更适合用于对内提供高性能的 API 接口。</li>
+</ol>
+</blockquote>
+<p>为了更好地开发 Web 服务，通常不会直接使用裸 HTTP 或 RPC 协议，而是基于这些协议封装一层框架来使用。因此，文中提到的“通信协议”实际上指的是协议在实际应用中的使用形态。</p>
+<p>REST+JSON 和 RPC+Protobuf 这两种组合在企业级应用中应用广泛。二者并非相互取代，而是各自适用于不同的场景，相辅相成。在企业应用中，REST 与 RPC 的组合方式通常如图</p>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628022826784.png" srcset="/img/loading.gif" lazyload></p>
+<p>外部请求通过 REST+JSON 访问 Web 服务，Web 服务通过 RPC+Protobuf 访问应用内的其他服务。应用内服务间调用通过 RPC+Protobuf 来调用。</p>
+<p>此外，很多 Go 应用采用了一种更灵活、更强大的构建方式：在一个 Web 服务器中同时实现 REST 接口和 RPC 接口。外部客户端调用 REST 接口，内部服务调用 RPC 接口，而 REST API 通过代理，将请求转发到内部的 RPC 接口。通过这种方式，只需实现一套 RPC 接口，就可以通过代理对外提供 REST 接口。例如，可以使用 grpc-gateway 将 HTTP 请求转换为 gRPC 请求。</p>
+<h2 id="1-3-如何选择一个优秀的-Web-框架"><a href="#1-3-如何选择一个优秀的-Web-框架" class="headerlink" title="1.3. 如何选择一个优秀的 Web 框架"></a><strong>1.3. 如何选择一个优秀的 Web 框架</strong></h2><p>当前自己的 golang 技术栈选项：</p>
+<ul>
+<li>http: gin, echo</li>
+<li>rpc: grpc-go</li>
+</ul>
+<h2 id="1-4-miniblog-项目中实现的-Web-服务类型"><a href="#1-4-miniblog-项目中实现的-Web-服务类型" class="headerlink" title="1.4. miniblog 项目中实现的 Web 服务类型"></a>1.4. <strong>miniblog 项目中实现的 Web 服务类型</strong></h2><p>miniblog 是一个小而美的项目，虽然项目不大，却同时实现了 HTTP 和 gRPC 两种 Web 服务类型，miniblog 具体的服务类型如图：</p>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628023146515.png" srcset="/img/loading.gif" lazyload></p>
+<p>miniblog 项目使用 Gin 框架实现了 HTTP 服务，使用 gRPC 框架实现了 gRPC 服务，使用 grpc-gateway 实现了 HTTP 反向代理服务，用来将 HTTP 服务转换为 gRPC 服务。</p>
+<p>同时，miniblog 项目支持通过配置文件中的 tls.use-tls 配置项开启 TLS 认证。mb-apiserver 服务启动时，可通过配置文件中的 server-mode 配置项来配置启动的 Web 服务类型：</p>
+<ol>
+<li>server-mode&#x3D;gin：启动使用 Gin Web 框架开发的 HTTP 服务；</li>
+<li>server-mode&#x3D;grpc：启动使用 grpc+grpc-gateway 框架开发的 gRPC 服务，同时支持 HTTP 请求。在 mb-apiserver 接收到 HTTP 请求后，HTTP 反向代理服务，会将 HTTP 请求转换为 gRPC 请求，并转发给 gRPC 服务接口。</li>
+</ol>
+<p>为什么 miniblog 项目会同时实现 HTTP 反向代理服务、gRPC 服务和 HTTP 服务：</p>
+<ol>
+<li>H**TTP 反向代理服务+gRPC 服务：**在 Go 项目开发中，外部系统一般通过 HTTP 接口访问服务，而内部系统则基于性能和调用便捷性的考虑，更倾向于使用 RPC 接口通信。一般情况下，服务只需要对外提供一种类型的通信协议。例如，仅提供 gRPC 接口，外部系统如果需要访问可以访问 API 网关，请求在 API 网关层被转换为 gRPC 请求。但这种方式依赖于 API 网关基础设施，在企业应用开发中，有些服务因为种种原因（例如，企业没有 API 网关），并不会接入 API 网关，所以这在这种情况下，服务内置一个 HTTP 反向代理服务器，用于支持 HTTP 请求，并将请求自动转换为 gRPC 请求，以解决此类诉求。miniblog 服务的 HTTP 反向代理服务器+gRPC 服务的组合模式，既能满足外部系统的访问需求，又能满足内部服务之间的访问需求；</li>
+<li>**HTTP 服务：**绝大多数企业应用通过 HTTP 接口对外提供服务，这类 HTTP 服务通常使用 Gin 框架开发。本课程中的 HTTP 服务实现仅用于展示如何使用 Gin 框架开发 HTTP 接口。</li>
+</ol>
+<h1 id="2-gRPC-服务实现"><a href="#2-gRPC-服务实现" class="headerlink" title="2. gRPC 服务实现"></a>2. gRPC 服务实现</h1><h2 id="2-1-rpc-介绍"><a href="#2-1-rpc-介绍" class="headerlink" title="2.1. rpc 介绍"></a>2.1. rpc 介绍</h2><blockquote>
+<p>RPC（Remote Procedure Call，远程过程调用）是一种计算机通信协议。该协议允许运行在一台计算机上的程序调用另一台计算机上的子程序，而开发者无需为这种交互编写额外的代码。</p>
+</blockquote>
+<p><img src="https://images-1306852673.cos.ap-chengdu.myqcloud.com/20250628023814532.png" srcset="/img/loading.gif" lazyload></p>
+<p>RPC 调用的具体流程如下：</p>
+<ol>
+<li>客户端通过本地调用的方式调用客户端存根（Client Stub）；</li>
+<li>客户端存根将参数打包（也称为 Marshalling）成一个消息，并发送该消息；</li>
+<li>客户端所在的操作系统（OS）将消息发送到服务端；</li>
+<li>服务端接收到消息后，将消息传递给服务端存根（Server Stub）；</li>
+<li>服务端存根将消息解包（也称为 Unmarshalling），得到参数；</li>
+<li>服务端存根调用服务端的子程序（函数），完成处理后，将结果按照相反的步骤返回给客户端。</li>
+</ol>
+<p>需要注意的是，Stub 负责处理参数和返回值的序列化（Serialization）、参数的打包与解包，以及网络层的通信。在 RPC 中，客户端的 Stub 通常被称为“Stub”，而服务端的 Stub 通常被称为“Skeleton”。</p>
+<h2 id="2-2-gRPC-介绍"><a href="#2-2-gRPC-介绍" class="headerlink" title="2.2. gRPC 介绍"></a>2.2. gRPC 介绍</h2><p>gRPC 是由谷歌开发的一种高性能、开源且支持多种编程语言的通用 RPC 框架，基于 HTTP&#x2F;2 协议开发，并默认采用 Protocol Buffers 作为数据序列化协议。gRPC 具有以下特性：</p>
+<ol>
+<li>**语言中立：**支持多种编程语言，例如 Go、Java、C、C++、C#、Node.js、PHP、Python、Ruby 等；</li>
+<li>**基于 IDL 定义服务：**通过 IDL（Interface Definition Language）文件定义服务，并使用 proto3 工具生成指定语言的数据结构、服务端接口以及客户端存根。这种方法能够解耦服务端和客户端，实现客户端与服务端的并行开发；</li>
+<li>**基于 HTTP&#x2F;2 协议：**通信协议基于标准的 HTTP&#x2F;2 设计，支持双向流、消息头压缩、单 TCP 的多路复用以及服务端推送等能力；</li>
+<li>**支持 Protocol Buffer 序列化：**Protocol Buffer（简称 Protobuf）是一种与语言无关的高性能序列化框架，可以减少网络传输流量，提高通信效率。此外，Protobuf 语法简单且表达能力强，非常适合用于接口定义。</li>
+</ol>
+<p>与许多其他 RPC 框架类似，gRPC 也通过 IDL 语言来定义接口（包括接口名称、传入参数和返回参数等）。在服务端，gRPC 服务实现了预定义的接口。在客户端，gRPC 存根提供了与服务端相同的方法。</p>
+<h2 id="2-3-Protocol-Buffers-介绍"><a href="#2-3-Protocol-Buffers-介绍" class="headerlink" title="2.3. Protocol Buffers 介绍"></a>2.3. <strong>Protocol Buffers 介绍</strong></h2><p>Protocol Buffers（简称 Protobuf）是由谷歌开发的一种用于对数据结构进行序列化的方法，可用于数据通信协议、数据存储格式等，也是一种灵活且高效的数据格式，与 XML 和 JSON 类似。由于 Protobuf 具有出色的传输性能，因此常被用于对数据传输性能要求较高的系统中。Protobuf 的主要特性如下：</p>
+<ol>
+<li>**更快的数据传输速度：**Protobuf 在传输过程中会将数据序列化为二进制格式，相较于 XML 和 JSON 的文本传输格式，这种序列化方式能够显著减少 I&#x2F;O 操作，从而提升数据传输的速度；</li>
+<li>**跨平台多语言支持：**Protobuf 自带的编译工具 protoc 可以基于 Protobuf 定义文件生成多种语言的客户端或服务端代码，供程序直接调用，因此适用于多语言需求的场景；</li>
+<li>**良好的扩展性和兼容性：**Protobuf 能够在不破坏或影响现有程序的基础上，更新已有的数据结构，提高系统的灵活性；</li>
+<li>**基于 IDL 文件定义服务：**通过 proto3 工具可以生成特定语言的数据结构、服务端和客户端接口。</li>
+</ol>
+<p>在 gRPC 框架中，Protocol Buffers 主要有以下四个作用：</p>
+<p>**第一，可以用来定义数据结构。**举个例子，下面的代码定义了一个 LoginRequest 数据结构：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs Protobuf"><span class="hljs-comment">// LoginRequest 表示登录请求</span><br><span class="hljs-keyword">message </span><span class="hljs-title class_">LoginRequest</span> &#123;<br>    <span class="hljs-comment">// username 表示用户名称</span><br>    <span class="hljs-type">string</span> username = <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">// password 表示用户密码</span><br>    <span class="hljs-type">string</span> password = <span class="hljs-number">2</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>**第二，可以用来定义服务接口。**下面的代码定义了一个 MiniBlog 服务：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Protobuf"><span class="hljs-keyword">service </span><span class="hljs-title class_">MiniBlog</span> &#123;<br>   <span class="hljs-function"><span class="hljs-keyword">rpc</span> Login(LoginRequest) <span class="hljs-keyword">returns</span> (LoginResponse) </span>&#123;&#125;<br>&#125; <br></code></pre></td></tr></table></figure>
+
+<p><strong>第三，可以通过 protobuf 序列化和反序列化，提升传输效率:</strong></p>
+<p>使用 XML 或 JSON 编译数据时，虽然数据文本格式可读性更高，但在进行数据交换时，设备需要耗费大量的 CPU 资源进行 I&#x2F;O 操作，从而影响整体传输速率。而 Protocol Buffers 不同于前者，它会将字符串序列化为二进制数据后再进行传输。这种二进制格式的字节数比 JSON 或 XML 少得多，因此传输速率更高。</p>
+<p><strong>第四，Protobuf 是标准化的:</strong></p>
+<p>我们可以基于标准的 Protobuf 文件生成多种编程语言的客户端、服务端代码。在 Go 项目开发中，可以基于这种标准化的语言开发多种 protoc 编译插件，从而大大提高开发效率。</p>
+<h2 id="2-4-miniblog-实现-gRPC-服务器"><a href="#2-4-miniblog-实现-gRPC-服务器" class="headerlink" title="2.4. miniblog 实现 gRPC 服务器"></a>2.4. <strong>miniblog 实现 gRPC 服务器</strong></h2><blockquote>
+<p>具体代码参见：<a target="_blank" rel="noopener" href="https://github.com/mmungdong/miniblog/tree/master/pkg/api/apiserver/v1">miniblog&#x2F;pkg&#x2F;api&#x2F;apiserver&#x2F;v1 at master · mmungdong&#x2F;miniblog</a></p>
+</blockquote>
+<p>为了展示如何实现一个 gRPC 服务器，并展示如何通信，miniblog 模拟了一个场景：miniblog 配套一个运营系统，运营系统需要通过接口获取所有的用户，进行注册用户统计。为了提高内部接口通信的性能，运营系统通过 gRPC 接口访问 miniblog 的 API 接口。为此，miniblog 需要实现一个 gRPC 服务器。那么如何实现一个 gRPC 服务器呢？其实很简单，可以通过以下几步来实现：</p>
+<ol>
+<li>定义 gRPC 服务；</li>
+<li>生成客户端和服务器代码；</li>
+<li>实现 gRPC 服务端；</li>
+<li>实现 gRPC 客户端；</li>
+<li>测试 gRPC 服务。</li>
+</ol>
+<p>grpc-go 官方仓库中提供了许多代码实现供参考，例如 <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc-go/tree/master/examples">examples</a> 目录。gRPC 官方文档也包含了大量 gRPC 框架的使用教程。建议在学习后续内容之前，先根据官方的 <a target="_blank" rel="noopener" href="https://grpc.io/docs/languages/go/quickstart/">Quick start 文档</a>完成一次 gRPC 服务的创建和使用流程，这将有助于你更好地理解后续内容。</p>
+<h3 id="2-4-1-定义-gRPC-服务"><a href="#2-4-1-定义-gRPC-服务" class="headerlink" title="2.4.1. 定义 gRPC 服务"></a>2.4.1. <strong>定义 gRPC 服务</strong></h3><p>我们需要编写.proto 格式的 Protobuf 文件来描述一个 gRPC 服务。服务内容包括以下部分：</p>
+<ol>
+<li>**服务定义：**描述服务包含的 API 接口；</li>
+<li>**请求和返回参数的定义：**服务定义了一系列 API 接口，每个 API 接口都需要指定请求参数和返回参数。</li>
+</ol>
+<p>新建 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s09/pkg/api/apiserver/v1/apiserver.proto">pkg&#x2F;api&#x2F;apiserver&#x2F;v1&#x2F;apiserver.proto</a> 文件，其内容如下：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs Protobuf">syntax = <span class="hljs-string">&quot;proto3&quot;</span>; <span class="hljs-comment">// 告诉编译器此文件使用什么版本的语法</span><br><br><span class="hljs-keyword">package</span> v1;<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;google/protobuf/empty.proto&quot;</span>;       <span class="hljs-comment">// 导入空消息</span><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;apiserver/v1/healthz.proto&quot;</span>;        <span class="hljs-comment">// 健康检查消息定义</span><br><br><span class="hljs-keyword">option</span> go_package = <span class="hljs-string">&quot;github.com/onexstack/miniblog/pkg/api/apiserver/v1;v1&quot;</span>;<br><br><span class="hljs-comment">// MiniBlog 定义了一个 MiniBlog RPC 服务</span><br><span class="hljs-keyword">service </span><span class="hljs-title class_">MiniBlog</span> &#123;<br>    <span class="hljs-comment">// Healthz 健康检查</span><br>    <span class="hljs-function"><span class="hljs-keyword">rpc</span> Healthz(google.protobuf.Empty) <span class="hljs-keyword">returns</span> (HealthzResponse) </span>&#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>syntax 关键字可以指定当前使用的版本号，这里采用的是 proto3 版本</p>
+<p>package 关键字用于指定生成的 .pb.go 文件所属的包名。</p>
+<p>import 关键字用来导入其他 Protobuf 文件。</p>
+<p>option 关键字用于对 .proto 文件进行配置，其中 go_package 是必需的配置项，其值必须设置为包的导入路径。</p>
+<p>service 关键字用来定义一个 MiniBlog 服务，服务中包含了所有的 RPC 接口。</p>
+<p>在 MiniBlog 服务中，使用 rpc 关键字定义服务的 API 接口。接口中包含了请求参数 google.protobuf.Empty 和返回参数 HealthzResponse。在上述 Protobuf 文件中，google.protobuf.Empty 是谷歌提供的一个特殊的 Protobuf 消息类型，其作用是表示一个“空消息”。它来自于谷歌的 Protocol Buffers 标准库，定义在 <a target="_blank" rel="noopener" href="https://github.com/golang/protobuf/tree/master/ptypes/empty">google&#x2F;protobuf&#x2F;empty.proto</a> 文件中。</p>
+<p>gRPC 支持定义四种类型的服务方法。上述示例中定义的是简单模式的服务方法，也是 miniblog 使用的 gRPC 模式。以下是四种服务方法的具体介绍：</p>
+<ol>
+<li>**简单模式（Simple RPC）：**这是最基本的 gRPC 调用形式。客户端发起一个请求，服务端返回一个响应。定义格式为 rpc SayHello (HelloRequest) returns (HelloReply) {}；</li>
+<li>**服务端流模式（Server-side streaming RPC）：**客户端发送一个请求，服务端返回数据流，客户端从流中依次读取数据直到流结束。定义格式为 rpc SayHello (HelloRequest) returns (stream HelloReply) {}；</li>
+<li>**客户端流模式（Client-side streaming RPC）：**客户端以数据流的形式连续发送多条消息至服务端，服务端在处理完所有数据之后返回一次响应。定义格式为 rpc SayHello (stream HelloRequest) returns (HelloReply) {}；</li>
+<li>**双向数据流模式（Bidirectional streaming RPC）：**客户端和服务端可以同时以数据流的方式向对方发送消息，实现实时交互。定义格式为 rpc SayHello (stream HelloRequest) returns (stream HelloReply) {}。</li>
+</ol>
+<p>在 apiserver.proto 文件中，定义了 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s09/pkg/api/apiserver/v1/apiserver.proto#L20">Healthz</a> 接口，还需要为这些接口定义请求参数和返回参数。考虑到代码未来的可维护性，这里建议将不同资源类型的请求参数定义保存在不同的文件中。在 Go 项目开发中，将不同资源类型相关的结构体定义和方法实现分别保存在不同的文件中，是一个好的开发习惯，代码按资源分别保存在不同的文件中，可以提高代码的维护效率。</p>
+<p>同样，为了提高代码的可维护性，建议接口的请求参数和返回参数都定义成固定的格式：</p>
+<ol>
+<li><strong>请求参数格式：</strong>&lt;接口名&gt;Request，例如 LoginRequest；</li>
+<li><strong>返回参数格式：</strong>&lt;接口名&gt;Response，例如 LoginResponse。</li>
+</ol>
+<p>根据上面的可维护性要求，新建 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s09/pkg/api/apiserver/v1/healthz.proto">pkg&#x2F;api&#x2F;apiserver&#x2F;v1&#x2F;healthz.proto</a> 文件，在文件中定义健康检查相关的请求参数，内容如下：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs Protobuf"><span class="hljs-comment">// Healthz API 定义，包含健康检查响应的相关消息和状态</span><br>syntax = <span class="hljs-string">&quot;proto3&quot;</span>; <span class="hljs-comment">// 告诉编译器此文件使用什么版本的语法</span><br><br><span class="hljs-keyword">package</span> v1;<br><br><span class="hljs-keyword">option</span> go_package = <span class="hljs-string">&quot;github.com/onexstack/miniblog/pkg/api/apiserver/v1&quot;</span>;<br><br><span class="hljs-comment">// ServiceStatus 表示服务的健康状态</span><br><span class="hljs-keyword">enum </span><span class="hljs-title class_">ServiceStatus</span> &#123;<br>    <span class="hljs-comment">// Healthy 表示服务健康</span><br>    Healthy = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">// Unhealthy 表示服务不健康</span><br>    Unhealthy = <span class="hljs-number">1</span>;<br>&#125;<br><br><span class="hljs-comment">// HealthzResponse 表示健康检查的响应结构体</span><br><span class="hljs-keyword">message </span><span class="hljs-title class_">HealthzResponse</span> &#123;<br>    <span class="hljs-comment">// status 表示服务的健康状态</span><br>    ServiceStatus status = <span class="hljs-number">1</span>;<br><br>    <span class="hljs-comment">// timestamp 表示请求的时间戳</span><br>    <span class="hljs-type">string</span> timestamp = <span class="hljs-number">2</span>;<br><br>    <span class="hljs-comment">// message 表示可选的状态消息，描述服务健康的更多信息</span><br>    <span class="hljs-type">string</span> message = <span class="hljs-number">3</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在 healthz.proto 文件中，使用 message 关键字定义消息类型（即接口参数）。消息类型由多个字段组成，每个字段包括字段类型和字段名称。位于等号（&#x3D;）右侧的值并非字段默认值，而是数字标签，可理解为字段的唯一标识符（类似于数据库中的主键），不可重复。标识符用于在编译后的二进制消息格式中对字段进行识别。**一旦 Protobuf 消息投入使用，字段的标识符就不应再修改。**数字标签的取值范围为 [1, 536870911]，其中 19000 至 19999 为保留数字，不能使用。</p>
+<p>在实际项目开发中，最常用的是 optional 和 repeated 关键字。Protobuf 更多的语法示例请参考 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s09/pkg/api/apiserver/v1/example.proto">pkg&#x2F;api&#x2F;apiserver&#x2F;v1&#x2F;example.proto</a> 文件，更多 Protobuf 语法请参考 Protobuf 的官方文档。  </p>
+<h3 id="2-4-2-生成客户端和服务器代码"><a href="#2-4-2-生成客户端和服务器代码" class="headerlink" title="2.4.2. 生成客户端和服务器代码"></a>2.4.2. <strong>生成客户端和服务器代码</strong></h3><p>编写好 Protobuf 文件后，需要使用 protoc 工具对 Protobuf 文件进行编译，以生成所需的客户端和服务端代码。由于在项目迭代过程中，Protobuf 文件可能会经常被修改并需要重新编译，为了提高开发效率和简化项目维护的复杂度，我们可以将编译操作定义为 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s09/Makefile#L66">Makefile</a> 中的一个目标。在 Makefile 文件中，添加以下代码：  </p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Makefile">...<br><span class="hljs-comment"># Protobuf 文件存放路径</span><br>APIROOT=<span class="hljs-variable">$(PROJ_ROOT_DIR)</span>/pkg/api<br>...<br><span class="hljs-section">protoc: # 编译 protobuf 文件.</span><br>    @echo <span class="hljs-string">&quot;===========&gt; Generate protobuf files&quot;</span><br>    @protoc                                              \<br>        --proto_path=<span class="hljs-variable">$(APIROOT)</span>                          \<br>        --proto_path=<span class="hljs-variable">$(PROJ_ROOT_DIR)</span>/third_party/protobuf    \<br>        --go_out=paths=source_relative:<span class="hljs-variable">$(APIROOT)</span>        \<br>        --go-grpc_out=paths=source_relative:<span class="hljs-variable">$(APIROOT)</span>   \<br>        <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find <span class="hljs-variable">$(APIROOT)</span> -name *.proto)</span><br></code></pre></td></tr></table></figure>
+
+<p>上述 protoc 规则的命令中，protoc 是 Protocol Buffers 文件的编译器工具，用于编译 .proto 文件生成代码。需要先安装 protoc 命令后才能使用。protoc 通过插件机制实现对不同语言的支持。例如，使用 –xxx_out 参数时，protoc 会首先查询是否存在内置的 xxx 插件。如果没有内置的 xxx 插件，则会继续查询系统中是否存在名为 protoc-gen-xxx 的可执行程序。例如 –go_out 参数使用的插件名为 protoc-gen-go。</p>
+<p>以下是 protoc 命令参数的说明：</p>
+<ol>
+<li>-proto_path 或 -I：用于指定编译源码的搜索路径，类似于 C&#x2F;C++中的头文件搜索路径，在构建 .proto 文件时，protoc 会在这些路径下查找所需的 Protobuf 文件及其依赖；</li>
+<li>-go_out：用于生成与 gRPC 服务相关的 Go 代码，并配置生成文件的路径和文件结构。例如 –go_out&#x3D;plugins&#x3D;grpc,paths&#x3D;import:.。主要参数包括 plugins 和 paths。分别表示生成 Go 代码所使用的插件，以及生成的 Go 代码的位置。这里我们使用到了 paths 参数，它支持以下两个选项：</li>
+<li>import（默认值）：按照生成的 Go 代码包的全路径创建目录结构；</li>
+<li>source_relative：表示生成的文件应保持与输入文件相对路径一致。假设 Protobuf 文件位于 pkg&#x2F;api&#x2F;apiserver&#x2F;v1&#x2F;example.proto，启用该选项后，生成的代码也会位于 pkg&#x2F;api&#x2F;apiserver&#x2F;v1&#x2F;目录。如果没有设置 paths&#x3D;source_relative，默认情况下，生成的 Go 文件的路径可能与包含路径有直接关系，并不总是与输入文件相对路径保持一致。</li>
+<li>-go-grpc_out：功能与 –go_out 类似，但该参数用于指定生成的 *_grpc.pb.go 文件的存放路径。</li>
+</ol>
+<p>在 pkg&#x2F;api&#x2F;apiserver&#x2F;v1&#x2F;apiserver.proto 文件中，通过以下语句导入了 empty.proto 文件：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Protobuf"><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;google/protobuf/empty.proto&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>因此，需要将 empty.proto 文件保存在匹配的路径下，并通过以下参数将其添加到 Protobuf 文件的搜索路径中：–proto_path&#x3D;$(PROJ_ROOT_DIR)&#x2F;third_party&#x2F;protobuf。</p>
+<p>由于 empty.proto 是第三方项目的文件，根据目录结构规范，应将其存放在项目根目录下的 third_party 目录中。</p>
+<p>执行以下命令编译 Protobuf 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Shell">make protoc<br></code></pre></td></tr></table></figure>
+
+<p>述命令会在 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/tree/feature/s09/pkg/api/apiserver/v1">pkg&#x2F;api&#x2F;apiserver&#x2F;v1&#x2F;</a> 目录下生成以下两类文件：</p>
+<ol>
+<li>.pb.go：包含与 Protobuf 文件中定义的消息类型（使用 message 关键字）对应的 Go 语言结构体、枚举类型、以及与这些结构体相关的序列化、反序列化代码。主要功能是将 Protobuf 数据格式与 Go 语言中的结构体进行映射，并支持 Protobuf 协议的数据序列化与反序列化操作；</li>
+<li>_grpc.pb.go：包含与 Protobuf 文件中定义的服务（使用 service 关键字）对应的 gRPC 服务代码。该文件会定义客户端和服务端用到的接口（interface），并包含注册服务的方法（如 RegisterService）。</li>
+</ol>
+<blockquote>
+<p>💡 提示：<br>由于编译 Protobuf 文件不是每次构建都需要执行的操作，因此未将 protoc 目标添加为 Makefile 中 all 目标的依赖项。</p>
+</blockquote>
+<h3 id="2-4-3-实现-gRPC-服务端"><a href="#2-4-3-实现-gRPC-服务端" class="headerlink" title="2.4.3. 实现 gRPC 服务端"></a>2.4.3. <strong>实现 gRPC 服务端</strong></h3><p>启动 gRPC 服务，需要指定一些核心配置，例如 gRPC 服务监听的端口。所以，需要先给应用添加 gRPC 服务配置。根据 miniblog 应用构建模型，需要先添加初始化配置，再添加运行时配置，之后根据运行时配置创建一个 gRPC 服务实例。代码实现如代码清单 7-1 所示（位于 <a target="_blank" rel="noopener" href="https://github.com/onexstack/miniblog/blob/feature/s09/cmd/mb-apiserver/app/options/options.go#L25">cmd&#x2F;mb-apiserver&#x2F;app&#x2F;options&#x2F;options.go</a> 文件中）。</p>
+<p>TODO</p>
+<h1 id="🤗-总结归纳"><a href="#🤗-总结归纳" class="headerlink" title="🤗 总结归纳"></a>🤗 总结归纳</h1><p>总结文章的内容</p>
+<h1 id="📎-参考文章"><a href="#📎-参考文章" class="headerlink" title="📎 参考文章"></a>📎 参考文章</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://articles.zsxq.com/id_o96j60qppjpt.html">12 | Web 服务器实现：什么是 Web 应用？</a></li>
+<li>引用文章</li>
+</ul>
+<blockquote>
+<p>有关Notion安装或者使用上的问题，欢迎您在底部评论区留言，一起交流~</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/golang/" class="print-no-link">#golang</a>
+      
+        <a href="/tags/miniblog/" class="print-no-link">#miniblog</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>05 Go web 服务器实现</div>
+      <div>https://yangfanbin.cn/代码笔记/05 Go web 服务器实现/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年8月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/vscode%20%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6/" title="vscode 常用插件">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">vscode 常用插件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/04%20%E5%9F%BA%E7%A1%80%20go%20%E5%8C%85%E5%BC%80%E5%8F%91%20-%20%E9%94%99%E8%AF%AF%E5%8C%85/" title="04 基础 go 包开发 - 错误包">
+                        <span class="hidden-mobile">04 基础 go 包开发 - 错误包</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

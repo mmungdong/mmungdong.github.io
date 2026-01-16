@@ -1,0 +1,681 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="介绍errgroup 是什么？errgroup 是Go官方扩展库 golang.org&#x2F;x&#x2F;sync 中的并发原语，用于管理多个 goroutine 的协同执行和错误处理。它解决了标准库 sync.WaitGroup 无法便捷传递错误的问题，支持在并发任务中统一处理错误，并支持在首个错误发生时取消所有任务。 核心特性 错误聚合与传播 当任意一个 goroutine 返回错误时，errgroup 会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="errgroup - golang sync 的扩展库">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/errgroup%20-%20%E5%A2%9E%E5%BC%BA%20go%20%E7%9A%84%E5%B9%B6%E5%8F%91%E8%83%BD%E5%8A%9B/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="介绍errgroup 是什么？errgroup 是Go官方扩展库 golang.org&#x2F;x&#x2F;sync 中的并发原语，用于管理多个 goroutine 的协同执行和错误处理。它解决了标准库 sync.WaitGroup 无法便捷传递错误的问题，支持在并发任务中统一处理错误，并支持在首个错误发生时取消所有任务。 核心特性 错误聚合与传播 当任意一个 goroutine 返回错误时，errgroup 会">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-08-09T07:07:46.000Z">
+<meta property="article:modified_time" content="2026-01-16T15:47:49.080Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="go3方库">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>errgroup - golang sync 的扩展库 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="errgroup - golang sync 的扩展库"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-08-09 15:07" pubdate>
+          2025年8月9日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">errgroup - golang sync 的扩展库</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="errgroup-是什么？"><a href="#errgroup-是什么？" class="headerlink" title="errgroup 是什么？"></a>errgroup 是什么？</h2><p>errgroup 是Go官方扩展库 <code>golang.org/x/sync</code> 中的并发原语，用于管理多个 goroutine 的协同执行和错误处理。它解决了标准库 <code>sync.WaitGroup</code> 无法便捷传递错误的问题，支持在并发任务中统一处理错误，并支持在首个错误发生时取消所有任务。</p>
+<h2 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h2><ol>
+<li><strong>错误聚合与传播</strong><br> <strong>当任意一个 goroutine 返回错误时，errgroup 会立即取消其他未完成的任务，并将错误传递给主 goroutine，避免资源浪费。</strong></li>
+<li><strong>批量任务取消</strong><br> 通过 <code>context.Context</code> 实现任务组的级联取消，一旦某个任务失败，整个任务组会被终止。</li>
+<li><strong>超时控制</strong><br> 支持结合 <code>context.WithTimeout</code> 设置任务组超时时间，防止长时间阻塞。</li>
+</ol>
+<h2 id="与标准库-sync-WaitGroup-的对比"><a href="#与标准库-sync-WaitGroup-的对比" class="headerlink" title="与标准库 sync.WaitGroup 的对比"></a>与标准库 <code>sync.WaitGroup</code> 的对比</h2><p>相较于 <code>sync.WaitGroup</code> 仅提供等待机制，errgroup增加了以下能力：</p>
+<ul>
+<li>错误自动收集与传播；</li>
+<li>任务取消的原子性操作；</li>
+<li>更简洁的并发任务管理代码结构。</li>
+</ul>
+<h1 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">go get github.com/golang/sync<br></code></pre></td></tr></table></figure>
+
+<h2 id="使用标准库的-sync-WaitGroup-收集并发错误"><a href="#使用标准库的-sync-WaitGroup-收集并发错误" class="headerlink" title="使用标准库的 sync.WaitGroup 收集并发错误"></a>使用标准库的 <code>sync.WaitGroup</code> 收集并发错误</h2><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>  <span class="hljs-string">&quot;fmt&quot;</span><br>  <span class="hljs-string">&quot;net/http&quot;</span><br>  <span class="hljs-string">&quot;sync&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>  <span class="hljs-keyword">var</span> urls = []<span class="hljs-type">string</span>&#123;<br>    <span class="hljs-string">&quot;http://www.baidu.org/&quot;</span>,          <span class="hljs-comment">// 错误URL</span><br>    <span class="hljs-string">&quot;http://www.bilibili.com/&quot;</span>,       <span class="hljs-comment">// 正常URL</span><br>    <span class="hljs-string">&quot;http://www.somestupidname.com/&quot;</span>, <span class="hljs-comment">// 正常URL</span><br>  &#125;<br><br>  <span class="hljs-comment">// 1. 定义错误集合（类似K8s收集所有错误）</span><br>  <span class="hljs-keyword">var</span> errors []<span class="hljs-type">error</span><br>  <span class="hljs-comment">// 2. 定义互斥锁，保证并发安全</span><br>  <span class="hljs-keyword">var</span> mu sync.Mutex<br>  <span class="hljs-keyword">var</span> wg sync.WaitGroup<br><br>  <span class="hljs-keyword">for</span> _, url := <span class="hljs-keyword">range</span> urls &#123;<br>    wg.Add(<span class="hljs-number">1</span>)<br>    <span class="hljs-comment">// 3. 传入url作为参数，避免goroutine共享循环变量（关键！）</span><br>    <span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(u <span class="hljs-type">string</span>)</span></span> &#123;<br>      <span class="hljs-keyword">defer</span> wg.Done()<br>      resp, err := http.Get(u)<br>      <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>      <br>        <span class="hljs-comment">// 加锁保护错误集合写入</span><br>        mu.Lock()<br>        errors = <span class="hljs-built_in">append</span>(errors, fmt.Errorf(<span class="hljs-string">&quot;访问 %s 失败: %v&quot;</span>, u, err))<br>        mu.Unlock()<br>        <span class="hljs-keyword">return</span><br>      &#125;<br>      <span class="hljs-keyword">defer</span> resp.Body.Close()<br>      fmt.Printf(<span class="hljs-string">&quot;访问 %s 成功，状态码: %s\n&quot;</span>, u, resp.Status)<br>    &#125;(url) <span class="hljs-comment">// 传入当前迭代的url</span><br>  &#125;<br><br>  wg.Wait() <span class="hljs-comment">// 等待所有任务完成</span><br><br>  <span class="hljs-comment">// 4. 打印所有收集到的错误（类似K8s汇总错误信息）</span><br>  <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(errors) &gt; <span class="hljs-number">0</span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;\n收集到以下错误：&quot;</span>)<br>    <span class="hljs-keyword">for</span> i, err := <span class="hljs-keyword">range</span> errors &#123;<br>      fmt.Printf(<span class="hljs-string">&quot;错误 %d: %v\n&quot;</span>, i+<span class="hljs-number">1</span>, err)<br>    &#125;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;\n所有任务执行成功，无错误&quot;</span>)<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">访问 http://www.bilibili.com/ 成功，状态码: 200 OK<br>访问 http://www.somestupidname.com/ 成功，状态码: 200 OK<br><br>收集到以下错误：<br>错误 1: 访问 http://www.baidu.org/ 失败: Get &quot;http://www.baidu.org/&quot;: EOF<br></code></pre></td></tr></table></figure>
+
+<p>这里必须要把所有的并发任务执行完成后，才可以返回所有的 goroutinue，而且还需要声明两个变量 errors 和 mutex 来确保并发安全。</p>
+<h2 id="使用-errgroup-来收集并发错误"><a href="#使用-errgroup-来收集并发错误" class="headerlink" title="使用 errgroup 来收集并发错误"></a>使用 <code>errgroup</code> 来收集并发错误</h2><p>安装 <code>go get golang.org/x/sync</code></p>
+<p>下面我们看看如果使用了 errgroup 可以怎么做：</p>
+<h3 id="1-常规用法"><a href="#1-常规用法" class="headerlink" title="1.  常规用法"></a>1.  常规用法</h3><p>使用 <code>errgroup</code> 来收集并发错误：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>  <span class="hljs-string">&quot;fmt&quot;</span><br>  <span class="hljs-string">&quot;net/http&quot;</span><br>  <span class="hljs-string">&quot;sync&quot;</span><br><br>  <span class="hljs-string">&quot;golang.org/x/sync/errgroup&quot;</span><br>)<br><br>  <br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>  <span class="hljs-keyword">var</span> urls = []<span class="hljs-type">string</span>&#123;<br>    <span class="hljs-string">&quot;http://www.baidu.org/&quot;</span>,           <span class="hljs-comment">// 错误URL</span><br>    <span class="hljs-string">&quot;http://www.bilibili.com/&quot;</span>,        <span class="hljs-comment">// 正常URL</span><br>    <span class="hljs-string">&quot;http://www.somestupidname.xxyy/&quot;</span>, <span class="hljs-comment">// 错误URL</span><br>  &#125;<br>  <br>  <span class="hljs-comment">// 1. 定义错误集合，用于存储所有错误</span><br>  <span class="hljs-keyword">var</span> allErrors []<span class="hljs-type">error</span><br>  <span class="hljs-comment">// 2. 互斥锁，保证多个goroutine并发写入错误时的安全</span><br>  <span class="hljs-keyword">var</span> mu sync.Mutex<br>  <span class="hljs-comment">// 创建errgroup</span><br>  <span class="hljs-keyword">var</span> g errgroup.Group<br><br>  <span class="hljs-keyword">for</span> _, url := <span class="hljs-keyword">range</span> urls &#123;<br>    <span class="hljs-comment">// 3. 传入当前url作为参数，避免goroutine共享循环变量</span><br>    u := url<br>    g.Go(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> <span class="hljs-type">error</span> &#123;<br>      resp, err := http.Get(u)<br>      <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>      <br>        <span class="hljs-comment">// 加锁保护错误集合的写入</span><br>        mu.Lock()<br>        <span class="hljs-comment">// 存储详细错误信息（包含URL）</span><br>        allErrors = <span class="hljs-built_in">append</span>(allErrors, fmt.Errorf(<span class="hljs-string">&quot;访问 %s 失败: %w&quot;</span>, u, err))<br>        mu.Unlock()<br>        <br>        <span class="hljs-comment">// 返回错误（errgroup会记录第一个错误，但我们主要靠allErrors收集所有）</span><br>        <span class="hljs-keyword">return</span> err<br>      &#125;<br>      <span class="hljs-keyword">defer</span> resp.Body.Close()<br>      fmt.Printf(<span class="hljs-string">&quot;访问 %s 成功，状态码: %s\n&quot;</span>, u, resp.Status)<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>    &#125;)<br>  &#125;<br><br>  <span class="hljs-comment">// 等待所有goroutine完成（无论是否有错误）</span><br>  _ = g.Wait() <span class="hljs-comment">// 忽略errgroup返回的第一个错误，我们关注allErrors</span><br><br>  <span class="hljs-comment">// 4. 打印所有收集到的错误</span><br>  <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(allErrors) &gt; <span class="hljs-number">0</span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;\n收集到所有错误：&quot;</span>)<br>    <span class="hljs-keyword">for</span> i, err := <span class="hljs-keyword">range</span> allErrors &#123;<br>      fmt.Printf(<span class="hljs-string">&quot;错误 %d: %v\n&quot;</span>, i+<span class="hljs-number">1</span>, err)<br>    &#125;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;\n所有请求均成功，无错误&quot;</span>)<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">访问 http://www.bilibili.com/ 成功，状态码: 200 OK<br><br>收集到所有错误：<br>错误 1: 访问 http://www.baidu.org/ 失败: Get &quot;http://www.baidu.org/&quot;: EOF<br>错误 2: 访问 http://www.somestupidname.xxyy/ 失败: Get &quot;http://www.somestupidname.xxyy/&quot;: EOF<br></code></pre></td></tr></table></figure>
+<h3 id="2-取消上下文"><a href="#2-取消上下文" class="headerlink" title="2. 取消上下文"></a>2. 取消上下文</h3><p>如果收集到一个错误后立刻取消其他 goroutinue，避免资源浪费，并在 <code>Wait</code> 方法中返回第一个非 <code>nil</code> 的错误：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;context&quot;</span><br>    <span class="hljs-string">&quot;fmt&quot;</span><br>    <span class="hljs-string">&quot;net/http&quot;</span><br>    <span class="hljs-string">&quot;sync&quot;</span><br><br>    <span class="hljs-string">&quot;golang.org/x/sync/errgroup&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> urls = []<span class="hljs-type">string</span>&#123;<br>        <span class="hljs-string">&quot;https://www.baidu.org/&quot;</span>,          <span class="hljs-comment">// 错误URL</span><br>        <span class="hljs-string">&quot;https://www.bilibili.com/&quot;</span>,       <span class="hljs-comment">// 正常URL</span><br>        <span class="hljs-string">&quot;https://www.somestupidname.xxyy/&quot;</span>, <span class="hljs-comment">// 错误URL</span><br>    &#125;<br><br>    <span class="hljs-comment">// 1. 创建可取消的上下文</span><br>    ctx, cancel := context.WithCancel(context.Background())<br>    <span class="hljs-keyword">defer</span> cancel()<br><br>    <span class="hljs-comment">// 2. 定义错误集合和互斥锁</span><br>    <span class="hljs-keyword">var</span> allErrors []<span class="hljs-type">error</span><br>    <span class="hljs-keyword">var</span> mu sync.Mutex<br><br>    <span class="hljs-comment">// 3. 创建带上下文的errgroup</span><br>    g, ctx := errgroup.WithContext(ctx)<br><br>    <span class="hljs-keyword">for</span> _, url := <span class="hljs-keyword">range</span> urls &#123;<br>        u := url <span class="hljs-comment">// 避免goroutine共享循环变量</span><br>        g.Go(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> <span class="hljs-type">error</span> &#123;<br>            <span class="hljs-comment">// 4. 创建带上下文的HTTP请求</span><br>            req, err := http.NewRequestWithContext(ctx, <span class="hljs-string">&quot;GET&quot;</span>, u, <span class="hljs-literal">nil</span>)<br>            <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>                mu.Lock()<br>                allErrors = <span class="hljs-built_in">append</span>(allErrors, fmt.Errorf(<span class="hljs-string">&quot;创建请求 %s 失败: %w&quot;</span>, u, err))<br>                mu.Unlock()<br>                <span class="hljs-keyword">return</span> err<br>            &#125;<br><br>            <span class="hljs-comment">// 发送请求</span><br>            resp, err := http.DefaultClient.Do(req)<br>            <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>                mu.Lock()<br>                allErrors = <span class="hljs-built_in">append</span>(allErrors, fmt.Errorf(<span class="hljs-string">&quot;访问 %s 失败: %w&quot;</span>, u, err))<br>                mu.Unlock()<br>                <span class="hljs-keyword">return</span> err <span class="hljs-comment">// 触发上下文取消</span><br>            &#125;<br>            <span class="hljs-keyword">defer</span> resp.Body.Close()<br><br>            <span class="hljs-comment">// 检查上下文是否已取消</span><br>            <span class="hljs-keyword">select</span> &#123;<br>            <span class="hljs-keyword">case</span> &lt;-ctx.Done():<br>                mu.Lock()<br>                allErrors = <span class="hljs-built_in">append</span>(allErrors, fmt.Errorf(<span class="hljs-string">&quot;请求 %s 被取消: %w&quot;</span>, u, ctx.Err()))<br>                mu.Unlock()<br>                <span class="hljs-keyword">return</span> ctx.Err()<br>            <span class="hljs-keyword">default</span>:<br>                fmt.Printf(<span class="hljs-string">&quot;访问 %s 成功，状态码: %s\n&quot;</span>, u, resp.Status)<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>            &#125;<br>        &#125;)<br>    &#125;<br><br>    <span class="hljs-comment">// 5. 等待所有goroutine完成</span><br>    <span class="hljs-keyword">if</span> err := g.Wait(); err != <span class="hljs-literal">nil</span> &#123;<br>        fmt.Println(<span class="hljs-string">&quot;Error: &quot;</span>, err)<br>    &#125;<br><br>    <span class="hljs-comment">// 6. 打印所有错误</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(allErrors) &gt; <span class="hljs-number">0</span> &#123;<br>        fmt.Println(<span class="hljs-string">&quot;\n收集到所有错误：&quot;</span>)<br>        <span class="hljs-keyword">for</span> i, err := <span class="hljs-keyword">range</span> allErrors &#123;<br>            fmt.Printf(<span class="hljs-string">&quot;错误 %d: %v\n&quot;</span>, i+<span class="hljs-number">1</span>, err)<br>        &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        fmt.Println(<span class="hljs-string">&quot;\n所有请求均成功，无错误&quot;</span>)<br>    &#125;<br>&#125;<br>    <br></code></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">Error:  Get &quot;https://www.somestupidname.xxyy/&quot;: EOF<br><br>收集到所有错误：<br>错误 1: 访问 https://www.somestupidname.xxyy/ 失败: Get &quot;https://www.somestupidname.xxyy/&quot;: EOF<br>错误 2: 访问 https://www.bilibili.com/ 失败: Get &quot;https://www.bilibili.com/&quot;: context canceled<br>错误 3: 访问 https://www.baidu.org/ 失败: Get &quot;https://www.baidu.org/&quot;: EOF<br></code></pre></td></tr></table></figure>
+
+<p>这里我们可以看到错误 2 的错误原因是上下文被取消造成的。</p>
+<h3 id="3-限制并发数量"><a href="#3-限制并发数量" class="headerlink" title="3. 限制并发数量"></a>3. 限制并发数量</h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;context&quot;</span><br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;sync&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br><br>	<span class="hljs-string">&quot;golang.org/x/sync/errgroup&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	tasks := []<span class="hljs-type">int</span>&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>&#125;<br><br>	<span class="hljs-comment">// 1. 并发计数器：记录当前正在执行的任务数</span><br>	<span class="hljs-keyword">var</span> currentConcurrency <span class="hljs-type">int</span><br>	<span class="hljs-comment">// 互斥锁：保护并发计数器的读写安全</span><br>	<span class="hljs-keyword">var</span> mu sync.Mutex<br><br>	<span class="hljs-comment">// 创建errgroup并限制最大并发数为2</span><br>	g, ctx := errgroup.WithContext(context.Background())<br>	g.SetLimit(<span class="hljs-number">2</span>) <span class="hljs-comment">// 最大并发数2</span><br><br>	<span class="hljs-keyword">for</span> _, task := <span class="hljs-keyword">range</span> tasks &#123;<br>		taskID := task<br>		g.Go(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> <span class="hljs-type">error</span> &#123;<br>			<span class="hljs-comment">// 2. 任务开始：并发数+1</span><br>			mu.Lock()<br>			currentConcurrency++<br>			fmt.Printf(<span class="hljs-string">&quot;任务 %d 开始，当前并发数: %d\n&quot;</span>, taskID, currentConcurrency)<br>			mu.Unlock()<br><br>			<span class="hljs-comment">// 模拟任务执行（耗时500ms）</span><br>			<span class="hljs-keyword">select</span> &#123;<br>			<span class="hljs-keyword">case</span> &lt;-ctx.Done():<br>				<span class="hljs-keyword">return</span> ctx.Err()<br>			<span class="hljs-keyword">default</span>:<br>				time.Sleep(<span class="hljs-number">500</span> * time.Millisecond)<br>			&#125;<br><br>			<span class="hljs-comment">// 3. 任务结束：并发数-1</span><br>			mu.Lock()<br>			currentConcurrency--<br>			fmt.Printf(<span class="hljs-string">&quot;任务 %d 结束，当前并发数: %d\n&quot;</span>, taskID, currentConcurrency)<br>			mu.Unlock()<br><br>			<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>		&#125;)<br>	&#125;<br><br>	<span class="hljs-comment">// 等待所有任务完成</span><br>	<span class="hljs-keyword">if</span> err := g.Wait(); err != <span class="hljs-literal">nil</span> &#123;<br>		fmt.Printf(<span class="hljs-string">&quot;执行出错: %v\n&quot;</span>, err)<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		fmt.Println(<span class="hljs-string">&quot;所有任务执行完毕&quot;</span>)<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs shell">任务 2 开始，当前并发数: 1<br>任务 1 开始，当前并发数: 2<br>任务 1 结束，当前并发数: 1<br>任务 3 开始，当前并发数: 2<br>任务 2 结束，当前并发数: 1<br>任务 4 开始，当前并发数: 2<br>任务 4 结束，当前并发数: 1<br>任务 5 开始，当前并发数: 2<br>任务 3 结束，当前并发数: 1<br>任务 6 开始，当前并发数: 2<br>任务 6 结束，当前并发数: 1<br>任务 7 开始，当前并发数: 2<br>任务 5 结束，当前并发数: 1<br>任务 8 开始，当前并发数: 2<br>任务 8 结束，当前并发数: 1<br>任务 9 开始，当前并发数: 2<br>任务 7 结束，当前并发数: 1<br>任务 10 开始，当前并发数: 2<br>任务 9 结束，当前并发数: 1<br>任务 10 结束，当前并发数: 0<br>所有任务执行完毕<br></code></pre></td></tr></table></figure>
+
+
+<p>从执行结果看，并发数始终没有超过 2。</p>
+<h3 id="4-尝试启动"><a href="#4-尝试启动" class="headerlink" title="4. 尝试启动"></a>4. 尝试启动</h3><p><code>errgroup</code> 还提供了 <code>errgroup.TryGo</code> 可以<strong>尝试启动一个任务</strong>，它返回一个 <code>bool</code> 值，标识任务是否启动成功，<code>true</code> 表示成功，<code>false</code> 表示失败。</p>
+<p><code>errgroup.TryGo</code> 需要搭配 <code>errgroup.SetLimit</code> 一同使用，因为如果不限制并发数量，那么 <code>errgroup.TryGo</code> 始终返回 <code>true</code>，当达到最大并发数量限制时，<code>errgroup.TryGo</code> 返回 <code>false</code>。</p>
+<p>示例如下：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br><br>	<span class="hljs-string">&quot;golang.org/x/sync/errgroup&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-comment">// 创建一个 errgroup.Group</span><br>	<span class="hljs-keyword">var</span> g errgroup.Group<br>	<span class="hljs-comment">// 设置最大并发限制为 3</span><br>	g.SetLimit(<span class="hljs-number">3</span>)<br><br>	<span class="hljs-comment">// 启动 10 个 goroutine</span><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">10</span>; i++ &#123;<br>		<span class="hljs-comment">// 捕获当前循环变量i（避免闭包延迟绑定导致的序号错乱）</span><br>		num := i<br>		<span class="hljs-keyword">if</span> g.TryGo(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> <span class="hljs-type">error</span> &#123;<br>			<span class="hljs-comment">// 打印正在运行的 goroutine</span><br>			fmt.Printf(<span class="hljs-string">&quot;goroutine %d 正在启动\n&quot;</span>, num)<br>			time.Sleep(<span class="hljs-number">2</span> * time.Second) <span class="hljs-comment">// 模拟工作</span><br>			fmt.Printf(<span class="hljs-string">&quot;goroutine %d 已完成\n&quot;</span>, num)<br>			<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>		&#125;) &#123;<br>			<span class="hljs-comment">// 如果成功启动，打印提示</span><br>			fmt.Printf(<span class="hljs-string">&quot;goroutine %d 启动成功\n&quot;</span>, num)<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-comment">// 如果达到并发限制，打印提示</span><br>			fmt.Printf(<span class="hljs-string">&quot;goroutine %d 无法启动（已达并发限制）\n&quot;</span>, num)<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// 等待所有 goroutine 完成</span><br>	<span class="hljs-keyword">if</span> err := g.Wait(); err != <span class="hljs-literal">nil</span> &#123;<br>		fmt.Printf(<span class="hljs-string">&quot;遇到错误：%v\n&quot;</span>, err)<br>	&#125;<br><br>	fmt.Println(<span class="hljs-string">&quot;所有goroutine已完成。&quot;</span>)<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell">goroutine 1 启动成功<br>goroutine 1 正在启动<br>goroutine 2 启动成功<br>goroutine 3 启动成功<br>goroutine 4 无法启动（已达并发限制）<br>goroutine 5 无法启动（已达并发限制）<br>goroutine 6 无法启动（已达并发限制）<br>goroutine 7 无法启动（已达并发限制）<br>goroutine 8 无法启动（已达并发限制）<br>goroutine 9 无法启动（已达并发限制）<br>goroutine 10 无法启动（已达并发限制）<br>goroutine 3 正在启动<br>goroutine 2 正在启动<br>goroutine 2 已完成<br>goroutine 1 已完成<br>goroutine 3 已完成<br>所有goroutine已完成。<br></code></pre></td></tr></table></figure>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/golang/sync">https://github.com/golang/sync</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/JD6FDfCEWO6uQZhyvrIWkA">mp.weixin.qq.com&#x2F;s&#x2F;JD6FDfCEWO6uQZhyvrIWkA</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/ra681t58cjxsgckj31/article/details/143616687">Go 并发控制：errgroup 详解-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://jianghushinian.cn/2024/11/04/x-sync-errgroup/">Go 并发控制：errgroup 详解 | 江湖十年 | 学而不思则罔，思而不学则殆。</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/golang/" class="print-no-link">#golang</a>
+      
+        <a href="/tags/go3%E6%96%B9%E5%BA%93/" class="print-no-link">#go3方库</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>errgroup - golang sync 的扩展库</div>
+      <div>https://yangfanbin.cn/代码笔记/errgroup - 增强 go 的并发能力/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年8月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/linux%20%20%E5%92%8C%20wsl%20%E8%87%AA%E7%94%A8%20.bashrc%20%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE/" title="linux  和 wsl 自用 .bashrc 文件配置">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">linux  和 wsl 自用 .bashrc 文件配置</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/git%20%E6%8F%90%E4%BA%A4%E8%A7%84%E8%8C%83/" title="git 提交规范">
+                        <span class="hidden-mobile">git 提交规范</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
