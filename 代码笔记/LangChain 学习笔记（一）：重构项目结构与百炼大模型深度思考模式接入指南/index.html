@@ -1,0 +1,680 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、项目结构重构在接入大模型之前，合理的项目结构是保证代码可维护性的基础。我们将原本杂乱的扁平结构，重构为了功能分明的模块化结构。 1.1 重构前后对比重构前（扁平结构，容易越写越乱）： 1234567langchain-demo&#x2F;├── env_utils.py├── my_llm.py├── test_llm&#x2F;│   ├── __init__.py│   └── test01.py└── .e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LangChain 学习笔记（一）：重构项目结构与百炼大模型深度思考模式接入指南">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/LangChain%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E9%87%8D%E6%9E%84%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%99%BE%E7%82%BC%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%B7%B1%E5%BA%A6%E6%80%9D%E8%80%83%E6%A8%A1%E5%BC%8F%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="一、项目结构重构在接入大模型之前，合理的项目结构是保证代码可维护性的基础。我们将原本杂乱的扁平结构，重构为了功能分明的模块化结构。 1.1 重构前后对比重构前（扁平结构，容易越写越乱）： 1234567langchain-demo&#x2F;├── env_utils.py├── my_llm.py├── test_llm&#x2F;│   ├── __init__.py│   └── test01.py└── .e">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-07T13:32:42.014Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="LangChain">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>LangChain 学习笔记（一）：重构项目结构与百炼大模型深度思考模式接入指南 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="LangChain 学习笔记（一）：重构项目结构与百炼大模型深度思考模式接入指南"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-03 00:00" pubdate>
+          2026年3月3日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">LangChain 学习笔记（一）：重构项目结构与百炼大模型深度思考模式接入指南</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="一、项目结构重构"><a href="#一、项目结构重构" class="headerlink" title="一、项目结构重构"></a>一、项目结构重构</h2><p>在接入大模型之前，合理的项目结构是保证代码可维护性的基础。我们将原本杂乱的扁平结构，重构为了功能分明的模块化结构。</p>
+<h3 id="1-1-重构前后对比"><a href="#1-1-重构前后对比" class="headerlink" title="1.1 重构前后对比"></a>1.1 重构前后对比</h3><p><strong>重构前（扁平结构，容易越写越乱）：</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">langchain-demo/<br>├── env_utils.py<br>├── my_llm.py<br>├── test_llm/<br>│   ├── __init__.py<br>│   └── test01.py<br>└── .env<br></code></pre></td></tr></table></figure>
+<p><strong>重构后（模块化结构，适合工程化）：</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs text">langchain-demo/<br>├── config/                    # 核心配置模块<br>│   ├── __init__.py<br>│   └── env_utils.py           # 环境变量加载工具<br>├── llms/                      # LLM 提供者统一封装层<br>│   ├── __init__.py<br>│   └── bailian.py             # 阿里云百炼平台 LLM 封装<br>├── tests/                     # 单元测试与效果测试目录<br>│   ├── __init__.py<br>│   └── test_llm_basic.py      # LLM 基础通信测试<br>├── .env                       # 环境变量（存放本地真实 Key，不可提交）<br>├── .env.example               # 环境变量模板（供他人参考，可提交）<br>├── .gitignore                 # Git 忽略规则（必加 .env）<br>├── README.md                  # 项目说明文档<br>└── requirements.txt           # 项目依赖列表<br></code></pre></td></tr></table></figure>
+<h3 id="1-2-重构收益与要点"><a href="#1-2-重构收益与要点" class="headerlink" title="1.2 重构收益与要点"></a>1.2 重构收益与要点</h3><ul>
+<li><strong>依赖隔离</strong>：完善 <code>requirements.txt</code>，保证项目换电脑也能一键跑通。</li>
+<li><strong>信息安全</strong>：添加 <code>.gitignore</code> 并忽略 <code>.env</code>，彻底杜绝了 API Key 泄露到 GitHub 的风险。</li>
+<li><strong>代码复用</strong>：将零散的测试脚本封装为了规范的函数调用，统一了全局配置入口。</li>
+</ul>
+<hr>
+<h2 id="二、LangChain-调用百炼平台-API"><a href="#二、LangChain-调用百炼平台-API" class="headerlink" title="二、LangChain 调用百炼平台 API"></a>二、LangChain 调用百炼平台 API</h2><p>阿里云百炼平台提供了极好的 <strong>OpenAI 兼容接口</strong>。这意味着我们在 LangChain 中，不需要去找特定的阿里云集成包，直接借用 <code>langchain_openai.ChatOpenAI</code> 即可完美调用。</p>
+<h3 id="2-1-环境变量配置（统一规范）"><a href="#2-1-环境变量配置（统一规范）" class="headerlink" title="2.1 环境变量配置（统一规范）"></a>2.1 环境变量配置（统一规范）</h3><p>建议统一使用阿里云百炼官方文档推荐的命名：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># config/env_utils.py</span><br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> dotenv <span class="hljs-keyword">import</span> load_dotenv<br><span class="hljs-comment"># override=True 确保以 .env 文件为准覆盖系统默认环境变量</span><br>load_dotenv(override=<span class="hljs-literal">True</span>)<br><span class="hljs-comment"># 统一使用百炼官方规范的命名</span><br>DASHSCOPE_API_KEY = os.getenv(<span class="hljs-string">&quot;DASHSCOPE_API_KEY&quot;</span>)<br>DASHSCOPE_BASE_URL = os.getenv(<span class="hljs-string">&quot;DASHSCOPE_BASE_URL&quot;</span>, <span class="hljs-string">&quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span>)<br></code></pre></td></tr></table></figure>
+<h3 id="2-2-基础模型实例化"><a href="#2-2-基础模型实例化" class="headerlink" title="2.2 基础模型实例化"></a>2.2 基础模型实例化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> langchain_openai <span class="hljs-keyword">import</span> ChatOpenAI<br><span class="hljs-keyword">from</span> config.env_utils <span class="hljs-keyword">import</span> DASHSCOPE_API_KEY, DASHSCOPE_BASE_URL<br>llm = ChatOpenAI(<br>    model=<span class="hljs-string">&quot;qwen-max&quot;</span>,                     <span class="hljs-comment"># 替换为你实际使用的模型名称（如 qwen-max, deepseek-r1 等）</span><br>    temperature=<span class="hljs-number">0.7</span>,    api_key=DASHSCOPE_API_KEY,            <span class="hljs-comment"># 百炼 API Key    base_url=DASHSCOPE_BASE_URL           # 务必指定百炼的 OpenAI 兼容端点</span><br>)<br></code></pre></td></tr></table></figure>
+<h3 id="2-3-🚨-踩坑预警：千万别用-ChatDeepSeek-调百炼的-DeepSeek"><a href="#2-3-🚨-踩坑预警：千万别用-ChatDeepSeek-调百炼的-DeepSeek" class="headerlink" title="2.3 🚨 踩坑预警：千万别用 ChatDeepSeek 调百炼的 DeepSeek"></a>2.3 🚨 踩坑预警：千万别用 <code>ChatDeepSeek</code> 调百炼的 DeepSeek</h3><p>如果你想调用百炼平台上托管的 <code>deepseek-r1</code> 等模型，<strong>千万不要</strong>这样做：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> langchain_deepseek <span class="hljs-keyword">import</span> ChatDeepSeek<br><span class="hljs-comment"># ❌ 这样会报错：Authentication Fails 或直接连接失败</span><br>deep_think_llm = ChatDeepSeek(<br>    model=<span class="hljs-string">&quot;deepseek-r1&quot;</span>,    api_key=DASHSCOPE_API_KEY,base_url=DASHSCOPE_BASE_URL      )<br></code></pre></td></tr></table></figure>
+<h2 id="💡-根本原因：-ChatDeepSeek-是-LangChain-专门为-DeepSeek-官方-API-设计的类，其底层网络请求认证机制和请求头与阿里云平台并不完全兼容。正解：-只要是调用阿里云百炼（无论什么模型），一律使用通用且协议最标准的-ChatOpenAI-并修改-base-url-即可。"><a href="#💡-根本原因：-ChatDeepSeek-是-LangChain-专门为-DeepSeek-官方-API-设计的类，其底层网络请求认证机制和请求头与阿里云平台并不完全兼容。正解：-只要是调用阿里云百炼（无论什么模型），一律使用通用且协议最标准的-ChatOpenAI-并修改-base-url-即可。" class="headerlink" title="💡 根本原因： ChatDeepSeek 是 LangChain 专门为 DeepSeek 官方 API 设计的类，其底层网络请求认证机制和请求头与阿里云平台并不完全兼容。正解： 只要是调用阿里云百炼（无论什么模型），一律使用通用且协议最标准的 ChatOpenAI 并修改 base_url 即可。"></a>💡 <strong>根本原因：</strong> <code>ChatDeepSeek</code> 是 LangChain 专门为 <strong>DeepSeek 官方 API</strong> 设计的类，其底层网络请求认证机制和请求头与阿里云平台并不完全兼容。<br><strong>正解：</strong> 只要是调用阿里云百炼（无论什么模型），一律使用通用且协议最标准的 <code>ChatOpenAI</code> 并修改 <code>base_url</code> 即可。</h2><h2 id="三、深度思考模式的正确打开方式（核心重点）"><a href="#三、深度思考模式的正确打开方式（核心重点）" class="headerlink" title="三、深度思考模式的正确打开方式（核心重点）"></a>三、深度思考模式的正确打开方式（核心重点）</h2><p>当前具备“深度思考（CoT）”能力的大模型越来越火，在百炼平台中，部分模型可以通过参数手动开启思考模式。</p>
+<h3 id="3-1-如何开启深度思考？"><a href="#3-1-如何开启深度思考？" class="headerlink" title="3.1 如何开启深度思考？"></a>3.1 如何开启深度思考？</h3><p>通过 <code>extra_body</code> 将专属参数传递给底层 API：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">deep_think_llm = ChatOpenAI(<br>    model=<span class="hljs-string">&quot;qwen-max-latest&quot;</span>,              <span class="hljs-comment"># 注：需使用支持思考模式的模型</span><br>    temperature=<span class="hljs-number">0.7</span>,    api_key=DASHSCOPE_API_KEY,    base_url=DASHSCOPE_BASE_URL,    extra_body=&#123;<span class="hljs-string">&quot;enable_thinking&quot;</span>: <span class="hljs-literal">True</span>&#125;  <span class="hljs-comment"># 🔥 关键参数：开启深度思考</span><br>)<br></code></pre></td></tr></table></figure>
+<h3 id="3-2-为什么必须用流式（Stream）输出？"><a href="#3-2-为什么必须用流式（Stream）输出？" class="headerlink" title="3.2 为什么必须用流式（Stream）输出？"></a>3.2 为什么必须用流式（Stream）输出？</h3><p><strong>这是一个硬性限制！</strong> 对于开启了 <code>enable_thinking=True</code> 的模型：</p>
+<ul>
+<li>❌ 调用 <code>invoke()</code>：非流式调用不仅会<strong>丢失</strong>思考过程，在百炼的某些 API 版本中甚至会<strong>直接报错</strong>（提示你必须关闭 thinking 或者改用流式）。</li>
+<li>✅ 调用 <code>stream()</code>：流式调用可以实时且完整地拿到 <code>reasoning_content</code>（思考链）。</li>
+</ul>
+<h3 id="3-3-实战：流式获取思考与回复的完整代码"><a href="#3-3-实战：流式获取思考与回复的完整代码" class="headerlink" title="3.3 实战：流式获取思考与回复的完整代码"></a>3.3 实战：流式获取思考与回复的完整代码</h3><p>在 LangChain 中获取非标准的响应字段，必须利用 <code>additional_kwargs</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">test_deep_think_llm_stream</span>():<br>    <span class="hljs-string">&quot;&quot;&quot;测试深度思考模型（流式获取思考过程与最终结果）&quot;&quot;&quot;</span><br>    reasoning_content = <span class="hljs-string">&quot;&quot;</span>  <span class="hljs-comment"># 收集思考过程</span><br>    answer_content = <span class="hljs-string">&quot;&quot;</span>     <span class="hljs-comment"># 收集最终回复</span><br>    is_answering = <span class="hljs-literal">False</span>    <span class="hljs-comment"># 状态标志：是否已进入正式回复阶段</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&quot;</span> + <span class="hljs-string">&quot;🤔&quot;</span> * <span class="hljs-number">10</span> + <span class="hljs-string">&quot; 思考过程 &quot;</span> + <span class="hljs-string">&quot;🤔&quot;</span> * <span class="hljs-number">10</span> + <span class="hljs-string">&quot;\n&quot;</span>)<br>    <span class="hljs-comment"># 必须使用 .stream()    for chunk in deep_think_llm.stream(&quot;用三句话简单介绍下AI agent&quot;):</span><br>        <span class="hljs-comment"># 【核心技巧】LangChain 会将非 OpenAI 标准的字段兜底放在 additional_kwargs 中</span><br>        chunk_reasoning = chunk.additional_kwargs.get(<span class="hljs-string">&quot;reasoning_content&quot;</span>, <span class="hljs-string">&quot;&quot;</span>)                <span class="hljs-keyword">if</span> chunk_reasoning:<br>            reasoning_content += chunk_reasoning            <span class="hljs-built_in">print</span>(chunk_reasoning, end=<span class="hljs-string">&quot;&quot;</span>, flush=<span class="hljs-literal">True</span>)            <span class="hljs-comment"># 当获取到正常的内容字段时，说明思考结束，开始正式回答</span><br>        <span class="hljs-keyword">if</span> chunk.content:            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> is_answering:                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n\n&quot;</span> + <span class="hljs-string">&quot;💡&quot;</span> * <span class="hljs-number">10</span> + <span class="hljs-string">&quot; 最终回复 &quot;</span> + <span class="hljs-string">&quot;💡&quot;</span> * <span class="hljs-number">10</span> + <span class="hljs-string">&quot;\n&quot;</span>)<br>                is_answering = <span class="hljs-literal">True</span>                            answer_content += chunk.content<br>            <span class="hljs-built_in">print</span>(chunk.content, end=<span class="hljs-string">&quot;&quot;</span>, flush=<span class="hljs-literal">True</span>)                <span class="hljs-keyword">return</span> reasoning_content, answer_content<br></code></pre></td></tr></table></figure>
+<h3 id="3-4-Token-消耗的隐藏细节（💳-计费预警）"><a href="#3-4-Token-消耗的隐藏细节（💳-计费预警）" class="headerlink" title="3.4 Token 消耗的隐藏细节（💳 计费预警）"></a>3.4 Token 消耗的隐藏细节（💳 计费预警）</h3><p>仔细观察返回的响应元数据（Response Metadata），你会发现计费维度的变化：</p>
+<ul>
+<li><strong>普通对话</strong>：<code>completion_tokens</code>（补全输出量）</li>
+<li><strong>深度思考对话</strong>：新增了 <code>reasoning_tokens</code>。<blockquote>
+<p><strong>注意</strong>：大模型“自言自语”的思考过程通常会非常长（动辄上千 Token），这部分是被归入输出计费的！在设计 C 端商业产品时，一定要考虑这部分产生的额外算力成本。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h2 id="四、原始-API-调用对比（知其然，知其所以然）"><a href="#四、原始-API-调用对比（知其然，知其所以然）" class="headerlink" title="四、原始 API 调用对比（知其然，知其所以然）"></a>四、原始 API 调用对比（知其然，知其所以然）</h2><p>为了搞明白 LangChain 底层干了什么，我们可以对比一下使用纯粹的 <code>openai</code> SDK 是怎么调用的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> openai <span class="hljs-keyword">import</span> OpenAI<br>client = OpenAI(<br>    api_key=os.getenv(<span class="hljs-string">&quot;DASHSCOPE_API_KEY&quot;</span>),    base_url=<span class="hljs-string">&quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span>,)<br>completion = client.chat.completions.create(<br>    model=<span class="hljs-string">&quot;qwen-max-latest&quot;</span>,    messages=[&#123;<span class="hljs-string">&quot;role&quot;</span>: <span class="hljs-string">&quot;user&quot;</span>, <span class="hljs-string">&quot;content&quot;</span>: <span class="hljs-string">&quot;你是谁&quot;</span>&#125;],<br>    extra_body=&#123;<span class="hljs-string">&quot;enable_thinking&quot;</span>: <span class="hljs-literal">True</span>&#125;,    stream=<span class="hljs-literal">True</span>,  <span class="hljs-comment"># 强制要求流式</span><br>)<br><span class="hljs-keyword">for</span> chunk <span class="hljs-keyword">in</span> completion:<br>    delta = chunk.choices[<span class="hljs-number">0</span>].delta    <span class="hljs-comment"># 原始 API 可以通过点运算符直接访问 reasoning_content    if hasattr(delta, &quot;reasoning_content&quot;) and delta.reasoning_content:        print(delta.reasoning_content, end=&quot;&quot;)            if hasattr(delta, &quot;content&quot;) and delta.content:</span><br>        <span class="hljs-built_in">print</span>(delta.content, end=<span class="hljs-string">&quot;&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p><strong>底层逻辑映射总结：</strong></p>
+<ul>
+<li>原始 SDK 中的 <code>delta.reasoning_content</code> 👉 等价于 LangChain 封装后的 <code>chunk.additional_kwargs.get(&quot;reasoning_content&quot;)</code>。LangChain 帮我们抹平了不同底层的差异，但遇到新特性时，多翻翻 <code>additional_kwargs</code> 准没错！</li>
+</ul>
+<hr>
+<h2 id="五、最佳实践复盘"><a href="#五、最佳实践复盘" class="headerlink" title="五、最佳实践复盘"></a>五、最佳实践复盘</h2><ol>
+<li><strong>项目隔离与解耦</strong>：坚持配置与业务逻辑分离，通过 <code>.env</code> 管理敏感凭证，这是工程师的基本素养。</li>
+<li><strong>“万能插座”法则</strong>：面对提供了“OpenAI兼容接口”的国产大模型平台，<code>ChatOpenAI</code> 就是最好的“万能插座”，别乱用专用 SDK 惹出一堆兼容性报错。</li>
+<li><strong>理解大模型流式思考</strong>：未来的大模型（如 O1、DeepSeek R1）必将标配思考过程。遇到思考过程拿不到的问题：<strong>一上 Stream，二查 additional_kwargs</strong>。</li>
+</ol>
+<hr>
+<h2 id="六、延伸阅读与参考资料"><a href="#六、延伸阅读与参考资料" class="headerlink" title="六、延伸阅读与参考资料"></a>六、延伸阅读与参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/model-studio/developer-reference/use-qwen-by-calling-api">阿里云百炼平台官方文档 - OpenAI 兼容调用</a></li>
+<li><a target="_blank" rel="noopener" href="https://python.langchain.com/docs/integrations/chat/openai/">LangChain 官方文档 - ChatOpenAI</a></li>
+<li><a target="_blank" rel="noopener" href="https://api-docs.deepseek.com/zh-cn/">DeepSeek 官方提示词与用法参考</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/LangChain/" class="print-no-link">#LangChain</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>LangChain 学习笔记（一）：重构项目结构与百炼大模型深度思考模式接入指南</div>
+      <div>https://yangfanbin.cn/代码笔记/LangChain 学习笔记（一）：重构项目结构与百炼大模型深度思考模式接入指南/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/%E5%88%AB%E5%86%8D%E5%AF%B9%20Docker%20%E9%87%8C%E7%9A%84%20d%20%E4%B8%80%E5%A4%B4%E9%9B%BE%E6%B0%B4%EF%BC%9A%E5%A4%A7%E7%99%BD%E8%AF%9D%E5%9B%BE%E8%A7%A3%20dockerd%20%E4%B8%8E%20docker.sock%20%E6%A0%B8%E5%BF%83%E7%8E%A9%E6%B3%95/" title="别再对 Docker 里的 &#34;d&#34; 一头雾水：大白话图解 dockerd 与 docker.sock 核心玩法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">别再对 Docker 里的 &#34;d&#34; 一头雾水：大白话图解 dockerd 与 docker.sock 核心玩法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/Go%20%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E8%A6%81%E7%82%B9%E6%95%B4%E7%90%86/" title="Go 工程师面试要点整理">
+                        <span class="hidden-mobile">Go 工程师面试要点整理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
