@@ -1,0 +1,702 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="核心知识点导读 ReplicaSet 核心机制：掌握 ReplicaSet 如何通过 Label Selector 管理 Pod，以及期望状态与实际状态的对比逻辑。 控制器哲学 (Reconcile Loop)：理解 Kubernetes 声明式 API 的底层基石——持续逼近预期状态的控制循环机制。 Informer 与 Workqueue 架构：剖析控制器如何通过 List-Watch 机制高">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解 Kubernetes：从 ReplicaSet 到 Deployment 的滚动发布机制与原理解析">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20Kubernetes%EF%BC%9A%E4%BB%8E%20ReplicaSet%20%E5%88%B0%20Deployment%20%E7%9A%84%E6%BB%9A%E5%8A%A8%E5%8F%91%E5%B8%83%E6%9C%BA%E5%88%B6%E4%B8%8E%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="核心知识点导读 ReplicaSet 核心机制：掌握 ReplicaSet 如何通过 Label Selector 管理 Pod，以及期望状态与实际状态的对比逻辑。 控制器哲学 (Reconcile Loop)：理解 Kubernetes 声明式 API 的底层基石——持续逼近预期状态的控制循环机制。 Informer 与 Workqueue 架构：剖析控制器如何通过 List-Watch 机制高">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-12T12:30:00.000Z">
+<meta property="article:modified_time" content="2026-03-12T06:28:09.013Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="云原生">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>深入理解 Kubernetes：从 ReplicaSet 到 Deployment 的滚动发布机制与原理解析 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="深入理解 Kubernetes：从 ReplicaSet 到 Deployment 的滚动发布机制与原理解析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-12 20:30" pubdate>
+          2026年3月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">深入理解 Kubernetes：从 ReplicaSet 到 Deployment 的滚动发布机制与原理解析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="核心知识点导读"><a href="#核心知识点导读" class="headerlink" title="核心知识点导读"></a>核心知识点导读</h2><ul>
+<li><strong>ReplicaSet 核心机制</strong>：掌握 ReplicaSet 如何通过 Label Selector 管理 Pod，以及期望状态与实际状态的对比逻辑。</li>
+<li><strong>控制器哲学 (Reconcile Loop)</strong>：理解 Kubernetes 声明式 API 的底层基石——持续逼近预期状态的控制循环机制。</li>
+<li><strong>Informer 与 Workqueue 架构</strong>：剖析控制器如何通过 List-Watch 机制高效感知资源变更，并利用工作队列实现事件去重与重试。</li>
+<li><strong>Deployment 的分层架构</strong>：理解 Deployment 如何通过管理多个 ReplicaSet 来实现应用的版本控制与平滑切换。</li>
+<li><strong>滚动更新 (RollingUpdate) 策略</strong>：深度解构 <code>maxSurge</code> 与 <code>maxUnavailable</code> 参数对发布平滑度与集群资源的影响。</li>
+<li><strong>生产级安全发布基线</strong>：掌握结合 <code>ReadinessProbe</code>（就绪探针）与优雅停机（Graceful Shutdown）的安全滚动发布规范。</li>
+<li><strong>控制器源码导航</strong>：定位 Kubernetes 核心仓库中 Deployment 控制器的代码流转路径。</li>
+</ul>
+<hr>
+<h2 id="一分钟通俗理解"><a href="#一分钟通俗理解" class="headerlink" title="一分钟通俗理解"></a>一分钟通俗理解</h2><p>为了让你快速建立直觉，我们可以用”餐饮门店管理”和”商场换电梯”的生活场景来映射 Kubernetes 的核心组件。</p>
+<p><strong>1. ReplicaSet：只盯人数的”值班主管”</strong><br>ReplicaSet 就像餐厅后厨的”值班主管”，他的唯一 KPI 是：<strong>确保当前时刻，符合”厨师”标签的人数必须是 3 个</strong>。</p>
+<ul>
+<li>发现少了一个人（Pod 挂了）？赶紧拉一个新厨师顶上。</li>
+<li>发现多了一个人（人为误操作多建了 Pod）？强制让一个人下班。</li>
+<li><strong>局限性</strong>：他不管餐厅要不要换新菜单，也不管新老厨师怎么交接，只认死理保数量。</li>
+</ul>
+<p><strong>2. Deployment：统筹大局的”店长”</strong><br>Deployment 则是”店长”。当店长决定升级新菜单（发布新版本）时，他不会自己去盯每个厨师，而是直接给”值班主管（ReplicaSet）”下发指令。</p>
+<ul>
+<li>升级时，店长会任命一个”新主管（新 ReplicaSet）”带一批新厨师逐步上岗，同时让”老主管（旧 ReplicaSet）”手下的老厨师逐步下班。</li>
+<li>这种新老交替的机制，保证了餐厅在换菜单期间依然能正常营业。</li>
+</ul>
+<p><strong>3. 滚动更新（RollingUpdate）：商场换电梯</strong><br>商场有 10 部电梯（10 个 Pod），现在要全部换成新款。</p>
+<ul>
+<li><strong>错误做法</strong>：全停了统一换（业务宕机）。</li>
+<li><strong>滚动更新</strong>：先建 1-2 部新电梯（对应 <code>maxSurge</code> 临时多开数量），确认新电梯运行正常后，再停掉 1-2 部老电梯（对应 <code>maxUnavailable</code> 允许停用的数量）。边建边拆，顾客几乎无感知。</li>
+</ul>
+<p><strong>4. Informer 与 Workqueue：高效的客服中心</strong></p>
+<ul>
+<li><strong>Informer</strong> 是客服中心的”消息订阅员”，一有风吹草动（资源变化）就记录到本地账本（Cache）上。</li>
+<li><strong>Workqueue</strong> 是”待办工单池”，把需要处理的任务排好队，去重防抖，交给后面的真正干活的业务员（Worker &#x2F; Reconcile）慢慢处理。</li>
+</ul>
+<hr>
+<h2 id="底层原理解析"><a href="#底层原理解析" class="headerlink" title="底层原理解析"></a>底层原理解析</h2><p><em>(注：本节进入严谨的技术原理探讨，剥离所有比喻词汇。)</em></p>
+<h3 id="1-控制器核心模式：Reconcile-循环"><a href="#1-控制器核心模式：Reconcile-循环" class="headerlink" title="1. 控制器核心模式：Reconcile 循环"></a>1. 控制器核心模式：Reconcile 循环</h3><p>Kubernetes 控制器的核心本质是一个基于事件驱动的反馈闭环（Feedback Loop）。<br>对于 ReplicaSet Controller 而言，其 <code>reconcile</code> 逻辑如下：</p>
+<ol>
+<li><strong>获取期望状态 (Desired State)</strong>：读取 <code>spec.replicas</code> 的设定值。</li>
+<li><strong>获取实际状态 (Actual State)</strong>：通过 Label Selector 查询当前集群中状态为 Active 且匹配的 Pod 数量。</li>
+<li><strong>计算差异 (Diff)</strong>：<code>Diff = Actual - Desired</code>。</li>
+<li><strong>执行收敛动作</strong>：<ul>
+<li>若 <code>Diff &lt; 0</code>：基于 <code>spec.template</code> 调用 API Server 创建新的 Pod。</li>
+<li>若 <code>Diff &gt; 0</code>：根据特定策略（如优先删除未就绪或运行时间较短的 Pod）删除多余的 Pod。</li>
+<li>若 <code>Diff == 0</code>：不执行任何操作（体现了接口的幂等性）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-Informer-与-Workqueue-机制原理"><a href="#2-Informer-与-Workqueue-机制原理" class="headerlink" title="2. Informer 与 Workqueue 机制原理"></a>2. Informer 与 Workqueue 机制原理</h3><p>如果没有 Informer，Controller 需要高频轮询 API Server，这会导致集群雪崩。K8s 通过 <code>Informer + Workqueue</code> 实现了高效的事件驱动：</p>
+<ul>
+<li><strong>Reflector (List-Watch)</strong>：首先通过 <code>List</code> API 获取目标资源的全量状态，随后通过 <code>Watch</code> API 维持长连接，监听增量事件（Add&#x2F;Update&#x2F;Delete）。</li>
+<li><strong>Indexer (Local Cache)</strong>：将获取到的资源对象缓存在本地内存中，Controller 后续查询状态时直接读缓存，极大降低 API Server 压力。</li>
+<li><strong>Workqueue</strong>：事件回调函数（EventHandler）触发后，不直接执行业务逻辑，而是将对象的 Key（通常为 <code>namespace/name</code>）推入 Workqueue。队列自带去重防抖、限速和延迟重试功能，最终由多个 Worker Goroutine 并发提取 Key 并执行 <code>reconcile</code>。</li>
+</ul>
+<h3 id="3-Deployment-与-ReplicaSet-的拓扑关系"><a href="#3-Deployment-与-ReplicaSet-的拓扑关系" class="headerlink" title="3. Deployment 与 ReplicaSet 的拓扑关系"></a>3. Deployment 与 ReplicaSet 的拓扑关系</h3><p>Deployment 属于声明式的高级控制器，它并不直接管理 Pod，而是管理 ReplicaSet。</p>
+<ul>
+<li><strong>版本哈希 (pod-template-hash)</strong>：每次修改 Deployment 的 <code>PodTemplate</code>（如修改镜像版本），Deployment Controller 都会计算一个新的 Hash 值，并创建一个带有该 Hash 标签的全新 ReplicaSet。</li>
+<li><strong>层级流转</strong>：API Server 接收 Deployment 变更 -&gt; Deployment Controller 调整新旧 ReplicaSet 的 <code>replicas</code> 值 -&gt; ReplicaSet Controller 侦测到 <code>replicas</code> 变化 -&gt; 最终执行 Pod 的增删。</li>
+</ul>
+<h3 id="4-滚动更新策略-Strategy-深度解构"><a href="#4-滚动更新策略-Strategy-深度解构" class="headerlink" title="4. 滚动更新策略 (Strategy) 深度解构"></a>4. 滚动更新策略 (Strategy) 深度解构</h3><p>Deployment 控制更新平滑度的核心在于 <code>strategy.rollingUpdate</code> 的两个关键参数：</p>
+<ul>
+<li><code>maxSurge</code> (最大超载值)：发布过程中，允许存在的总 Pod 数量上限超过期望 <code>replicas</code> 的数量或比例。该值决定了<strong>发布期间所需的额外集群资源分配</strong>。</li>
+<li><code>maxUnavailable</code> (最大不可用值)：发布过程中，允许处于不可用状态的 Pod 的最大数量或比例。该值决定了<strong>发布期间服务容量的最低保障底线</strong>。</li>
+</ul>
+<p><em>(补充知识：K8s 在计算可用性时，严格依赖 Pod 的就绪状态。如果一个新创建的 Pod 未通过 ReadinessProbe 检查，它将不会被计入”可用副本”，旧 Pod 也不会被继续销毁，从而阻断了错误版本的蔓延。)</em></p>
+<h3 id="5-源码导航路径"><a href="#5-源码导航路径" class="headerlink" title="5. 源码导航路径"></a>5. 源码导航路径</h3><p>若需深入 Kubernetes 源码验证上述逻辑，主干代码位于官方仓库 <code>kubernetes/kubernetes</code> 下的 <code>pkg/controller/deployment/</code> 目录：</p>
+<ul>
+<li><code>deployment_controller.go</code>：控制器的初始化入口，注册 Informer EventHandler 以及 Workqueue 的流转。</li>
+<li><code>sync.go</code>：<code>syncDeployment</code> 核心同步函数，处理对象的新旧 RS 区分及扩缩容指令分发。</li>
+<li><code>rolling.go</code>：包含 <code>rolloutRolling</code> 函数，基于 <code>maxSurge</code> 和 <code>maxUnavailable</code> 进行精确的数学计算，控制新 RS 的扩容步长和旧 RS 的缩容步长。</li>
+</ul>
+<hr>
+<h2 id="实战代码演示"><a href="#实战代码演示" class="headerlink" title="实战代码演示"></a>实战代码演示</h2><p>以下提供一份符合生产安全基线的 Deployment YAML 模板。此配置不仅指定了滚动更新参数，还补充了服务稳定必不可少的探针与优雅停机机制。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">my-backend-service</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">prod</span><br>  <span class="hljs-attr">labels:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">backend</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">replicas:</span> <span class="hljs-number">4</span><br>  <span class="hljs-attr">progressDeadlineSeconds:</span> <span class="hljs-number">600</span> <span class="hljs-comment"># 避免发布卡死，600秒未完成则标记为失败</span><br>  <span class="hljs-attr">strategy:</span><br>    <span class="hljs-attr">type:</span> <span class="hljs-string">RollingUpdate</span><br>    <span class="hljs-attr">rollingUpdate:</span><br>      <span class="hljs-attr">maxSurge:</span> <span class="hljs-number">1</span>           <span class="hljs-comment"># 资源充裕时，每次多启动 1 个新 Pod</span><br>      <span class="hljs-attr">maxUnavailable:</span> <span class="hljs-number">0</span>     <span class="hljs-comment"># 绝不容忍可用副本数低于 4，确保高并发不掉量</span><br>  <span class="hljs-attr">selector:</span><br>    <span class="hljs-attr">matchLabels:</span><br>      <span class="hljs-attr">app:</span> <span class="hljs-string">backend</span><br>  <span class="hljs-attr">template:</span><br>    <span class="hljs-attr">metadata:</span><br>      <span class="hljs-attr">labels:</span><br>        <span class="hljs-attr">app:</span> <span class="hljs-string">backend</span><br>    <span class="hljs-attr">spec:</span><br>      <span class="hljs-attr">terminationGracePeriodSeconds:</span> <span class="hljs-number">30</span> <span class="hljs-comment"># 给予 Pod 30 秒的缓冲时间处理进行中的请求</span><br>      <span class="hljs-attr">containers:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">application</span><br>          <span class="hljs-attr">image:</span> <span class="hljs-string">myrepo/backend:v2.0.0</span><br>          <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">IfNotPresent</span><br>          <span class="hljs-attr">ports:</span><br>            <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">8080</span><br>          <span class="hljs-attr">resources:</span><br>            <span class="hljs-attr">requests:</span><br>              <span class="hljs-attr">cpu:</span> <span class="hljs-string">&quot;500m&quot;</span><br>              <span class="hljs-attr">memory:</span> <span class="hljs-string">&quot;512Mi&quot;</span><br>            <span class="hljs-attr">limits:</span><br>              <span class="hljs-attr">cpu:</span> <span class="hljs-string">&quot;1000m&quot;</span><br>              <span class="hljs-attr">memory:</span> <span class="hljs-string">&quot;1024Mi&quot;</span><br>          <span class="hljs-comment"># 核心防线：就绪探针，通过后 K8s 才会将流量切入，并继续销毁旧 Pod</span><br>          <span class="hljs-attr">readinessProbe:</span><br>            <span class="hljs-attr">httpGet:</span><br>              <span class="hljs-attr">path:</span> <span class="hljs-string">/actuator/health</span><br>              <span class="hljs-attr">port:</span> <span class="hljs-number">8080</span><br>            <span class="hljs-attr">initialDelaySeconds:</span> <span class="hljs-number">10</span><br>            <span class="hljs-attr">periodSeconds:</span> <span class="hljs-number">5</span><br>            <span class="hljs-attr">failureThreshold:</span> <span class="hljs-number">3</span><br>          <span class="hljs-comment"># 存活探针：检测应用是否进入死锁</span><br>          <span class="hljs-attr">livenessProbe:</span><br>            <span class="hljs-attr">httpGet:</span><br>              <span class="hljs-attr">path:</span> <span class="hljs-string">/actuator/health</span><br>              <span class="hljs-attr">port:</span> <span class="hljs-number">8080</span><br>            <span class="hljs-attr">initialDelaySeconds:</span> <span class="hljs-number">30</span><br>            <span class="hljs-attr">periodSeconds:</span> <span class="hljs-number">10</span><br>          <span class="hljs-comment"># 优雅退出钩子：在接收到 SIGTERM 信号前，先主动休眠几秒，等待注册中心/Ingress 摘除流量</span><br>          <span class="hljs-attr">lifecycle:</span><br>            <span class="hljs-attr">preStop:</span><br>              <span class="hljs-attr">exec:</span><br>                <span class="hljs-attr">command:</span> [<span class="hljs-string">&quot;/bin/sh&quot;</span>, <span class="hljs-string">&quot;-c&quot;</span>, <span class="hljs-string">&quot;sleep 10&quot;</span>]<br></code></pre></td></tr></table></figure>
+
+<h3 id="常用实战排查与管理指令"><a href="#常用实战排查与管理指令" class="headerlink" title="常用实战排查与管理指令"></a>常用实战排查与管理指令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 提交/更新部署清单</span><br>kubectl apply -f deployment.yaml<br><br><span class="hljs-comment"># 实时观察滚动更新的过程与进度</span><br>kubectl rollout status deployment/my-backend-service -n prod<br><br><span class="hljs-comment"># 假如发布存在问题（如探针失败卡住），一键回滚到上一个正常版本</span><br>kubectl rollout undo deployment/my-backend-service -n prod<br><br><span class="hljs-comment"># 查看该 Deployment 管理的所有相关 ReplicaSet 及哈希标识</span><br>kubectl get rs -l app=backend -n prod<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">Kubernetes 官方文档: Deployments</a></li>
+<li><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">Kubernetes 官方文档: ReplicaSet</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/tree/master/pkg/controller/deployment">Kubernetes 源码仓库 (GitHub): Deployment Controller</a></li>
+<li><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/controller/">K8s 官方博客: Building K8s Controllers (Informer &amp; Workqueue)</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" class="print-no-link">#云原生</a>
+      
+        <a href="/tags/Kubernetes/" class="print-no-link">#Kubernetes</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>深入理解 Kubernetes：从 ReplicaSet 到 Deployment 的滚动发布机制与原理解析</div>
+      <div>https://yangfanbin.cn/代码笔记/深入理解 Kubernetes：从 ReplicaSet 到 Deployment 的滚动发布机制与原理解析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/%E5%86%99%E7%BB%99%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20AI%20%E6%A6%82%E5%BF%B5%E6%9E%81%E7%AE%80%E5%9B%BE%E9%89%B4%EF%BC%9A%E4%BB%8E%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%88%B0%20AI%20Agent%20%E7%9A%84%E6%BC%94%E8%BF%9B%E4%B9%8B%E8%B7%AF/" title="写给程序员的 AI 概念极简图鉴：从神经网络到 AI Agent 的演进之路">
+                        <span class="hidden-mobile">写给程序员的 AI 概念极简图鉴：从神经网络到 AI Agent 的演进之路</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
