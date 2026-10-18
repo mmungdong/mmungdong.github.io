@@ -1,0 +1,2694 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon.ico">
+  <link rel="icon" href="/assets/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yang Fanbin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本文档记录 Claude Code 的完整学习路径，按难度分级整理。   1. 初学者篇 1.1. Slash Commands（斜杠命令）1.1.1 什么是 Slash CommandsSlash Commands 是在交互会话中通过 &#x2F;命令名 触发的快捷方式，用于控制 Claude 的行为。 1.1.2 命令类型与常用内置命令速查命令类型：    类型 来源 示例    内置命令 Claud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code How - 学习笔记">
+<meta property="og:url" content="https://yangfanbin.cn/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/Claude%20Code%20How%20-%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Yang Fanbin">
+<meta property="og:description" content="本文档记录 Claude Code 的完整学习路径，按难度分级整理。   1. 初学者篇 1.1. Slash Commands（斜杠命令）1.1.1 什么是 Slash CommandsSlash Commands 是在交互会话中通过 &#x2F;命令名 触发的快捷方式，用于控制 Claude 的行为。 1.1.2 命令类型与常用内置命令速查命令类型：    类型 来源 示例    内置命令 Claud">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-18T06:40:18.429Z">
+<meta property="article:author" content="Yang Fanbin">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="ClaudeCode">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Claude Code How - 学习笔记 - Yang Fanbin</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yangfanbin.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Yang Fanbin</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/assets/img/top.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Claude Code How - 学习笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-14 00:00" pubdate>
+          2026年4月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          77 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Claude Code How - 学习笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>本文档记录 Claude Code 的完整学习路径，按难度分级整理。</p>
+</blockquote>
+<hr>
+<h1 id="1-初学者篇"><a href="#1-初学者篇" class="headerlink" title="1. 初学者篇"></a>1. 初学者篇</h1><hr>
+<h2 id="1-1-Slash-Commands（斜杠命令）"><a href="#1-1-Slash-Commands（斜杠命令）" class="headerlink" title="1.1. Slash Commands（斜杠命令）"></a>1.1. Slash Commands（斜杠命令）</h2><h3 id="1-1-1-什么是-Slash-Commands"><a href="#1-1-1-什么是-Slash-Commands" class="headerlink" title="1.1.1 什么是 Slash Commands"></a>1.1.1 什么是 Slash Commands</h3><p>Slash Commands 是在交互会话中通过 <code>/命令名</code> 触发的快捷方式，用于控制 Claude 的行为。</p>
+<h3 id="1-1-2-命令类型与常用内置命令速查"><a href="#1-1-2-命令类型与常用内置命令速查" class="headerlink" title="1.1.2 命令类型与常用内置命令速查"></a>1.1.2 命令类型与常用内置命令速查</h3><p><strong>命令类型：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>来源</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>内置命令</strong></td>
+<td>Claude Code 提供</td>
+<td><code>/help</code>, <code>/clear</code>, <code>/model</code></td>
+</tr>
+<tr>
+<td><strong>Skills</strong></td>
+<td>用户定义的 <code>SKILL.md</code> 文件</td>
+<td><code>/optimize</code>, <code>/pr</code></td>
+</tr>
+<tr>
+<td><strong>Plugin 命令</strong></td>
+<td>安装的插件</td>
+<td><code>/frontend-design:frontend-design</code></td>
+</tr>
+<tr>
+<td><strong>MCP 提示</strong></td>
+<td>MCP 服务器</td>
+<td><code>/mcp__github__list_prs</code></td>
+</tr>
+</tbody></table>
+<p><strong>常用内置命令速查：</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/help</code></td>
+<td>显示帮助</td>
+</tr>
+<tr>
+<td><code>/clear</code></td>
+<td>清除对话</td>
+</tr>
+<tr>
+<td><code>/model</code></td>
+<td>切换模型（Sonnet&#x2F;Opus&#x2F;Haiku）</td>
+</tr>
+<tr>
+<td><code>/compact</code></td>
+<td>压缩对话以节省上下文</td>
+</tr>
+<tr>
+<td><code>/cost</code></td>
+<td>显示 Token 使用统计</td>
+</tr>
+<tr>
+<td><code>/branch</code></td>
+<td>分支对话到新会话</td>
+</tr>
+<tr>
+<td><code>/resume</code></td>
+<td>恢复之前的会话</td>
+</tr>
+<tr>
+<td><code>/rewind</code></td>
+<td>回滚对话或代码</td>
+</tr>
+<tr>
+<td><code>/init</code></td>
+<td>初始化 CLAUDE.md</td>
+</tr>
+<tr>
+<td><code>/doctor</code></td>
+<td>诊断安装问题</td>
+</tr>
+<tr>
+<td><code>/fast</code></td>
+<td>切换快速模式</td>
+</tr>
+</tbody></table>
+<h3 id="1-1-3-创建自定义命令（Skills-方式）"><a href="#1-1-3-创建自定义命令（Skills-方式）" class="headerlink" title="1.1.3 创建自定义命令（Skills 方式）"></a>1.1.3 创建自定义命令（Skills 方式）</h3><p>推荐通过 Skills 方式创建自定义命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 创建技能目录</span><br><span class="hljs-built_in">mkdir</span> -p .claude/skills/my-command<br></code></pre></td></tr></table></figure>
+
+<p><strong>文件模板：</strong> <code>.claude/skills/my-command/SKILL.md</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">my-command</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">命令描述，帮助</span> <span class="hljs-string">Claude</span> <span class="hljs-string">知道何时使用</span><br><span class="hljs-attr">allowed-tools:</span> <span class="hljs-string">Bash(git</span> <span class="hljs-string">*),</span> <span class="hljs-string">Read</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment"># 我的命令</span><br><br><span class="hljs-comment">## 上下文</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-string">当前分支:</span> <span class="hljs-string">!`git</span> <span class="hljs-string">branch</span> <span class="hljs-string">--show-current`</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">相关文件:</span> <span class="hljs-string">@package.json</span><br><br><span class="hljs-comment">## 指令</span><br><br><span class="hljs-number">1</span><span class="hljs-string">.</span> <span class="hljs-string">第一步</span><br><span class="hljs-number">2</span><span class="hljs-string">.</span> <span class="hljs-string">第二步，参数:</span> <span class="hljs-string">$ARGUMENTS</span><br><span class="hljs-number">3</span><span class="hljs-string">.</span> <span class="hljs-string">第三步</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-1-4-关键语法与示例"><a href="#1-1-4-关键语法与示例" class="headerlink" title="1.1.4 关键语法与示例"></a>1.1.4 关键语法与示例</h3><p><strong>关键语法：</strong></p>
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$ARGUMENTS</code></td>
+<td>获取所有参数</td>
+</tr>
+<tr>
+<td><code>$0</code>, <code>$1</code></td>
+<td>获取第 0、1 个参数</td>
+</tr>
+<tr>
+<td><code>!`command`</code></td>
+<td>执行 shell 命令获取动态上下文</td>
+</tr>
+<tr>
+<td><code>@file.txt</code></td>
+<td>引用文件内容</td>
+</tr>
+</tbody></table>
+<p><strong>示例 — <code>/commit</code> 带上下文的 Git 提交：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">allowed-tools:</span> <span class="hljs-string">Bash(git</span> <span class="hljs-string">add:*),</span> <span class="hljs-string">Bash(git</span> <span class="hljs-string">status:*),</span> <span class="hljs-string">Bash(git</span> <span class="hljs-string">commit:*),</span> <span class="hljs-string">Bash(git</span> <span class="hljs-string">diff:*)</span><br><span class="hljs-attr">argument-hint:</span> [<span class="hljs-string">message</span>]<br><span class="hljs-attr">description:</span> <span class="hljs-string">Create</span> <span class="hljs-string">a</span> <span class="hljs-string">git</span> <span class="hljs-string">commit</span> <span class="hljs-string">with</span> <span class="hljs-string">context</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment">## Context</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-attr">Current git status:</span> <span class="hljs-string">!`git</span> <span class="hljs-string">status`</span><br><span class="hljs-bullet">-</span> <span class="hljs-attr">Current git diff:</span> <span class="hljs-string">!`git</span> <span class="hljs-string">diff</span> <span class="hljs-string">HEAD`</span><br><span class="hljs-bullet">-</span> <span class="hljs-attr">Current branch:</span> <span class="hljs-string">!`git</span> <span class="hljs-string">branch</span> <span class="hljs-string">--show-current`</span><br><span class="hljs-bullet">-</span> <span class="hljs-attr">Recent commits:</span> <span class="hljs-string">!`git</span> <span class="hljs-string">log</span> <span class="hljs-string">--oneline</span> <span class="hljs-number">-10</span><span class="hljs-string">`</span><br><br><span class="hljs-comment">## Your task</span><br><br><span class="hljs-string">Based</span> <span class="hljs-string">on</span> <span class="hljs-string">the</span> <span class="hljs-string">above</span> <span class="hljs-string">changes,</span> <span class="hljs-string">create</span> <span class="hljs-string">a</span> <span class="hljs-string">single</span> <span class="hljs-string">git</span> <span class="hljs-string">commit.</span><br><span class="hljs-string">If</span> <span class="hljs-string">a</span> <span class="hljs-string">message</span> <span class="hljs-string">was</span> <span class="hljs-string">provided</span> <span class="hljs-string">via</span> <span class="hljs-string">arguments,</span> <span class="hljs-attr">use it:</span> <span class="hljs-string">$ARGUMENTS</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 — <code>/optimize</code> 代码优化分析：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">Analyze</span> <span class="hljs-string">code</span> <span class="hljs-string">for</span> <span class="hljs-string">performance</span> <span class="hljs-string">issues</span> <span class="hljs-string">and</span> <span class="hljs-string">suggest</span> <span class="hljs-string">optimizations</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment"># Code Optimization</span><br><br><span class="hljs-attr">Review the provided code for the following issues in order of priority:</span><br><br><span class="hljs-number">1</span><span class="hljs-string">.</span> <span class="hljs-string">**Performance</span> <span class="hljs-string">bottlenecks**</span> <span class="hljs-bullet">-</span> <span class="hljs-string">identify</span> <span class="hljs-string">O(n²)</span> <span class="hljs-string">operations</span><br><span class="hljs-number">2</span><span class="hljs-string">.</span> <span class="hljs-string">**Memory</span> <span class="hljs-string">leaks**</span> <span class="hljs-bullet">-</span> <span class="hljs-string">find</span> <span class="hljs-string">unreleased</span> <span class="hljs-string">resources</span><br><span class="hljs-number">3</span><span class="hljs-string">.</span> <span class="hljs-string">**Algorithm</span> <span class="hljs-string">improvements**</span> <span class="hljs-bullet">-</span> <span class="hljs-string">suggest</span> <span class="hljs-string">better</span> <span class="hljs-string">data</span> <span class="hljs-string">structures</span><br><span class="hljs-number">4</span><span class="hljs-string">.</span> <span class="hljs-string">**Caching</span> <span class="hljs-string">opportunities**</span> <span class="hljs-bullet">-</span> <span class="hljs-string">identify</span> <span class="hljs-string">repeated</span> <span class="hljs-string">computations</span><br><span class="hljs-number">5</span><span class="hljs-string">.</span> <span class="hljs-string">**Concurrency</span> <span class="hljs-string">issues**</span> <span class="hljs-bullet">-</span> <span class="hljs-string">find</span> <span class="hljs-string">race</span> <span class="hljs-string">conditions</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="1-2-Memory（记忆系统）"><a href="#1-2-Memory（记忆系统）" class="headerlink" title="1.2. Memory（记忆系统）"></a>1.2. Memory（记忆系统）</h2><h3 id="1-2-1-什么是-Memory"><a href="#1-2-1-什么是-Memory" class="headerlink" title="1.2.1 什么是 Memory"></a>1.2.1 什么是 Memory</h3><p>Memory 让 Claude 能够 <strong>跨会话和对话保持上下文</strong>。不同于临时的上下文窗口，Memory 文件让你可以：</p>
+<ul>
+<li>在团队间共享项目标准</li>
+<li>存储个人开发偏好</li>
+<li>维护目录特定的规则和配置</li>
+</ul>
+<p><strong>Memory 命令速查：</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/init</code></td>
+<td>初始化项目 Memory</td>
+<td>新项目启动，首次设置 CLAUDE.md</td>
+</tr>
+<tr>
+<td><code>/memory</code></td>
+<td>在编辑器中编辑 Memory</td>
+<td>大量更新、重组、审查内容</td>
+</tr>
+<tr>
+<td><code>@path/to/file</code></td>
+<td>导入外部内容</td>
+<td>引用现有文档到 CLAUDE.md</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-2-Memory-层级架构"><a href="#1-2-2-Memory-层级架构" class="headerlink" title="1.2.2 Memory 层级架构"></a>1.2.2 Memory 层级架构</h3><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">┌─────────────────────────────────────────────────────────────┐<br>│  优先级 1: Managed Policy <span class="hljs-params">(组织级策略)</span>                       │<br>│  → <span class="hljs-string">/Library/Application</span> Support/ClaudeCode/CLAUDE.md        │<br>├─────────────────────────────────────────────────────────────┤<br>│  优先级 2: Project Memory <span class="hljs-params">(项目级，团队共享)</span>                 │<br>│  → <span class="hljs-string">./CLAUDE.md</span> 或 <span class="hljs-string">./.claude/CLAUDE.md</span>                       │<br>├─────────────────────────────────────────────────────────────┤<br>│  优先级 3: Project Rules <span class="hljs-params">(模块化规则)</span>                        │<br>│  → <span class="hljs-string">./.claude/rules/</span>*<span class="hljs-string">.md</span>                                     │<br>├─────────────────────────────────────────────────────────────┤<br>│  优先级 4: User Memory <span class="hljs-params">(用户级，个人偏好)</span>                    │<br>│  → ~<span class="hljs-string">/.claude/CLAUDE.md</span>                                      │<br>├─────────────────────────────────────────────────────────────┤<br>│  优先级 5: User Rules <span class="hljs-params">(用户级规则)</span>                           │<br>│  → ~<span class="hljs-string">/.claude/rules/</span>*<span class="hljs-string">.md</span>                                     │<br>├─────────────────────────────────────────────────────────────┤<br>│  优先级 6: Local Project Memory <span class="hljs-params">(本地项目偏好)</span>               │<br>│  → <span class="hljs-string">./CLAUDE.local.md</span> <span class="hljs-params">(加入 .gitignore)</span>                      │<br>├─────────────────────────────────────────────────────────────┤<br>│  优先级 7: Auto Memory <span class="hljs-params">(Claude 自动记录)</span>                     │<br>│  → ~<span class="hljs-string">/.claude/projects/</span>&lt;project&gt;<span class="hljs-string">/memory/</span>                     │<br>└─────────────────────────────────────────────────────────────┘<br></code></pre></td></tr></table></figure>
+
+<p><strong>Memory 位置详解：</strong></p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>范围</th>
+<th>共享</th>
+<th>最佳用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>./CLAUDE.md</code></td>
+<td>项目</td>
+<td>团队 (Git)</td>
+<td>团队标准、共享架构</td>
+</tr>
+<tr>
+<td><code>./.claude/rules/*.md</code></td>
+<td>项目</td>
+<td>团队 (Git)</td>
+<td>路径特定的模块化规则</td>
+</tr>
+<tr>
+<td><code>~/.claude/CLAUDE.md</code></td>
+<td>用户</td>
+<td>个人</td>
+<td>个人偏好（所有项目）</td>
+</tr>
+<tr>
+<td><code>./CLAUDE.local.md</code></td>
+<td>项目本地</td>
+<td>个人</td>
+<td>项目特定的个人偏好</td>
+</tr>
+<tr>
+<td><code>~/.claude/projects/.../memory/</code></td>
+<td>自动</td>
+<td>个人</td>
+<td>Claude 的自动学习笔记</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-3-Auto-Memory-与模块化规则系统"><a href="#1-2-3-Auto-Memory-与模块化规则系统" class="headerlink" title="1.2.3 Auto Memory 与模块化规则系统"></a>1.2.3 Auto Memory 与模块化规则系统</h3><p><strong>Auto Memory</strong> 是 Claude 在会话中自动记录学习内容的地方：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk">~<span class="hljs-regexp">/.claude/</span>projects<span class="hljs-regexp">/&lt;project&gt;/m</span>emory/<br>├── MEMORY.md              <span class="hljs-comment"># 入口文件（启动时加载前 200 行）</span><br>├── debugging.md           <span class="hljs-comment"># 主题文件（按需加载）</span><br>├── api-conventions.md     <span class="hljs-comment"># 主题文件</span><br>└── testing-patterns.md    <span class="hljs-comment"># 主题文件</span><br></code></pre></td></tr></table></figure>
+
+<p>控制 Auto Memory：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 禁用 Auto Memory</span><br>CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 claude<br><br><span class="hljs-comment"># 强制启用</span><br>CLAUDE_CODE_DISABLE_AUTO_MEMORY=0 claude<br></code></pre></td></tr></table></figure>
+
+<p><strong>模块化规则系统</strong> — 在 <code>.claude/rules/</code> 目录下创建路径特定的规则：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs markdown">---<br><span class="hljs-section">paths: src/api/<span class="hljs-strong">**/<span class="hljs-emphasis">*.ts</span></span></span><br><span class="hljs-emphasis"><span class="hljs-strong"><span class="hljs-section">---</span></span></span><br><span class="hljs-emphasis"><span class="hljs-strong"><span class="hljs-section"></span></span></span><br><span class="hljs-emphasis"><span class="hljs-strong"><span class="hljs-section"># API Development Rules</span></span></span><br><span class="hljs-emphasis"><span class="hljs-strong"><span class="hljs-section"></span></span></span><br><span class="hljs-emphasis"><span class="hljs-strong"><span class="hljs-section">- All API endpoints must include input validation</span></span></span><br><span class="hljs-emphasis"><span class="hljs-strong"><span class="hljs-section">- Use Zod for schema validation</span></span></span><br><span class="hljs-emphasis"><span class="hljs-strong"><span class="hljs-section">- Document all parameters and response types</span></span></span><br></code></pre></td></tr></table></figure>
+
+<p>目录结构示例：</p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs dos">your-project/<br>├── .claude/<br>│   ├── CLAUDE.<span class="hljs-built_in">md</span><br>│   └── rules/<br>│       ├── code-style.<span class="hljs-built_in">md</span><br>│       ├── testing.<span class="hljs-built_in">md</span><br>│       └── api/<br>│           ├── conventions.<span class="hljs-built_in">md</span><br>│           └── validation.<span class="hljs-built_in">md</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-4-导入外部内容与最佳实践"><a href="#1-2-4-导入外部内容与最佳实践" class="headerlink" title="1.2.4 导入外部内容与最佳实践"></a>1.2.4 导入外部内容与最佳实践</h3><p>使用 <code>@path/to/file</code> 语法引用现有文档：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># Project Documentation</span><br>See @README.md for project overview<br>See @package.json for available npm commands<br>See @docs/architecture.md for system design<br></code></pre></td></tr></table></figure>
+
+<p><strong>最佳实践：</strong></p>
+<table>
+<thead>
+<tr>
+<th>✅ 应该做</th>
+<th>❌ 不应该做</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>具体详细：<code>Use 2-space indentation</code></td>
+<td>模糊：<code>Follow best practices</code></td>
+</tr>
+<tr>
+<td>使用 <code>@path</code> 导入现有文档</td>
+<td>复制已存在的内容</td>
+</tr>
+<tr>
+<td>将项目 Memory 提交到 Git</td>
+<td>存储 API 密钥、密码等敏感信息</td>
+</tr>
+<tr>
+<td>定期更新 Memory</td>
+<td>创建过长的 Memory 文件（&lt;500 行）</td>
+</tr>
+<tr>
+<td>提供具体代码示例</td>
+<td>过度组织目录结构</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="1-3-Skills（技能系统）"><a href="#1-3-Skills（技能系统）" class="headerlink" title="1.3. Skills（技能系统）"></a>1.3. Skills（技能系统）</h2><h3 id="1-3-1-什么是-Skills-与核心优势"><a href="#1-3-1-什么是-Skills-与核心优势" class="headerlink" title="1.3.1 什么是 Skills 与核心优势"></a>1.3.1 什么是 Skills 与核心优势</h3><p>Skills 是 <strong>可复用的、基于文件系统的能力模块</strong>，用于扩展 Claude 的功能。它们将领域专业知识、工作流和最佳实践打包成可发现的组件，Claude 会在相关时自动使用。</p>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>专业化 Claude</strong></td>
+<td>为特定领域任务定制能力</td>
+</tr>
+<tr>
+<td><strong>减少重复</strong></td>
+<td>一次创建，跨会话自动使用</td>
+</tr>
+<tr>
+<td><strong>组合能力</strong></td>
+<td>组合多个 Skills 构建复杂工作流</td>
+</tr>
+<tr>
+<td><strong>规模化工作流</strong></td>
+<td>在多个项目和团队间复用</td>
+</tr>
+<tr>
+<td><strong>保持质量</strong></td>
+<td>将最佳实践直接嵌入工作流</td>
+</tr>
+</tbody></table>
+<h3 id="1-3-2-渐进式披露架构"><a href="#1-3-2-渐进式披露架构" class="headerlink" title="1.3.2 渐进式披露架构"></a>1.3.2 渐进式披露架构</h3><p>Skills 采用渐进式披露架构——Claude 按需分阶段加载信息：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">┌─────────────────────────────────────────────────────────────┐<br>│  <span class="hljs-keyword">Level</span> <span class="hljs-number">1</span>: Metadata (始终加载)                               │<br>│  → YAML Frontmatter (~<span class="hljs-number">100</span> tokens)                           │<br>│  → <span class="hljs-type">name</span> + description                                       │<br>├─────────────────────────────────────────────────────────────┤<br>│  <span class="hljs-keyword">Level</span> <span class="hljs-number">2</span>: Instructions (触发时加载)                         │<br>│  → SKILL.md 正文 (&lt; <span class="hljs-number">5</span>k tokens)                              │<br>│  → 工作流和指导                                              │<br>├─────────────────────────────────────────────────────────────┤<br>│  <span class="hljs-keyword">Level</span> <span class="hljs-number">3</span>+: Resources (按需加载)                             │<br>│  → 打包文件 (无限制)                                         │<br>│  → 脚本、模板、文档                                          │<br>└─────────────────────────────────────────────────────────────┘<br></code></pre></td></tr></table></figure>
+
+<p><strong>关键好处：</strong> 你可以安装很多 Skills 而不会有上下文惩罚。</p>
+<p><strong>Skills 类型与位置：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>位置</th>
+<th>范围</th>
+<th>共享</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Enterprise</strong></td>
+<td>Managed settings</td>
+<td>所有组织用户</td>
+<td>是</td>
+</tr>
+<tr>
+<td><strong>Personal</strong></td>
+<td><code>~/.claude/skills/&lt;name&gt;/SKILL.md</code></td>
+<td>个人</td>
+<td>否</td>
+</tr>
+<tr>
+<td><strong>Project</strong></td>
+<td><code>.claude/skills/&lt;name&gt;/SKILL.md</code></td>
+<td>团队</td>
+<td>是</td>
+</tr>
+<tr>
+<td><strong>Plugin</strong></td>
+<td><code>&lt;plugin&gt;/skills/&lt;name&gt;/SKILL.md</code></td>
+<td>启用插件处</td>
+<td>取决于配置</td>
+</tr>
+</tbody></table>
+<p>优先级：Enterprise &gt; Personal &gt; Project</p>
+<h3 id="1-3-3-SKILL-md-格式与-Frontmatter-字段详解"><a href="#1-3-3-SKILL-md-格式与-Frontmatter-字段详解" class="headerlink" title="1.3.3 SKILL.md 格式与 Frontmatter 字段详解"></a>1.3.3 SKILL.md 格式与 Frontmatter 字段详解</h3><p><strong>基本目录结构：</strong></p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs nix">my-skill<span class="hljs-symbol">/</span><br>├── SKILL.md           <span class="hljs-comment"># 主指令文件（必需）</span><br>├── templates<span class="hljs-symbol">/</span>         <span class="hljs-comment"># 模板文件</span><br>├── examples<span class="hljs-symbol">/</span>          <span class="hljs-comment"># 示例输出</span><br>├── references<span class="hljs-symbol">/</span>        <span class="hljs-comment"># 参考文档</span><br>└── scripts<span class="hljs-symbol">/</span>           <span class="hljs-comment"># 可执行脚本</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>SKILL.md 格式：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">your-skill-name</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">Brief</span> <span class="hljs-string">description</span> <span class="hljs-string">of</span> <span class="hljs-string">what</span> <span class="hljs-string">this</span> <span class="hljs-string">Skill</span> <span class="hljs-string">does</span> <span class="hljs-string">and</span> <span class="hljs-string">when</span> <span class="hljs-string">to</span> <span class="hljs-string">use</span> <span class="hljs-string">it</span><br><span class="hljs-attr">argument-hint:</span> <span class="hljs-string">&quot;[filename] [format]&quot;</span><br><span class="hljs-attr">allowed-tools:</span> <span class="hljs-string">Read,</span> <span class="hljs-string">Grep,</span> <span class="hljs-string">Glob</span><br><span class="hljs-attr">disable-model-invocation:</span> <span class="hljs-literal">true</span><br><span class="hljs-attr">context:</span> <span class="hljs-string">fork</span><br><span class="hljs-attr">agent:</span> <span class="hljs-string">Explore</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment"># Your Skill Name</span><br><br><span class="hljs-comment">## Instructions</span><br><span class="hljs-string">Provide</span> <span class="hljs-string">clear,</span> <span class="hljs-string">step-by-step</span> <span class="hljs-string">guidance</span> <span class="hljs-string">for</span> <span class="hljs-string">Claude.</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Frontmatter 字段详解：</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>name</code></td>
+<td>小写字母、数字、连字符（最多 64 字符）</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><strong>关键！</strong> 描述做什么 + 何时使用（最多 1024 字符）</td>
+</tr>
+<tr>
+<td><code>argument-hint</code></td>
+<td>参数提示，显示在 <code>/</code> 自动补全菜单</td>
+</tr>
+<tr>
+<td><code>disable-model-invocation</code></td>
+<td><code>true</code> &#x3D; 只有用户可以调用，Claude 不会自动触发</td>
+</tr>
+<tr>
+<td><code>user-invocable</code></td>
+<td><code>false</code> &#x3D; 从 <code>/</code> 菜单隐藏，只有 Claude 可调用</td>
+</tr>
+<tr>
+<td><code>allowed-tools</code></td>
+<td>预授权的工具列表，无需权限确认</td>
+</tr>
+<tr>
+<td><code>context: fork</code></td>
+<td>在隔离的子代理上下文中运行</td>
+</tr>
+<tr>
+<td><code>agent</code></td>
+<td>子代理类型：<code>Explore</code>、<code>Plan</code>、<code>general-purpose</code></td>
+</tr>
+<tr>
+<td><code>paths</code></td>
+<td>Glob 模式，限制技能自动激活的文件范围</td>
+</tr>
+</tbody></table>
+<h3 id="1-3-4-调用控制与字符串替换"><a href="#1-3-4-调用控制与字符串替换" class="headerlink" title="1.3.4 调用控制与字符串替换"></a>1.3.4 调用控制与字符串替换</h3><p><strong>调用控制：</strong></p>
+<table>
+<thead>
+<tr>
+<th>Frontmatter</th>
+<th>用户可调用</th>
+<th>Claude 可调用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>(默认)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>disable-model-invocation: true</code></td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>user-invocable: false</code></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<p>使用场景：</p>
+<ul>
+<li><code>disable-model-invocation: true</code> → 有副作用的操作：<code>/deploy</code>、<code>/commit</code></li>
+<li><code>user-invocable: false</code> → 背景知识：<code>legacy-system-context</code></li>
+</ul>
+<p><strong>字符串替换：</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$ARGUMENTS</code></td>
+<td>所有传入参数</td>
+</tr>
+<tr>
+<td><code>$ARGUMENTS[N]</code> 或 <code>$N</code></td>
+<td>按索引访问特定参数（0 起始）</td>
+</tr>
+<tr>
+<td><code>$&#123;CLAUDE_SESSION_ID&#125;</code></td>
+<td>当前会话 ID</td>
+</tr>
+<tr>
+<td><code>$&#123;CLAUDE_SKILL_DIR&#125;</code></td>
+<td>Skill 目录路径</td>
+</tr>
+<tr>
+<td><code>!`command`</code></td>
+<td>执行 shell 命令并内联输出</td>
+</tr>
+</tbody></table>
+<h3 id="1-3-5-在子代理中运行-Skill-与内置-Skills"><a href="#1-3-5-在子代理中运行-Skill-与内置-Skills" class="headerlink" title="1.3.5 在子代理中运行 Skill 与内置 Skills"></a>1.3.5 在子代理中运行 Skill 与内置 Skills</h3><p>在子代理中运行 Skill：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">deep-research</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">Research</span> <span class="hljs-string">a</span> <span class="hljs-string">topic</span> <span class="hljs-string">thoroughly</span><br><span class="hljs-attr">context:</span> <span class="hljs-string">fork</span><br><span class="hljs-attr">agent:</span> <span class="hljs-string">Explore</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-string">Research</span> <span class="hljs-string">$ARGUMENTS</span> <span class="hljs-attr">thoroughly:</span><br><span class="hljs-number">1</span><span class="hljs-string">.</span> <span class="hljs-string">Find</span> <span class="hljs-string">relevant</span> <span class="hljs-string">files</span> <span class="hljs-string">using</span> <span class="hljs-string">Glob</span> <span class="hljs-string">and</span> <span class="hljs-string">Grep</span><br><span class="hljs-number">2</span><span class="hljs-string">.</span> <span class="hljs-string">Read</span> <span class="hljs-string">and</span> <span class="hljs-string">analyze</span> <span class="hljs-string">the</span> <span class="hljs-string">code</span><br><span class="hljs-number">3</span><span class="hljs-string">.</span> <span class="hljs-string">Summarize</span> <span class="hljs-string">findings</span> <span class="hljs-string">with</span> <span class="hljs-string">specific</span> <span class="hljs-string">file</span> <span class="hljs-string">references</span><br></code></pre></td></tr></table></figure>
+
+<p>代理类型选择：</p>
+<table>
+<thead>
+<tr>
+<th>代理类型</th>
+<th>最适合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Explore</code></td>
+<td>只读研究、代码库分析</td>
+</tr>
+<tr>
+<td><code>Plan</code></td>
+<td>创建实施计划</td>
+</tr>
+<tr>
+<td><code>general-purpose</code></td>
+<td>需要所有工具的广泛任务</td>
+</tr>
+</tbody></table>
+<p><strong>内置 Skills：</strong></p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/simplify</code></td>
+<td>审查变更文件的复用性、质量和效率</td>
+</tr>
+<tr>
+<td><code>/batch &lt;instruction&gt;</code></td>
+<td>使用 git worktrees 编排大规模并行变更</td>
+</tr>
+<tr>
+<td><code>/debug [description]</code></td>
+<td>通过读取调试日志排查当前会话</td>
+</tr>
+<tr>
+<td><code>/loop [interval] &lt;prompt&gt;</code></td>
+<td>按间隔重复运行提示</td>
+</tr>
+<tr>
+<td><code>/claude-api</code></td>
+<td>加载 Claude API&#x2F;SDK 参考</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="1-4-Subagents（子代理）"><a href="#1-4-Subagents（子代理）" class="headerlink" title="1.4. Subagents（子代理）"></a>1.4. Subagents（子代理）</h2><h3 id="1-4-1-什么是-Subagents-与核心优势"><a href="#1-4-1-什么是-Subagents-与核心优势" class="headerlink" title="1.4.1 什么是 Subagents 与核心优势"></a>1.4.1 什么是 Subagents 与核心优势</h3><p>Subagents 是专门化的 AI 助手，Claude Code 可以将任务委托给它们。每个子代理有：</p>
+<ul>
+<li>特定的目的</li>
+<li><strong>独立的上下文窗口</strong>（与主对话分离）</li>
+<li>可配置的工具集</li>
+<li>自定义系统提示</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>上下文保留</strong></td>
+<td>在独立上下文中运行，防止污染主对话</td>
+</tr>
+<tr>
+<td><strong>专业化知识</strong></td>
+<td>针对特定领域微调，成功率更高</td>
+</tr>
+<tr>
+<td><strong>可复用性</strong></td>
+<td>跨项目使用，与团队共享</td>
+</tr>
+<tr>
+<td><strong>灵活权限</strong></td>
+<td>不同子代理类型有不同的工具访问级别</td>
+</tr>
+<tr>
+<td><strong>可扩展性</strong></td>
+<td>多个代理同时处理不同方面</td>
+</tr>
+</tbody></table>
+<h3 id="1-4-2-配置格式与字段详解"><a href="#1-4-2-配置格式与字段详解" class="headerlink" title="1.4.2 配置格式与字段详解"></a>1.4.2 配置格式与字段详解</h3><p><strong>文件位置：</strong></p>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>类型</th>
+<th>位置</th>
+<th>范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 (最高)</td>
+<td><strong>CLI 定义</strong></td>
+<td><code>--agents</code> 标志 (JSON)</td>
+<td>仅当前会话</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>项目级</strong></td>
+<td><code>.claude/agents/</code></td>
+<td>当前项目</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>用户级</strong></td>
+<td><code>~/.claude/agents/</code></td>
+<td>所有项目</td>
+</tr>
+<tr>
+<td>4 (最低)</td>
+<td><strong>插件级</strong></td>
+<td>插件 <code>agents/</code> 目录</td>
+<td>通过插件</td>
+</tr>
+</tbody></table>
+<p><strong>配置格式：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">your-sub-agent-name</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">Description</span> <span class="hljs-string">of</span> <span class="hljs-string">when</span> <span class="hljs-string">this</span> <span class="hljs-string">subagent</span> <span class="hljs-string">should</span> <span class="hljs-string">be</span> <span class="hljs-string">invoked</span><br><span class="hljs-attr">tools:</span> <span class="hljs-string">tool1,</span> <span class="hljs-string">tool2,</span> <span class="hljs-string">tool3</span><br><span class="hljs-attr">disallowedTools:</span> <span class="hljs-string">tool4</span><br><span class="hljs-attr">model:</span> <span class="hljs-string">sonnet</span><br><span class="hljs-attr">permissionMode:</span> <span class="hljs-string">default</span><br><span class="hljs-attr">maxTurns:</span> <span class="hljs-number">20</span><br><span class="hljs-attr">skills:</span> <span class="hljs-string">skill1,</span> <span class="hljs-string">skill2</span><br><span class="hljs-attr">mcpServers:</span> <span class="hljs-string">server1</span><br><span class="hljs-attr">memory:</span> <span class="hljs-string">user</span><br><span class="hljs-attr">background:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">effort:</span> <span class="hljs-string">high</span><br><span class="hljs-attr">isolation:</span> <span class="hljs-string">worktree</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-string">Your</span> <span class="hljs-string">subagent&#x27;s</span> <span class="hljs-string">system</span> <span class="hljs-string">prompt</span> <span class="hljs-string">goes</span> <span class="hljs-string">here.</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>配置字段详解：</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>必需</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>name</code></td>
+<td>✅</td>
+<td>唯一标识符（小写字母和连字符）</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>✅</td>
+<td>自然语言描述，包含 “use PROACTIVELY” 鼓励自动调用</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td>❌</td>
+<td>工具列表，省略则继承所有工具</td>
+</tr>
+<tr>
+<td><code>disallowedTools</code></td>
+<td>❌</td>
+<td>禁止使用的工具</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>❌</td>
+<td><code>sonnet</code>、<code>opus</code>、<code>haiku</code> 或 <code>inherit</code></td>
+</tr>
+<tr>
+<td><code>permissionMode</code></td>
+<td>❌</td>
+<td>权限模式：<code>default</code>、<code>acceptEdits</code>、<code>dontAsk</code></td>
+</tr>
+<tr>
+<td><code>maxTurns</code></td>
+<td>❌</td>
+<td>最大代理轮次限制</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>❌</td>
+<td>预加载的技能列表</td>
+</tr>
+<tr>
+<td><code>memory</code></td>
+<td>❌</td>
+<td>持久内存范围：<code>user</code>、<code>project</code>、<code>local</code></td>
+</tr>
+<tr>
+<td><code>background</code></td>
+<td>❌</td>
+<td>设为 <code>true</code> 始终作为后台任务运行</td>
+</tr>
+<tr>
+<td><code>isolation</code></td>
+<td>❌</td>
+<td>设为 <code>worktree</code> 给子代理独立的 git worktree</td>
+</tr>
+</tbody></table>
+<h3 id="1-4-3-内置子代理与使用方式"><a href="#1-4-3-内置子代理与使用方式" class="headerlink" title="1.4.3 内置子代理与使用方式"></a>1.4.3 内置子代理与使用方式</h3><p><strong>内置子代理：</strong></p>
+<table>
+<thead>
+<tr>
+<th>代理</th>
+<th>模型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>general-purpose</strong></td>
+<td>继承</td>
+<td>复杂多步任务</td>
+</tr>
+<tr>
+<td><strong>Plan</strong></td>
+<td>继承</td>
+<td>规划模式的研究</td>
+</tr>
+<tr>
+<td><strong>Explore</strong></td>
+<td>Haiku</td>
+<td>只读代码库探索（快速&#x2F;中等&#x2F;非常彻底）</td>
+</tr>
+<tr>
+<td><strong>Bash</strong></td>
+<td>继承</td>
+<td>在独立上下文中执行终端命令</td>
+</tr>
+<tr>
+<td><strong>statusline-setup</strong></td>
+<td>Sonnet</td>
+<td>配置状态栏</td>
+</tr>
+<tr>
+<td><strong>Claude Code Guide</strong></td>
+<td>Haiku</td>
+<td>回答 Claude Code 功能问题</td>
+</tr>
+</tbody></table>
+<p><strong>使用方式：</strong></p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-comment"># 自动委托 — description 中包含 &quot;use PROACTIVELY&quot;</span><br><br><span class="hljs-comment"># 显式调用</span><br>&gt; Use <span class="hljs-keyword">the</span> test-runner subagent <span class="hljs-built_in">to</span> fix failing tests<br><br><span class="hljs-comment"># @-提及调用</span><br>&gt; @<span class="hljs-string">&quot;code-reviewer (agent)&quot;</span> review <span class="hljs-keyword">the</span> auth module<br><br><span class="hljs-comment"># 会话级代理</span><br>claude <span class="hljs-comment">--agent code-reviewer</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-4-4-可恢复代理、持久内存与-Worktree-隔离"><a href="#1-4-4-可恢复代理、持久内存与-Worktree-隔离" class="headerlink" title="1.4.4 可恢复代理、持久内存与 Worktree 隔离"></a>1.4.4 可恢复代理、持久内存与 Worktree 隔离</h3><p><strong>可恢复代理：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 初始调用</span><br>&gt; Use the code-analyzer agent to review the auth module<br><span class="hljs-comment"># Returns agentId: &quot;abc123&quot;</span><br><br><span class="hljs-comment"># 稍后恢复</span><br>&gt; Resume agent abc123 and now analyze the authorization logic<br></code></pre></td></tr></table></figure>
+
+<p><strong>子代理持久内存：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">researcher</span><br><span class="hljs-attr">memory:</span> <span class="hljs-string">user</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-string">You</span> <span class="hljs-string">are</span> <span class="hljs-string">a</span> <span class="hljs-string">research</span> <span class="hljs-string">assistant.</span> <span class="hljs-string">Check</span> <span class="hljs-string">your</span> <span class="hljs-string">MEMORY.md</span> <span class="hljs-string">file</span> <span class="hljs-string">at</span> <span class="hljs-string">the</span><br><span class="hljs-string">start</span> <span class="hljs-string">of</span> <span class="hljs-string">each</span> <span class="hljs-string">session</span> <span class="hljs-string">to</span> <span class="hljs-string">recall</span> <span class="hljs-string">previous</span> <span class="hljs-string">context.</span><br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>范围</th>
+<th>目录</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>user</code></td>
+<td><code>~/.claude/agent-memory/&lt;name&gt;/</code></td>
+<td>个人笔记和偏好（所有项目）</td>
+</tr>
+<tr>
+<td><code>project</code></td>
+<td><code>.claude/agent-memory/&lt;name&gt;/</code></td>
+<td>项目特定知识（团队共享）</td>
+</tr>
+<tr>
+<td><code>local</code></td>
+<td><code>.claude/agent-memory-local/&lt;name&gt;/</code></td>
+<td>本地项目知识（不提交）</td>
+</tr>
+</tbody></table>
+<p><strong>Worktree 隔离：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">feature-builder</span><br><span class="hljs-attr">isolation:</span> <span class="hljs-string">worktree</span><br><span class="hljs-attr">tools:</span> <span class="hljs-string">Read,</span> <span class="hljs-string">Write,</span> <span class="hljs-string">Edit,</span> <span class="hljs-string">Bash,</span> <span class="hljs-string">Grep,</span> <span class="hljs-string">Glob</span><br><span class="hljs-meta">---</span><br></code></pre></td></tr></table></figure>
+
+<p>工作原理：子代理在自己的 git worktree 中操作；如果没有更改，worktree 自动清理；如果有更改，返回 worktree 路径和分支名。</p>
+<p><strong>后台子代理快捷键：</strong></p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Ctrl+B</code></td>
+<td>将当前任务转入后台</td>
+</tr>
+<tr>
+<td><code>Ctrl+F</code></td>
+<td>终止所有后台代理</td>
+</tr>
+</tbody></table>
+<h3 id="1-4-5-示例子代理配置"><a href="#1-4-5-示例子代理配置" class="headerlink" title="1.4.5 示例子代理配置"></a>1.4.5 示例子代理配置</h3><p><strong>Secure Reviewer — 只读权限：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">secure-reviewer</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">Security-focused</span> <span class="hljs-string">code</span> <span class="hljs-string">review</span> <span class="hljs-string">specialist</span> <span class="hljs-string">with</span> <span class="hljs-string">minimal</span> <span class="hljs-string">permissions.</span><br><span class="hljs-attr">tools:</span> <span class="hljs-string">Read,</span> <span class="hljs-string">Grep</span><br><span class="hljs-attr">model:</span> <span class="hljs-string">inherit</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment"># Secure Code Reviewer</span><br><br><span class="hljs-attr">This agent has minimal permissions by design:</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">Can</span> <span class="hljs-string">read</span> <span class="hljs-string">files</span> <span class="hljs-string">to</span> <span class="hljs-string">analyze</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">Can</span> <span class="hljs-string">search</span> <span class="hljs-string">for</span> <span class="hljs-string">patterns</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">Cannot</span> <span class="hljs-string">execute</span> <span class="hljs-string">code</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">Cannot</span> <span class="hljs-string">modify</span> <span class="hljs-string">files</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Implementation Agent — 完整权限：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">implementation-agent</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">Full-stack</span> <span class="hljs-string">implementation</span> <span class="hljs-string">specialist</span> <span class="hljs-string">for</span> <span class="hljs-string">feature</span> <span class="hljs-string">development.</span><br><span class="hljs-attr">tools:</span> <span class="hljs-string">Read,</span> <span class="hljs-string">Write,</span> <span class="hljs-string">Edit,</span> <span class="hljs-string">Bash,</span> <span class="hljs-string">Grep,</span> <span class="hljs-string">Glob</span><br><span class="hljs-attr">model:</span> <span class="hljs-string">inherit</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment"># Implementation Agent</span><br><br><span class="hljs-attr">This agent has full capabilities:</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">Read</span> <span class="hljs-string">specifications</span> <span class="hljs-string">and</span> <span class="hljs-string">existing</span> <span class="hljs-string">code</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">Write</span> <span class="hljs-string">new</span> <span class="hljs-string">code</span> <span class="hljs-string">files</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">Edit</span> <span class="hljs-string">existing</span> <span class="hljs-string">files</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">Run</span> <span class="hljs-string">build</span> <span class="hljs-string">commands</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Code Reviewer — 代码审查：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">code-reviewer</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">Expert</span> <span class="hljs-string">code</span> <span class="hljs-string">review</span> <span class="hljs-string">specialist.</span> <span class="hljs-string">Use</span> <span class="hljs-string">PROACTIVELY</span> <span class="hljs-string">after</span> <span class="hljs-string">writing</span> <span class="hljs-string">code.</span><br><span class="hljs-attr">tools:</span> <span class="hljs-string">Read,</span> <span class="hljs-string">Grep,</span> <span class="hljs-string">Glob,</span> <span class="hljs-string">Bash</span><br><span class="hljs-attr">model:</span> <span class="hljs-string">inherit</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment"># Code Reviewer Agent</span><br><br><span class="hljs-attr">When invoked:</span><br><span class="hljs-number">1</span><span class="hljs-string">.</span> <span class="hljs-string">Run</span> <span class="hljs-string">git</span> <span class="hljs-string">diff</span> <span class="hljs-string">to</span> <span class="hljs-string">see</span> <span class="hljs-string">recent</span> <span class="hljs-string">changes</span><br><span class="hljs-number">2</span><span class="hljs-string">.</span> <span class="hljs-string">Focus</span> <span class="hljs-string">on</span> <span class="hljs-string">modified</span> <span class="hljs-string">files</span><br><span class="hljs-number">3</span><span class="hljs-string">.</span> <span class="hljs-string">Begin</span> <span class="hljs-string">review</span> <span class="hljs-string">immediately</span><br><br><span class="hljs-comment">## Review Priorities (in order)</span><br><span class="hljs-number">1</span><span class="hljs-string">.</span> <span class="hljs-string">**Security</span> <span class="hljs-string">Issues**</span><br><span class="hljs-number">2</span><span class="hljs-string">.</span> <span class="hljs-string">**Performance</span> <span class="hljs-string">Problems**</span><br><span class="hljs-number">3</span><span class="hljs-string">.</span> <span class="hljs-string">**Code</span> <span class="hljs-string">Quality**</span><br><span class="hljs-number">4</span><span class="hljs-string">.</span> <span class="hljs-string">**Test</span> <span class="hljs-string">Coverage**</span><br><span class="hljs-number">5</span><span class="hljs-string">.</span> <span class="hljs-string">**Design</span> <span class="hljs-string">Patterns**</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Debugger — 调试专家：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">debugger</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">Debugging</span> <span class="hljs-string">specialist</span> <span class="hljs-string">for</span> <span class="hljs-string">errors,</span> <span class="hljs-string">test</span> <span class="hljs-string">failures.</span> <span class="hljs-string">Use</span> <span class="hljs-string">PROACTIVELY.</span><br><span class="hljs-attr">tools:</span> <span class="hljs-string">Read,</span> <span class="hljs-string">Edit,</span> <span class="hljs-string">Bash,</span> <span class="hljs-string">Grep,</span> <span class="hljs-string">Glob</span><br><span class="hljs-attr">model:</span> <span class="hljs-string">inherit</span><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment"># Debugger Agent</span><br><br><span class="hljs-attr">When invoked:</span><br><span class="hljs-number">1</span><span class="hljs-string">.</span> <span class="hljs-string">Capture</span> <span class="hljs-string">error</span> <span class="hljs-string">message</span> <span class="hljs-string">and</span> <span class="hljs-string">stack</span> <span class="hljs-string">trace</span><br><span class="hljs-number">2</span><span class="hljs-string">.</span> <span class="hljs-string">Identify</span> <span class="hljs-string">reproduction</span> <span class="hljs-string">steps</span><br><span class="hljs-number">3</span><span class="hljs-string">.</span> <span class="hljs-string">Isolate</span> <span class="hljs-string">the</span> <span class="hljs-string">failure</span> <span class="hljs-string">location</span><br><span class="hljs-number">4</span><span class="hljs-string">.</span> <span class="hljs-string">Implement</span> <span class="hljs-string">minimal</span> <span class="hljs-string">fix</span><br><span class="hljs-number">5</span><span class="hljs-string">.</span> <span class="hljs-string">Verify</span> <span class="hljs-string">solution</span> <span class="hljs-string">works</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="1-5-Checkpoints（检查点）"><a href="#1-5-Checkpoints（检查点）" class="headerlink" title="1.5. Checkpoints（检查点）"></a>1.5. Checkpoints（检查点）</h2><h3 id="1-5-1-什么是-Checkpoints-与核心概念"><a href="#1-5-1-什么是-Checkpoints-与核心概念" class="headerlink" title="1.5.1 什么是 Checkpoints 与核心概念"></a>1.5.1 什么是 Checkpoints 与核心概念</h3><p>Checkpoints 允许你保存会话状态并回滚到之前的点。这对于探索不同方法、从错误中恢复、比较替代方案非常有价值。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Checkpoint</strong></td>
+<td>会话状态快照，包括消息、文件修改、工具使用历史</td>
+</tr>
+<tr>
+<td><strong>Rewind</strong></td>
+<td>返回到之前的检查点，丢弃后续变更</td>
+</tr>
+<tr>
+<td><strong>Branch Point</strong></td>
+<td>从一个检查点探索多种方法的分支点</td>
+</tr>
+</tbody></table>
+<p>Claude Code <strong>自动创建检查点</strong>：每次用户输入都创建新检查点，跨会话保留，30 天后自动清理。</p>
+<h3 id="1-5-2-访问方式与回滚选项"><a href="#1-5-2-访问方式与回滚选项" class="headerlink" title="1.5.2 访问方式与回滚选项"></a>1.5.2 访问方式与回滚选项</h3><p><strong>访问方式：</strong></p>
+<ul>
+<li>键盘快捷键：按 <code>Esc</code> 两次 (<code>Esc + Esc</code>)</li>
+<li>斜杠命令：<code>/rewind</code> 或 <code>/checkpoint</code></li>
+</ul>
+<p><strong>回滚时的 5 个选项：</strong></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1. Restore code and conversation</strong></td>
+<td>恢复文件和消息到检查点状态</td>
+</tr>
+<tr>
+<td><strong>2. Restore conversation</strong></td>
+<td>仅回滚消息，保留当前代码</td>
+</tr>
+<tr>
+<td><strong>3. Restore code</strong></td>
+<td>仅恢复文件变更，保留完整对话历史</td>
+</tr>
+<tr>
+<td><strong>4. Summarize from here</strong></td>
+<td>压缩该点之后的对话为摘要，释放上下文空间</td>
+</tr>
+<tr>
+<td><strong>5. Never mind</strong></td>
+<td>取消，返回当前状态</td>
+</tr>
+</tbody></table>
+<h3 id="1-5-3-使用场景与实际示例"><a href="#1-5-3-使用场景与实际示例" class="headerlink" title="1.5.3 使用场景与实际示例"></a>1.5.3 使用场景与实际示例</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>工作流</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>探索方法</strong></td>
+<td>保存 → 尝试 A → 保存 → 回滚 → 尝试 B → 比较</td>
+</tr>
+<tr>
+<td><strong>安全重构</strong></td>
+<td>保存 → 重构 → 测试 → 失败则回滚</td>
+</tr>
+<tr>
+<td><strong>A&#x2F;B 测试</strong></td>
+<td>保存 → 设计 A → 保存 → 回滚 → 设计 B → 比较</td>
+</tr>
+<tr>
+<td><strong>错误恢复</strong></td>
+<td>发现问题 → 回滚到最后良好状态</td>
+</tr>
+</tbody></table>
+<p><strong>示例 — 探索不同方法：</strong></p>
+<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs prolog">用户: 给 <span class="hljs-symbol">API</span> 添加缓存层<br><br><span class="hljs-symbol">Claude</span>: 我将添加 <span class="hljs-symbol">Redis</span> 缓存...<br>[在检查点 <span class="hljs-symbol">A</span> 做出变更]<br><br>用户: 其实，让我们试试内存缓存<br><br>[用户按 <span class="hljs-symbol">Esc</span>+<span class="hljs-symbol">Esc</span> 回滚到检查点 <span class="hljs-symbol">A</span>]<br>[在检查点 <span class="hljs-symbol">B</span> 实现内存缓存]<br></code></pre></td></tr></table></figure>
+
+<p><strong>分支策略：</strong></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">1.</span> 初始实现 → 检查点 A<br><span class="hljs-bullet">2.</span> 尝试方法 1 → 检查点 B<br><span class="hljs-bullet">3.</span> 回滚到检查点 A<br><span class="hljs-bullet">4.</span> 尝试方法 2 → 检查点 C<br><span class="hljs-bullet">5.</span> 比较 B 和 C 的结果<br><span class="hljs-bullet">6.</span> 选择最佳方法继续<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-5-4-与-Git-的对比与限制"><a href="#1-5-4-与-Git-的对比与限制" class="headerlink" title="1.5.4 与 Git 的对比与限制"></a>1.5.4 与 Git 的对比与限制</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Git</th>
+<th>Checkpoints</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>范围</strong></td>
+<td>文件系统</td>
+<td>对话 + 文件</td>
+</tr>
+<tr>
+<td><strong>持久性</strong></td>
+<td>永久</td>
+<td>基于会话（30天）</td>
+</tr>
+<tr>
+<td><strong>粒度</strong></td>
+<td>提交</td>
+<td>任意点</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>较慢</td>
+<td>即时</td>
+</tr>
+<tr>
+<td><strong>共享</strong></td>
+<td>是</td>
+<td>有限</td>
+</tr>
+</tbody></table>
+<p><strong>配合使用：</strong> 用 Checkpoints 快速实验，用 Git 提交最终变更。</p>
+<p><strong>限制：</strong></p>
+<table>
+<thead>
+<tr>
+<th>限制</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Bash 命令不跟踪</strong></td>
+<td><code>rm</code>、<code>mv</code>、<code>cp</code> 等文件系统操作不被捕获</td>
+</tr>
+<tr>
+<td><strong>外部变更不跟踪</strong></td>
+<td>在编辑器、终端等外部做的变更不被捕获</td>
+</tr>
+<tr>
+<td><strong>非版本控制替代</strong></td>
+<td>使用 Git 进行永久、可审计的变更</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="1-6-CLI（命令行基础）"><a href="#1-6-CLI（命令行基础）" class="headerlink" title="1.6. CLI（命令行基础）"></a>1.6. CLI（命令行基础）</h2><h3 id="1-6-1-CLI-架构与核心命令"><a href="#1-6-1-CLI-架构与核心命令" class="headerlink" title="1.6.1 CLI 架构与核心命令"></a>1.6.1 CLI 架构与核心命令</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs css">┌─────────────────────────────────────────────────────────────┐<br>│                    用户终端                                  │<br>│                       ↓                                     │<br>│            &quot;claude <span class="hljs-selector-attr">[options]</span> <span class="hljs-selector-attr">[query]</span>&quot;                       │<br>│                       ↓                                     │<br>│              ┌─────────────────┐                            │<br>│              │ Claude <span class="hljs-selector-tag">Code</span> CLI │                            │<br>│              └────────┬────────┘                            │<br>│                       │                                     │<br>│         ┌─────────────┼─────────────┐                      │<br>│         ↓             ↓             ↓                      │<br>│    交互式 REPL    打印模式      会话恢复                     │<br>│    (默认)        (-<span class="hljs-selector-tag">p</span>)         (-<span class="hljs-attribute">r</span>/-c)                      │<br>│         ↓             ↓             ↓                      │<br>│              ┌─────────────────┐                            │<br>│              │   Claude API    │                            │<br>│              └─────────────────┘                            │<br>└─────────────────────────────────────────────────────────────┘<br></code></pre></td></tr></table></figure>
+
+<p><strong>核心 CLI 命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>claude</code></td>
+<td>启动交互式 REPL</td>
+<td><code>claude</code></td>
+</tr>
+<tr>
+<td><code>claude &quot;query&quot;</code></td>
+<td>带初始提示启动</td>
+<td><code>claude &quot;explain this project&quot;</code></td>
+</tr>
+<tr>
+<td><code>claude -p &quot;query&quot;</code></td>
+<td>打印模式 - 查询后退出</td>
+<td><code>claude -p &quot;explain this function&quot;</code></td>
+</tr>
+<tr>
+<td><code>cat file | claude -p &quot;query&quot;</code></td>
+<td>处理管道内容</td>
+<td><code>cat logs.txt | claude -p &quot;explain&quot;</code></td>
+</tr>
+<tr>
+<td><code>claude -c</code></td>
+<td>继续最近对话</td>
+<td><code>claude -c</code></td>
+</tr>
+<tr>
+<td><code>claude -r &quot;&lt;session&gt;&quot;</code></td>
+<td>恢复指定会话</td>
+<td><code>claude -r &quot;auth-refactor&quot;</code></td>
+</tr>
+<tr>
+<td><code>claude update</code></td>
+<td>更新到最新版本</td>
+<td><code>claude update</code></td>
+</tr>
+</tbody></table>
+<p><strong>核心标志：</strong></p>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-p, --print</code></td>
+<td>打印模式，无交互</td>
+<td><code>claude -p &quot;query&quot;</code></td>
+</tr>
+<tr>
+<td><code>-c, --continue</code></td>
+<td>加载最近对话</td>
+<td><code>claude -c</code></td>
+</tr>
+<tr>
+<td><code>-r, --resume</code></td>
+<td>恢复指定会话</td>
+<td><code>claude -r &quot;session-name&quot;</code></td>
+</tr>
+<tr>
+<td><code>--model</code></td>
+<td>设置模型</td>
+<td><code>claude --model opus</code></td>
+</tr>
+<tr>
+<td><code>-n, --name</code></td>
+<td>会话显示名称</td>
+<td><code>claude -n &quot;auth-refactor&quot;</code></td>
+</tr>
+<tr>
+<td><code>--effort</code></td>
+<td>设置思考努力级别</td>
+<td><code>claude --effort high</code></td>
+</tr>
+<tr>
+<td><code>--bare</code></td>
+<td>最小模式</td>
+<td><code>claude --bare</code></td>
+</tr>
+</tbody></table>
+<h3 id="1-6-2-交互模式-vs-打印模式"><a href="#1-6-2-交互模式-vs-打印模式" class="headerlink" title="1.6.2 交互模式 vs 打印模式"></a>1.6.2 交互模式 vs 打印模式</h3><p><strong>交互模式</strong>（默认）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 启动交互会话</span><br>claude<br><br><span class="hljs-comment"># 带初始提示启动</span><br>claude <span class="hljs-string">&quot;explain the authentication flow&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>打印模式</strong>（非交互）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 单次查询后退出</span><br>claude -p <span class="hljs-string">&quot;what does this function do?&quot;</span><br><br><span class="hljs-comment"># 处理文件内容</span><br><span class="hljs-built_in">cat</span> error.log | claude -p <span class="hljs-string">&quot;explain this error&quot;</span><br><br><span class="hljs-comment"># 与其他工具链式处理</span><br>claude -p <span class="hljs-string">&quot;list todos&quot;</span> | grep <span class="hljs-string">&quot;URGENT&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-6-3-模型选择与输出格式"><a href="#1-6-3-模型选择与输出格式" class="headerlink" title="1.6.3 模型选择与输出格式"></a>1.6.3 模型选择与输出格式</h3><p><strong>模型选择：</strong></p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>ID</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Opus 4.6</strong></td>
+<td><code>claude-opus-4-6</code></td>
+<td>最强大，自适应努力级别</td>
+</tr>
+<tr>
+<td><strong>Sonnet 4.6</strong></td>
+<td><code>claude-sonnet-4-6</code></td>
+<td>平衡速度和能力</td>
+</tr>
+<tr>
+<td><strong>Haiku 4.5</strong></td>
+<td><code>claude-haiku-4-5</code></td>
+<td>最快，适合快速任务</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 使用短名称</span><br>claude --model opus <span class="hljs-string">&quot;complex architectural review&quot;</span><br>claude --model sonnet <span class="hljs-string">&quot;implement this feature&quot;</span><br>claude --model haiku -p <span class="hljs-string">&quot;format this JSON&quot;</span><br><br><span class="hljs-comment"># 使用 opusplan 别名 (Opus 规划，Sonnet 执行)</span><br>claude --model opusplan <span class="hljs-string">&quot;design and implement the API&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>输出格式：</strong></p>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--output-format</code></td>
+<td><code>text</code>, <code>json</code>, <code>stream-json</code></td>
+<td>输出格式（打印模式）</td>
+</tr>
+<tr>
+<td><code>--json-schema</code></td>
+<td>Schema 对象</td>
+<td>验证 JSON 输出</td>
+</tr>
+<tr>
+<td><code>--max-budget-usd</code></td>
+<td>金额</td>
+<td>最大花费（打印模式）</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># JSON 输出用于程序化使用</span><br>claude -p --output-format json <span class="hljs-string">&quot;list all functions&quot;</span><br><br><span class="hljs-comment"># 流式 JSON 用于实时处理</span><br>claude -p --output-format stream-json <span class="hljs-string">&quot;generate a long report&quot;</span><br><br><span class="hljs-comment"># 结构化输出带 Schema 验证</span><br>claude -p --json-schema <span class="hljs-string">&#x27;&#123;&quot;type&quot;:&quot;object&quot;&#125;&#x27;</span> <span class="hljs-string">&quot;find bugs and return as JSON&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-6-4-权限管理"><a href="#1-6-4-权限管理" class="headerlink" title="1.6.4 权限管理"></a>1.6.4 权限管理</h3><table>
+<thead>
+<tr>
+<th>标志</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--permission-mode</code></td>
+<td>权限模式</td>
+<td><code>claude --permission-mode plan</code></td>
+</tr>
+<tr>
+<td><code>--tools</code></td>
+<td>限制可用工具</td>
+<td><code>claude --tools &quot;Read,Grep,Glob&quot;</code></td>
+</tr>
+<tr>
+<td><code>--allowedTools</code></td>
+<td>无需确认的工具</td>
+<td><code>claude --allowedTools &quot;Bash(git *)&quot;</code></td>
+</tr>
+<tr>
+<td><code>--disallowedTools</code></td>
+<td>禁用的工具</td>
+<td><code>claude --disallowedTools &quot;Bash(rm:*)&quot;</code></td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 只读模式用于代码审查</span><br>claude --permission-mode plan <span class="hljs-string">&quot;review this codebase&quot;</span><br><br><span class="hljs-comment"># 限制为安全工具</span><br>claude --tools <span class="hljs-string">&quot;Read,Grep,Glob&quot;</span> -p <span class="hljs-string">&quot;find all TODO comments&quot;</span><br><br><span class="hljs-comment"># 阻止危险操作</span><br>claude --disallowedTools <span class="hljs-string">&quot;Bash(rm -rf:*)&quot;</span> <span class="hljs-string">&quot;Bash(git push --force:*)&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-6-5-高价值使用场景"><a href="#1-6-5-高价值使用场景" class="headerlink" title="1.6.5 高价值使用场景"></a>1.6.5 高价值使用场景</h3><p><strong>1. CI&#x2F;CD 集成：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># GitHub Actions 示例</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">AI</span> <span class="hljs-string">Code</span> <span class="hljs-string">Review</span><br><span class="hljs-attr">on:</span> [<span class="hljs-string">pull_request</span>]<br><br><span class="hljs-attr">jobs:</span><br>  <span class="hljs-attr">review:</span><br>    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span><br>    <span class="hljs-attr">steps:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">Code</span> <span class="hljs-string">Review</span><br>        <span class="hljs-attr">env:</span><br>          <span class="hljs-attr">ANTHROPIC_API_KEY:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.ANTHROPIC_API_KEY</span> <span class="hljs-string">&#125;&#125;</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">          claude -p --output-format json \</span><br><span class="hljs-string">            --max-turns 1 \</span><br><span class="hljs-string">            &quot;Review the changes in this PR&quot; &gt; review.json</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>2. 脚本管道：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 分析错误日志</span><br><span class="hljs-built_in">tail</span> -1000 /var/log/app/error.log | claude -p <span class="hljs-string">&quot;summarize errors and suggest fixes&quot;</span><br><br><span class="hljs-comment"># 分析 git 历史</span><br>git <span class="hljs-built_in">log</span> --oneline -50 | claude -p <span class="hljs-string">&quot;summarize recent development activity&quot;</span><br><br><span class="hljs-comment"># 生成文档</span><br><span class="hljs-built_in">cat</span> src/api/*.ts | claude -p <span class="hljs-string">&quot;generate API documentation in markdown&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>3. 批量处理：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 处理多个文件</span><br><span class="hljs-keyword">for</span> file <span class="hljs-keyword">in</span> src/*.ts; <span class="hljs-keyword">do</span><br>  claude -p --model haiku <span class="hljs-string">&quot;summarize: <span class="hljs-subst">$(cat $file)</span>&quot;</span> &gt;&gt; summaries.md<br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>关键环境变量：</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ANTHROPIC_API_KEY</code></td>
+<td>API 密钥</td>
+</tr>
+<tr>
+<td><code>ANTHROPIC_MODEL</code></td>
+<td>覆盖默认模型</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_EFFORT_LEVEL</code></td>
+<td>努力级别</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_DISABLE_AUTO_MEMORY</code></td>
+<td>禁用自动记忆</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS</code></td>
+<td>启用实验性代理团队</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="2-进阶者篇"><a href="#2-进阶者篇" class="headerlink" title="2. 进阶者篇"></a>2. 进阶者篇</h1><hr>
+<h2 id="2-1-MCP（模型上下文协议）"><a href="#2-1-MCP（模型上下文协议）" class="headerlink" title="2.1. MCP（模型上下文协议）"></a>2.1. MCP（模型上下文协议）</h2><h3 id="2-1-1-什么是-MCP-与架构"><a href="#2-1-1-什么是-MCP-与架构" class="headerlink" title="2.1.1 什么是 MCP 与架构"></a>2.1.1 什么是 MCP 与架构</h3><p>MCP (Model Context Protocol) 是一种标准化方式，让 Claude 能够访问外部工具、API 和实时数据源。与 Memory 不同，MCP 提供<strong>实时访问动态数据</strong>的能力。</p>
+<p><strong>关键特性：</strong> 实时访问外部服务、实时数据同步、可扩展架构、安全认证、基于工具的交互</p>
+<p><strong>MCP 架构：</strong></p>
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs nsis">Claude<br>  │<br>  ├── <span class="hljs-keyword">File</span><span class="hljs-params">system</span> MCP → 本地文件<br>  ├── GitHub MCP → GitHub 仓库<br>  ├── Database MCP → PostgreSQL/MySQL<br>  ├── Slack MCP → Slack 工作区<br>  └── Google Docs MCP → Google Drive<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-1-2-安装方法（HTTP-Stdio-OAuth）"><a href="#2-1-2-安装方法（HTTP-Stdio-OAuth）" class="headerlink" title="2.1.2 安装方法（HTTP &#x2F; Stdio &#x2F; OAuth）"></a>2.1.2 安装方法（HTTP &#x2F; Stdio &#x2F; OAuth）</h3><p><strong>HTTP 传输（推荐）：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 基本 HTTP 连接</span><br>claude mcp add --transport http notion https://mcp.notion.com/mcp<br><br><span class="hljs-comment"># 带认证头的 HTTP</span><br>claude mcp add --transport http secure-api https://api.example.com/mcp \<br>  --header <span class="hljs-string">&quot;Authorization: Bearer your-token&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Stdio 传输（本地）：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 本地 Node.js 服务器</span><br>claude mcp add --transport stdio myserver -- npx @myorg/mcp-server<br><br><span class="hljs-comment"># 带环境变量</span><br>claude mcp add --transport stdio myserver --<span class="hljs-built_in">env</span> KEY=value -- npx server<br></code></pre></td></tr></table></figure>
+
+<p><strong>OAuth 2.0 认证：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 交互式 OAuth 流程</span><br>claude mcp add --transport http my-service https://my-service.example.com/mcp<br><br><span class="hljs-comment"># 预配置 OAuth 凭据</span><br>claude mcp add --transport http my-service https://my-service.example.com/mcp \<br>  --client-id <span class="hljs-string">&quot;your-client-id&quot;</span> \<br>  --client-secret <span class="hljs-string">&quot;your-client-secret&quot;</span> \<br>  --callback-port 8080<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-1-3-配置管理与作用域"><a href="#2-1-3-配置管理与作用域" class="headerlink" title="2.1.3 配置管理与作用域"></a>2.1.3 配置管理与作用域</h3><p><strong>MCP 作用域：</strong></p>
+<table>
+<thead>
+<tr>
+<th>作用域</th>
+<th>位置</th>
+<th>描述</th>
+<th>共享</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Local</strong></td>
+<td><code>~/.claude.json</code></td>
+<td>当前用户当前项目私有</td>
+<td>仅自己</td>
+</tr>
+<tr>
+<td><strong>Project</strong></td>
+<td><code>.mcp.json</code></td>
+<td>提交到 git 仓库</td>
+<td>团队成员</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td><code>~/.claude.json</code></td>
+<td>所有项目可用</td>
+<td>仅自己</td>
+</tr>
+</tbody></table>
+<p><strong>项目级 MCP 配置 — <code>.mcp.json</code>：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;mcpServers&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;github&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;http&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;url&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://api.github.com/mcp&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>MCP 配置管理命令：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 添加 HTTP 服务器</span><br>claude mcp add --transport http github https://api.github.com/mcp<br><br><span class="hljs-comment"># 添加本地 stdio 服务器</span><br>claude mcp add --transport stdio database -- npx @company/db-server<br><br><span class="hljs-comment"># 列出所有 MCP 服务器</span><br>claude mcp list<br><br><span class="hljs-comment"># 获取特定服务器详情</span><br>claude mcp get github<br><br><span class="hljs-comment"># 移除 MCP 服务器</span><br>claude mcp remove github<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-1-4-常用-MCP-服务器示例"><a href="#2-1-4-常用-MCP-服务器示例" class="headerlink" title="2.1.4 常用 MCP 服务器示例"></a>2.1.4 常用 MCP 服务器示例</h3><p><strong>GitHub MCP：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;mcpServers&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;github&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;@modelcontextprotocol/server-github&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;env&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;GITHUB_TOKEN&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;$&#123;GITHUB_TOKEN&#125;&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>可用工具：<code>list_prs</code>、<code>get_pr</code>、<code>create_pr</code>、<code>list_issues</code>、<code>create_issue</code>、<code>search_code</code></p>
+<p>使用示例：<code>/mcp__github__get_pr 456</code></p>
+<p><strong>Database MCP：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;mcpServers&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;database&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;@modelcontextprotocol/server-database&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;env&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;DATABASE_URL&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;postgresql://user:pass@localhost/mydb&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Filesystem MCP：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;mcpServers&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;filesystem&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;@modelcontextprotocol/server-filesystem&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;/home/user/projects&quot;</span><span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>环境变量管理</strong> — 在 <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 中设置敏感凭据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> GITHUB_TOKEN=<span class="hljs-string">&quot;ghp_xxxxxxxxxxxxx&quot;</span><br><span class="hljs-built_in">export</span> DATABASE_URL=<span class="hljs-string">&quot;postgresql://user:pass@localhost/mydb&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-1-5-MCP-vs-Memory-决策矩阵与输出限制"><a href="#2-1-5-MCP-vs-Memory-决策矩阵与输出限制" class="headerlink" title="2.1.5 MCP vs Memory 决策矩阵与输出限制"></a>2.1.5 MCP vs Memory 决策矩阵与输出限制</h3><p><strong>决策矩阵：</strong></p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs stata">需要外部数据？<br>    │<br>    ├── 否 → 使用 <span class="hljs-keyword">Memory</span><br>    │<br>    └── 是 → 数据是否频繁变化？<br>              │<br>              ├── 否/很少 → 使用 <span class="hljs-keyword">Memory</span><br>              │<br>              └── 是/经常 → 使用 MCP<br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Memory</th>
+<th>MCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>数据类型</strong></td>
+<td>静态、持久</td>
+<td>动态、实时</td>
+</tr>
+<tr>
+<td><strong>典型用途</strong></td>
+<td>偏好、上下文、历史</td>
+<td>API、数据库、服务</td>
+</tr>
+<tr>
+<td><strong>更新频率</strong></td>
+<td>手动更新</td>
+<td>实时同步</td>
+</tr>
+<tr>
+<td><strong>缓存</strong></td>
+<td>自动缓存</td>
+<td>无缓存</td>
+</tr>
+</tbody></table>
+<p><strong>MCP 输出限制：</strong></p>
+<table>
+<thead>
+<tr>
+<th>限制</th>
+<th>阈值</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>警告</strong></td>
+<td>10,000 tokens</td>
+<td>显示警告，输出较大</td>
+</tr>
+<tr>
+<td><strong>默认最大</strong></td>
+<td>25,000 tokens</td>
+<td>超出此限制截断输出</td>
+</tr>
+<tr>
+<td><strong>磁盘持久化</strong></td>
+<td>50,000 字符</td>
+<td>超出 50K 字符保存到磁盘</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 增加最大输出限制</span><br><span class="hljs-built_in">export</span> MAX_MCP_OUTPUT_TOKENS=50000<br></code></pre></td></tr></table></figure>
+
+<p><strong>MCP Prompts 作为斜杠命令：</strong> <code>/mcp__&lt;server&gt;__&lt;prompt&gt;</code></p>
+<p><strong>MCP 资源 @ 提及：</strong> <code>@server-name:protocol://resource/path</code></p>
+<p><strong>Claude 作为 MCP 服务器：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 启动 Claude Code 作为 MCP 服务器</span><br>claude mcp serve<br><br><span class="hljs-comment"># 在另一个 Claude Code 实例中添加</span><br>claude mcp add --transport stdio claude-agent -- claude mcp serve<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-2-Hooks（钩子）"><a href="#2-2-Hooks（钩子）" class="headerlink" title="2.2. Hooks（钩子）"></a>2.2. Hooks（钩子）</h2><h3 id="2-2-1-什么是-Hooks-与配置位置"><a href="#2-2-1-什么是-Hooks-与配置位置" class="headerlink" title="2.2.1 什么是 Hooks 与配置位置"></a>2.2.1 什么是 Hooks 与配置位置</h3><p>Hooks 是在 Claude Code 会话期间响应特定事件而自动执行的脚本。它们实现自动化、验证、权限管理和自定义工作流。</p>
+<p><strong>配置位置：</strong></p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>范围</th>
+<th>共享</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>~/.claude/settings.json</code></td>
+<td>用户设置（所有项目）</td>
+<td>个人</td>
+</tr>
+<tr>
+<td><code>.claude/settings.json</code></td>
+<td>项目设置（可提交）</td>
+<td>团队</td>
+</tr>
+<tr>
+<td><code>.claude/settings.local.json</code></td>
+<td>本地项目设置</td>
+<td>个人</td>
+</tr>
+<tr>
+<td>Managed policy</td>
+<td>组织级设置</td>
+<td>组织</td>
+</tr>
+<tr>
+<td>Plugin <code>hooks/hooks.json</code></td>
+<td>插件范围钩子</td>
+<td>插件用户</td>
+</tr>
+<tr>
+<td>Skill&#x2F;Agent frontmatter</td>
+<td>组件生命周期钩子</td>
+<td>组件用户</td>
+</tr>
+</tbody></table>
+<p><strong>基本配置结构：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;hooks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;EventName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;matcher&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ToolPattern&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;hooks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>          <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;command&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;your-command-here&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;timeout&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">60</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">]</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>关键字段：</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>matcher</code></td>
+<td>匹配工具名称的模式（区分大小写）</td>
+<td><code>&quot;Write&quot;</code>, <code>&quot;Edit|Write&quot;</code>, <code>&quot;*&quot;</code></td>
+</tr>
+<tr>
+<td><code>hooks</code></td>
+<td>钩子定义数组</td>
+<td><code>[&#123; &quot;type&quot;: &quot;command&quot;, ... &#125;]</code></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>钩子类型</td>
+<td><code>&quot;command&quot;</code>, <code>&quot;prompt&quot;</code>, <code>&quot;http&quot;</code>, <code>&quot;agent&quot;</code></td>
+</tr>
+<tr>
+<td><code>command</code></td>
+<td>要执行的 shell 命令</td>
+<td><code>&quot;$CLAUDE_PROJECT_DIR/.claude/hooks/format.sh&quot;</code></td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>可选超时时间（秒，默认 60）</td>
+<td><code>30</code></td>
+</tr>
+<tr>
+<td><code>once</code></td>
+<td>如果为 <code>true</code>，每次会话只运行一次</td>
+<td><code>true</code></td>
+</tr>
+</tbody></table>
+<h3 id="2-2-2-钩子类型与事件"><a href="#2-2-2-钩子类型与事件" class="headerlink" title="2.2.2 钩子类型与事件"></a>2.2.2 钩子类型与事件</h3><p><strong>钩子类型：</strong></p>
+<ul>
+<li><strong>Command Hooks</strong>（默认）：执行 shell 命令，通过 JSON stdin&#x2F;stdout 和退出码通信</li>
+<li><strong>HTTP Hooks</strong>：远程 webhook 端点</li>
+<li><strong>Prompt Hooks</strong>：LLM 评估的提示，主要用于 <code>Stop</code> 和 <code>SubagentStop</code> 事件</li>
+<li><strong>Agent Hooks</strong>：基于子代理的验证钩子，可以执行多步推理</li>
+</ul>
+<p><strong>钩子事件：</strong></p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>触发时机</th>
+<th>可阻塞</th>
+<th>常见用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SessionStart</strong></td>
+<td>会话开始&#x2F;恢复&#x2F;清除&#x2F;压缩</td>
+<td>否</td>
+<td>环境设置</td>
+</tr>
+<tr>
+<td><strong>UserPromptSubmit</strong></td>
+<td>用户提交提示</td>
+<td>是</td>
+<td>验证提示</td>
+</tr>
+<tr>
+<td><strong>PreToolUse</strong></td>
+<td>工具执行前</td>
+<td>是</td>
+<td>验证、修改输入</td>
+</tr>
+<tr>
+<td><strong>PermissionRequest</strong></td>
+<td>权限对话框显示</td>
+<td>是</td>
+<td>自动批准&#x2F;拒绝</td>
+</tr>
+<tr>
+<td><strong>PostToolUse</strong></td>
+<td>工具成功后</td>
+<td>否</td>
+<td>添加上下文、反馈</td>
+</tr>
+<tr>
+<td><strong>PostToolUseFailure</strong></td>
+<td>工具执行失败</td>
+<td>否</td>
+<td>错误处理、日志</td>
+</tr>
+<tr>
+<td><strong>SubagentStart</strong></td>
+<td>子代理启动</td>
+<td>否</td>
+<td>子代理设置</td>
+</tr>
+<tr>
+<td><strong>SubagentStop</strong></td>
+<td>子代理完成</td>
+<td>是</td>
+<td>子代理验证</td>
+</tr>
+<tr>
+<td><strong>Stop</strong></td>
+<td>Claude 完成响应</td>
+<td>是</td>
+<td>任务完成检查</td>
+</tr>
+<tr>
+<td><strong>SessionEnd</strong></td>
+<td>会话终止</td>
+<td>否</td>
+<td>清理、最终日志</td>
+</tr>
+</tbody></table>
+<p><strong>匹配器模式：</strong></p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>精确字符串</td>
+<td>匹配特定工具</td>
+<td><code>&quot;Write&quot;</code></td>
+</tr>
+<tr>
+<td>正则模式</td>
+<td>匹配多个工具</td>
+<td><code>&quot;Edit|Write&quot;</code></td>
+</tr>
+<tr>
+<td>通配符</td>
+<td>匹配所有工具</td>
+<td><code>&quot;*&quot;</code> 或 <code>&quot;&quot;</code></td>
+</tr>
+<tr>
+<td>MCP 工具</td>
+<td>服务器和工具模式</td>
+<td><code>&quot;mcp__memory__.*&quot;</code></td>
+</tr>
+</tbody></table>
+<h3 id="2-2-3-PreToolUse-与-PostToolUse-钩子"><a href="#2-2-3-PreToolUse-与-PostToolUse-钩子" class="headerlink" title="2.2.3 PreToolUse 与 PostToolUse 钩子"></a>2.2.3 PreToolUse 与 PostToolUse 钩子</h3><p><strong>PreToolUse</strong> — 在 Claude 创建工具参数后、处理前运行：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;hooks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;PreToolUse&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;matcher&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Bash&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;hooks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>          <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;command&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;$CLAUDE_PROJECT_DIR/.claude/hooks/validate-bash.py&quot;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">]</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>PreToolUse 输出控制：</p>
+<ul>
+<li><code>permissionDecision</code>: <code>&quot;allow&quot;</code>, <code>&quot;deny&quot;</code>, 或 <code>&quot;ask&quot;</code></li>
+<li><code>permissionDecisionReason</code>: 决定原因</li>
+<li><code>updatedInput</code>: 修改后的工具输入参数</li>
+</ul>
+<p><strong>PostToolUse</strong> — 工具完成后立即运行：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;hooks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;PostToolUse&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;matcher&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Write|Edit&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;hooks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>          <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;command&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;$CLAUDE_PROJECT_DIR/.claude/hooks/security-scan.py&quot;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">]</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>PostToolUse 输出控制：</p>
+<ul>
+<li><code>&quot;block&quot;</code> 决定向 Claude 提供反馈</li>
+<li><code>additionalContext</code>: 为 Claude 添加的上下文</li>
+</ul>
+<h3 id="2-2-4-JSON-输入输出与退出码"><a href="#2-2-4-JSON-输入输出与退出码" class="headerlink" title="2.2.4 JSON 输入输出与退出码"></a>2.2.4 JSON 输入输出与退出码</h3><p><strong>JSON 输入（通过 stdin）：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;session_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;abc123&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;transcript_path&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/path/to/transcript.jsonl&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;cwd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/current/working/directory&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;hook_event_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;PreToolUse&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;tool_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Write&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;tool_input&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;file_path&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/path/to/file.js&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>退出码：</strong></p>
+<table>
+<thead>
+<tr>
+<th>退出码</th>
+<th>含义</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>0</strong></td>
+<td>成功</td>
+<td>继续，解析 JSON stdout</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>阻塞错误</td>
+<td>阻塞操作，stderr 显示为错误</td>
+</tr>
+<tr>
+<td><strong>其他</strong></td>
+<td>非阻塞错误</td>
+<td>继续，stderr 在详细模式下显示</td>
+</tr>
+</tbody></table>
+<p><strong>JSON 输出（stdout，退出码 0）：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;continue&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;stopReason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Optional message if stopping&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;systemMessage&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Optional warning message&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;hookSpecificOutput&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;hookEventName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;PreToolUse&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;permissionDecision&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;allow&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;permissionDecisionReason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;File is in allowed directory&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;updatedInput&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;file_path&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/modified/path.js&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>环境变量：</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>可用性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>CLAUDE_PROJECT_DIR</code></td>
+<td>所有钩子</td>
+<td>项目根目录的绝对路径</td>
+</tr>
+<tr>
+<td><code>CLAUDE_ENV_FILE</code></td>
+<td>SessionStart, CwdChanged, FileChanged</td>
+<td>持久化环境变量的文件路径</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_REMOTE</code></td>
+<td>所有钩子</td>
+<td>远程环境运行时为 <code>&quot;true&quot;</code></td>
+</tr>
+</tbody></table>
+<h3 id="2-2-5-示例钩子脚本"><a href="#2-2-5-示例钩子脚本" class="headerlink" title="2.2.5 示例钩子脚本"></a>2.2.5 示例钩子脚本</h3><p><strong>示例 1 — Bash 命令验证器（PreToolUse）：</strong></p>
+<p><code>.claude/hooks/validate-bash.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python3</span><br><span class="hljs-keyword">import</span> json<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> re<br><br>BLOCKED_PATTERNS = [<br>    (<span class="hljs-string">r&quot;\brm\s+-rf\s+/&quot;</span>, <span class="hljs-string">&quot;Blocking dangerous rm -rf / command&quot;</span>),<br>    (<span class="hljs-string">r&quot;\bsudo\s+rm&quot;</span>, <span class="hljs-string">&quot;Blocking sudo rm command&quot;</span>),<br>]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    input_data = json.load(sys.stdin)<br>    tool_name = input_data.get(<span class="hljs-string">&quot;tool_name&quot;</span>, <span class="hljs-string">&quot;&quot;</span>)<br>    <span class="hljs-keyword">if</span> tool_name != <span class="hljs-string">&quot;Bash&quot;</span>:<br>        sys.exit(<span class="hljs-number">0</span>)<br><br>    command = input_data.get(<span class="hljs-string">&quot;tool_input&quot;</span>, &#123;&#125;).get(<span class="hljs-string">&quot;command&quot;</span>, <span class="hljs-string">&quot;&quot;</span>)<br><br>    <span class="hljs-keyword">for</span> pattern, message <span class="hljs-keyword">in</span> BLOCKED_PATTERNS:<br>        <span class="hljs-keyword">if</span> re.search(pattern, command):<br>            <span class="hljs-built_in">print</span>(message, file=sys.stderr)<br>            sys.exit(<span class="hljs-number">2</span>)  <span class="hljs-comment"># Exit 2 = blocking error</span><br><br>    sys.exit(<span class="hljs-number">0</span>)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    main()<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2 — 安全扫描器（PostToolUse）：</strong></p>
+<p><code>.claude/hooks/security-scan.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python3</span><br><span class="hljs-keyword">import</span> json<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> re<br><br>SECRET_PATTERNS = [<br>    (<span class="hljs-string">r&quot;password\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]+[&#x27;\&quot;]&quot;</span>, <span class="hljs-string">&quot;Potential hardcoded password&quot;</span>),<br>    (<span class="hljs-string">r&quot;api[_-]?key\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]+[&#x27;\&quot;]&quot;</span>, <span class="hljs-string">&quot;Potential hardcoded API key&quot;</span>),<br>]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    input_data = json.load(sys.stdin)<br>    tool_name = input_data.get(<span class="hljs-string">&quot;tool_name&quot;</span>, <span class="hljs-string">&quot;&quot;</span>)<br>    <span class="hljs-keyword">if</span> tool_name <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;Write&quot;</span>, <span class="hljs-string">&quot;Edit&quot;</span>]:<br>        sys.exit(<span class="hljs-number">0</span>)<br><br>    tool_input = input_data.get(<span class="hljs-string">&quot;tool_input&quot;</span>, &#123;&#125;)<br>    content = tool_input.get(<span class="hljs-string">&quot;content&quot;</span>, <span class="hljs-string">&quot;&quot;</span>) <span class="hljs-keyword">or</span> tool_input.get(<span class="hljs-string">&quot;new_string&quot;</span>, <span class="hljs-string">&quot;&quot;</span>)<br><br>    warnings = []<br>    <span class="hljs-keyword">for</span> pattern, message <span class="hljs-keyword">in</span> SECRET_PATTERNS:<br>        <span class="hljs-keyword">if</span> re.search(pattern, content, re.IGNORECASE):<br>            warnings.append(message)<br><br>    <span class="hljs-keyword">if</span> warnings:<br>        output = &#123;<br>            <span class="hljs-string">&quot;hookSpecificOutput&quot;</span>: &#123;<br>                <span class="hljs-string">&quot;hookEventName&quot;</span>: <span class="hljs-string">&quot;PostToolUse&quot;</span>,<br>                <span class="hljs-string">&quot;additionalContext&quot;</span>: <span class="hljs-string">f&quot;Security warnings: &quot;</span> + <span class="hljs-string">&quot;; &quot;</span>.join(warnings)<br>            &#125;<br>        &#125;<br>        <span class="hljs-built_in">print</span>(json.dumps(output))<br><br>    sys.exit(<span class="hljs-number">0</span>)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    main()<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 3 — 自动格式化代码（PostToolUse）：</strong></p>
+<p><code>.claude/hooks/format-code.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><br>INPUT=$(<span class="hljs-built_in">cat</span>)<br>TOOL_NAME=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$INPUT</span>&quot;</span> | python3 -c <span class="hljs-string">&quot;import sys, json; print(json.load(sys.stdin).get(&#x27;tool_name&#x27;, &#x27;&#x27;))&quot;</span>)<br>FILE_PATH=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$INPUT</span>&quot;</span> | python3 -c <span class="hljs-string">&quot;import sys, json; print(json.load(sys.stdin).get(&#x27;tool_input&#x27;, &#123;&#125;).get(&#x27;file_path&#x27;, &#x27;&#x27;))&quot;</span>)<br><br><span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$TOOL_NAME</span>&quot;</span> != <span class="hljs-string">&quot;Write&quot;</span> ] &amp;&amp; [ <span class="hljs-string">&quot;<span class="hljs-variable">$TOOL_NAME</span>&quot;</span> != <span class="hljs-string">&quot;Edit&quot;</span> ]; <span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">exit</span> 0<br><span class="hljs-keyword">fi</span><br><br><span class="hljs-comment"># 根据文件扩展名格式化</span><br><span class="hljs-keyword">case</span> <span class="hljs-string">&quot;<span class="hljs-variable">$FILE_PATH</span>&quot;</span> <span class="hljs-keyword">in</span><br>    *.js|*.jsx|*.ts|*.tsx|*.json)<br>        <span class="hljs-built_in">command</span> -v prettier &amp;&gt;/dev/null &amp;&amp; prettier --write <span class="hljs-string">&quot;<span class="hljs-variable">$FILE_PATH</span>&quot;</span> 2&gt;/dev/null<br>        ;;<br>    *.py)<br>        <span class="hljs-built_in">command</span> -v black &amp;&gt;/dev/null &amp;&amp; black <span class="hljs-string">&quot;<span class="hljs-variable">$FILE_PATH</span>&quot;</span> 2&gt;/dev/null<br>        ;;<br>    *.go)<br>        <span class="hljs-built_in">command</span> -v gofmt &amp;&gt;/dev/null &amp;&amp; gofmt -w <span class="hljs-string">&quot;<span class="hljs-variable">$FILE_PATH</span>&quot;</span> 2&gt;/dev/null<br>        ;;<br><span class="hljs-keyword">esac</span><br><br><span class="hljs-built_in">exit</span> 0<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 4 — 提示验证器（UserPromptSubmit）：</strong></p>
+<p><code>.claude/hooks/validate-prompt.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python3</span><br><span class="hljs-keyword">import</span> json<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> re<br><br>BLOCKED_PATTERNS = [<br>    (<span class="hljs-string">r&quot;delete\s+(all\s+)?database&quot;</span>, <span class="hljs-string">&quot;Dangerous: database deletion&quot;</span>),<br>    (<span class="hljs-string">r&quot;rm\s+-rf\s+/&quot;</span>, <span class="hljs-string">&quot;Dangerous: root deletion&quot;</span>),<br>]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    input_data = json.load(sys.stdin)<br>    prompt = input_data.get(<span class="hljs-string">&quot;user_prompt&quot;</span>, <span class="hljs-string">&quot;&quot;</span>) <span class="hljs-keyword">or</span> input_data.get(<span class="hljs-string">&quot;prompt&quot;</span>, <span class="hljs-string">&quot;&quot;</span>)<br><br>    <span class="hljs-keyword">for</span> pattern, message <span class="hljs-keyword">in</span> BLOCKED_PATTERNS:<br>        <span class="hljs-keyword">if</span> re.search(pattern, prompt, re.IGNORECASE):<br>            output = &#123;<br>                <span class="hljs-string">&quot;decision&quot;</span>: <span class="hljs-string">&quot;block&quot;</span>,<br>                <span class="hljs-string">&quot;reason&quot;</span>: <span class="hljs-string">f&quot;Blocked: <span class="hljs-subst">&#123;message&#125;</span>&quot;</span><br>            &#125;<br>            <span class="hljs-built_in">print</span>(json.dumps(output))<br>            sys.exit(<span class="hljs-number">0</span>)<br><br>    sys.exit(<span class="hljs-number">0</span>)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    main()<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 5 — 智能停止钩子（Prompt-Based）：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;hooks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;Stop&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;hooks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>          <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;prompt&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;prompt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Review if Claude completed all requested tasks. Check: 1) Were all files created/modified? 2) Were there unresolved errors?&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;timeout&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">]</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-6-安全注意事项与调试"><a href="#2-2-6-安全注意事项与调试" class="headerlink" title="2.2.6 安全注意事项与调试"></a>2.2.6 安全注意事项与调试</h3><p><strong>安全注意事项：</strong></p>
+<table>
+<thead>
+<tr>
+<th>✅ 应该做</th>
+<th>❌ 不应该做</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>验证和清理所有输入</td>
+<td>盲目信任输入数据</td>
+</tr>
+<tr>
+<td>引用 shell 变量：<code>&quot;$VAR&quot;</code></td>
+<td>使用未引用：<code>$VAR</code></td>
+</tr>
+<tr>
+<td>阻塞路径遍历（<code>..</code>）</td>
+<td>允许任意路径</td>
+</tr>
+<tr>
+<td>使用 <code>$CLAUDE_PROJECT_DIR</code> 绝对路径</td>
+<td>硬编码路径</td>
+</tr>
+<tr>
+<td>跳过敏感文件（<code>.env</code>, <code>.git/</code>, 密钥）</td>
+<td>处理所有文件</td>
+</tr>
+</tbody></table>
+<p><strong>调试：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 启用调试模式</span><br>claude --debug<br><br><span class="hljs-comment"># 在 Claude Code 中使用 Ctrl+O 启用详细模式</span><br><br><span class="hljs-comment"># 独立测试钩子</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;&#123;&quot;tool_name&quot;: &quot;Bash&quot;, &quot;tool_input&quot;: &#123;&quot;command&quot;: &quot;ls -la&quot;&#125;&#125;&#x27;</span> | python3 .claude/hooks/validate-bash.py<br><br><span class="hljs-comment"># 检查退出码</span><br><span class="hljs-built_in">echo</span> $?<br></code></pre></td></tr></table></figure>
+
+<p><strong>钩子执行细节：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>超时</strong></td>
+<td>默认 60 秒，可配置</td>
+</tr>
+<tr>
+<td><strong>并行化</strong></td>
+<td>所有匹配的钩子并行运行</td>
+</tr>
+<tr>
+<td><strong>去重</strong></td>
+<td>相同的钩子命令去重</td>
+</tr>
+<tr>
+<td><strong>环境</strong></td>
+<td>在当前目录运行，使用 Claude Code 环境</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="3-高级用户篇"><a href="#3-高级用户篇" class="headerlink" title="3. 高级用户篇"></a>3. 高级用户篇</h1><hr>
+<h2 id="3-1-Plugins（插件）"><a href="#3-1-Plugins（插件）" class="headerlink" title="3.1. Plugins（插件）"></a>3.1. Plugins（插件）</h2><h3 id="3-1-1-什么是-Plugins-与核心优势"><a href="#3-1-1-什么是-Plugins-与核心优势" class="headerlink" title="3.1.1 什么是 Plugins 与核心优势"></a>3.1.1 什么是 Plugins 与核心优势</h3><p>Plugins 是打包的功能集合，将斜杠命令、子代理、MCP 服务器和钩子组合成一键安装的扩展包。它们是最高级别的扩展机制，用于创建可共享、可分发的完整工作流。</p>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>一键安装</strong></td>
+<td>单条命令安装所有组件</td>
+</tr>
+<tr>
+<td><strong>自动配置</strong></td>
+<td>无需手动设置各个部分</td>
+</tr>
+<tr>
+<td><strong>版本管理</strong></td>
+<td>自动处理版本和更新</td>
+</tr>
+<tr>
+<td><strong>团队共享</strong></td>
+<td>通过市场或仓库轻松分发</td>
+</tr>
+<tr>
+<td><strong>依赖管理</strong></td>
+<td>自动处理依赖关系</td>
+</tr>
+</tbody></table>
+<p><strong>插件架构：</strong></p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs nix">┌─────────────────────────────────────────────────────────────┐<br>│                      Plugin                                  │<br>├─────────────────────────────────────────────────────────────┤<br>│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │<br>│  │ Slash Cmds  │  │ Subagents   │  │ MCP Servers │         │<br>│  │  commands<span class="hljs-symbol">/</span>  │  │  agents<span class="hljs-symbol">/</span>    │  │  .mcp.json  │         │<br>│  └─────────────┘  └─────────────┘  └─────────────┘         │<br>│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │<br>│  │   Hooks     │  │    LSP      │  │   Skills    │         │<br>│  │  hooks<span class="hljs-symbol">/</span>     │  │  .lsp.json  │  │  skills<span class="hljs-symbol">/</span>    │         │<br>│  └─────────────┘  └─────────────┘  └─────────────┘         │<br>└─────────────────────────────────────────────────────────────┘<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-1-2-插件目录结构与-plugin-json-清单"><a href="#3-1-2-插件目录结构与-plugin-json-清单" class="headerlink" title="3.1.2 插件目录结构与 plugin.json 清单"></a>3.1.2 插件目录结构与 plugin.json 清单</h3><p><strong>插件目录结构：</strong></p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs nix">my-plugin<span class="hljs-symbol">/</span><br>├── .claude-plugin<span class="hljs-symbol">/</span><br>│   └── plugin.json       <span class="hljs-comment"># 清单文件（必需）</span><br>├── commands<span class="hljs-symbol">/</span>             <span class="hljs-comment"># 斜杠命令</span><br>│   ├── task-<span class="hljs-number">1</span>.md<br>│   └── workflows<span class="hljs-symbol">/</span><br>├── agents<span class="hljs-symbol">/</span>               <span class="hljs-comment"># 子代理定义</span><br>│   └── specialist.md<br>├── skills<span class="hljs-symbol">/</span>               <span class="hljs-comment"># 技能定义</span><br>│   └── skill-<span class="hljs-number">1</span><span class="hljs-symbol">/</span><br>│       └── SKILL.md<br>├── hooks<span class="hljs-symbol">/</span>                <span class="hljs-comment"># 事件钩子</span><br>│   └── hooks.json<br>├── .mcp.json             <span class="hljs-comment"># MCP 服务器配置</span><br>├── .lsp.json             <span class="hljs-comment"># LSP 服务器配置</span><br>├── bin<span class="hljs-symbol">/</span>                  <span class="hljs-comment"># 可执行文件</span><br>├── settings.json         <span class="hljs-comment"># 默认设置</span><br>├── templates<span class="hljs-symbol">/</span>            <span class="hljs-comment"># 模板文件</span><br>├── scripts<span class="hljs-symbol">/</span>              <span class="hljs-comment"># 辅助脚本</span><br>└── docs<span class="hljs-symbol">/</span>                 <span class="hljs-comment"># 文档</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>plugin.json 清单文件：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;my-plugin&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;插件功能描述&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;version&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1.0.0&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;author&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Your Name&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;homepage&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://example.com&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;repository&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://github.com/user/repo&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;license&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;MIT&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;userConfig&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;apiKey&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;API 密钥&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;sensitive&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;region&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;部署区域&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;default&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;us-east-1&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-1-3-LSP-服务器配置"><a href="#3-1-3-LSP-服务器配置" class="headerlink" title="3.1.3 LSP 服务器配置"></a>3.1.3 LSP 服务器配置</h3><p>插件可以包含语言服务器协议 (LSP) 支持，提供实时代码智能。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;python&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;pyright-langserver&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;--stdio&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;extensionToLanguage&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;.py&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;python&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;.pyi&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;python&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;typescript&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;typescript-language-server&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;--stdio&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;extensionToLanguage&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;.ts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;typescript&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;.tsx&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;typescriptreact&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>LSP 能力：即时诊断、代码导航、悬停信息、符号列表</p>
+<h3 id="3-1-4-安装管理与市场"><a href="#3-1-4-安装管理与市场" class="headerlink" title="3.1.4 安装管理与市场"></a>3.1.4 安装管理与市场</h3><p><strong>安装与管理命令：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 从市场安装</span><br>/plugin install plugin-name<br>claude plugin install plugin-name@marketplace-name<br><br><span class="hljs-comment"># 从 GitHub 安装</span><br>/plugin install github:username/repo<br><br><span class="hljs-comment"># 从本地路径安装（开发测试）</span><br>claude --plugin-dir ./my-plugin<br><br><span class="hljs-comment"># 列出已安装插件</span><br>/plugin list --installed<br><br><span class="hljs-comment"># 启用/禁用插件</span><br>/plugin <span class="hljs-built_in">enable</span> plugin-name<br>/plugin <span class="hljs-built_in">disable</span> plugin-name<br><br><span class="hljs-comment"># 更新插件</span><br>/plugin update plugin-name<br><br><span class="hljs-comment"># 卸载插件</span><br>/plugin uninstall plugin-name<br></code></pre></td></tr></table></figure>
+
+<p><strong>插件来源类型：</strong></p>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>语法</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>相对路径</td>
+<td>字符串路径</td>
+<td><code>&quot;./plugins/my-plugin&quot;</code></td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td><code>&#123; &quot;source&quot;: &quot;github&quot;, &quot;repo&quot;: &quot;owner/repo&quot; &#125;</code></td>
+<td><code>&#123; &quot;source&quot;: &quot;github&quot;, &quot;repo&quot;: &quot;acme/lint-plugin&quot; &#125;</code></td>
+</tr>
+<tr>
+<td>Git URL</td>
+<td><code>&#123; &quot;source&quot;: &quot;url&quot;, &quot;url&quot;: &quot;...&quot; &#125;</code></td>
+<td><code>&#123; &quot;source&quot;: &quot;url&quot;, &quot;url&quot;: &quot;https://git.internal/plugin.git&quot; &#125;</code></td>
+</tr>
+<tr>
+<td>npm</td>
+<td><code>&#123; &quot;source&quot;: &quot;npm&quot;, &quot;package&quot;: &quot;...&quot; &#125;</code></td>
+<td><code>&#123; &quot;source&quot;: &quot;npm&quot;, &quot;package&quot;: &quot;@acme/claude-plugin&quot; &#125;</code></td>
+</tr>
+<tr>
+<td>pip</td>
+<td><code>&#123; &quot;source&quot;: &quot;pip&quot;, &quot;package&quot;: &quot;...&quot; &#125;</code></td>
+<td><code>&#123; &quot;source&quot;: &quot;pip&quot;, &quot;package&quot;: &quot;claude-data-plugin&quot; &#125;</code></td>
+</tr>
+</tbody></table>
+<h3 id="3-1-5-企业管理与安全"><a href="#3-1-5-企业管理与安全" class="headerlink" title="3.1.5 企业管理与安全"></a>3.1.5 企业管理与安全</h3><p><strong>企业管理设置：</strong></p>
+<table>
+<thead>
+<tr>
+<th>设置</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>enabledPlugins</code></td>
+<td>默认启用的插件白名单</td>
+</tr>
+<tr>
+<td><code>deniedPlugins</code></td>
+<td>禁止安装的插件黑名单</td>
+</tr>
+<tr>
+<td><code>extraKnownMarketplaces</code></td>
+<td>添加额外的市场来源</td>
+</tr>
+<tr>
+<td><code>strictKnownMarketplaces</code></td>
+<td>限制用户可添加的市场</td>
+</tr>
+</tbody></table>
+<p>插件子代理在受限沙箱中运行，以下 frontmatter 键不被允许：<code>hooks</code>、<code>mcpServers</code>、<code>permissionMode</code></p>
+<p>插件可通过 <code>$&#123;CLAUDE_PLUGIN_DATA&#125;</code> 环境变量访问持久化状态目录。</p>
+<p><strong>插件 vs 独立配置：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>独立配置</th>
+<th>插件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>安装时间</strong></td>
+<td>2+ 小时</td>
+<td>2 分钟</td>
+</tr>
+<tr>
+<td><strong>配置</strong></td>
+<td>手动设置</td>
+<td>自动配置</td>
+</tr>
+<tr>
+<td><strong>版本控制</strong></td>
+<td>手动</td>
+<td>自动</td>
+</tr>
+<tr>
+<td><strong>团队共享</strong></td>
+<td>复制文件</td>
+<td>安装 ID</td>
+</tr>
+<tr>
+<td><strong>更新</strong></td>
+<td>手动</td>
+<td>自动可用</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-2-Advanced-Features（高级功能）"><a href="#3-2-Advanced-Features（高级功能）" class="headerlink" title="3.2. Advanced Features（高级功能）"></a>3.2. Advanced Features（高级功能）</h2><h3 id="3-2-1-规划模式与-Ultraplan"><a href="#3-2-1-规划模式与-Ultraplan" class="headerlink" title="3.2.1 规划模式与 Ultraplan"></a>3.2.1 规划模式与 Ultraplan</h3><p><strong>规划模式</strong> 让 Claude 在实施前先思考复杂任务，创建可审查和批准的详细计划。</p>
+<p><strong>两阶段方法：</strong> 规划阶段（分析任务，创建详细实施计划）→ 实施阶段（批准后执行计划）</p>
+<p>激活方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 斜杠命令</span><br>/plan Implement user authentication system<br><br><span class="hljs-comment"># CLI 标志</span><br>claude --permission-mode plan<br><br><span class="hljs-comment"># 键盘快捷键</span><br>Shift + Tab    <span class="hljs-comment"># 切换权限模式</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Ultraplan（v2.1.101 新增）</strong> 将规划任务从本地 CLI 移交给云端 Claude Code 会话。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">/ultraplan migrate the auth service from sessions to JWTs<br></code></pre></td></tr></table></figure>
+
+<p>状态指示：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>◇ ultraplan</code></td>
+<td>Claude 正在研究代码库并起草计划</td>
+</tr>
+<tr>
+<td><code>◇ ultraplan needs your input</code></td>
+<td>Claude 有澄清问题</td>
+</tr>
+<tr>
+<td><code>◆ ultraplan ready</code></td>
+<td>计划可在浏览器中审查</td>
+</tr>
+</tbody></table>
+<h3 id="3-2-2-深度思考与自动模式"><a href="#3-2-2-深度思考与自动模式" class="headerlink" title="3.2.2 深度思考与自动模式"></a>3.2.2 深度思考与自动模式</h3><p><strong>深度思考</strong> 让 Claude 花更多时间推理复杂问题。</p>
+<p>激活方式：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>键盘快捷键</td>
+<td><code>Option + T</code> (macOS) &#x2F; <code>Alt + T</code> (Windows&#x2F;Linux)</td>
+</tr>
+<tr>
+<td>环境变量</td>
+<td><code>export MAX_THINKING_TOKENS=16000</code></td>
+</tr>
+<tr>
+<td>CLI 标志</td>
+<td><code>claude --effort high</code></td>
+</tr>
+<tr>
+<td>斜杠命令</td>
+<td><code>/effort high</code></td>
+</tr>
+</tbody></table>
+<p>努力级别（仅 Opus 4.6）：</p>
+<table>
+<thead>
+<tr>
+<th>级别</th>
+<th>符号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>low</code></td>
+<td>○</td>
+<td>最少推理</td>
+</tr>
+<tr>
+<td><code>medium</code></td>
+<td>◐</td>
+<td>中等推理</td>
+</tr>
+<tr>
+<td><code>high</code></td>
+<td>●</td>
+<td>深度推理</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>●●</td>
+<td>最大推理（仅 Opus 4.6）</td>
+</tr>
+</tbody></table>
+<p><strong>自动模式</strong>（研究预览）使用后台安全分类器审查每个操作，允许 Claude 自主工作同时阻止危险操作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">claude --enable-auto-mode<br>claude --permission-mode auto<br></code></pre></td></tr></table></figure>
+
+<p>默认阻止的操作：管道安装、发送敏感数据、生产部署、批量删除、IAM 变更、强制推送主分支</p>
+<p>默认允许的操作：本地文件操作、声明依赖安装、只读 HTTP、推送当前分支</p>
+<h3 id="3-2-3-后台任务与监控工具"><a href="#3-2-3-后台任务与监控工具" class="headerlink" title="3.2.3 后台任务与监控工具"></a>3.2.3 后台任务与监控工具</h3><p><strong>后台任务：</strong></p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs nix">用户: Run tests <span class="hljs-keyword">in</span> background<br><br><span class="hljs-params">Claude:</span> Started task bg-<span class="hljs-number">1234</span><br><br><span class="hljs-symbol">/task</span> list           <span class="hljs-comment"># 显示所有任务</span><br><span class="hljs-symbol">/task</span> status bg-<span class="hljs-number">1234</span> <span class="hljs-comment"># 检查进度</span><br><span class="hljs-symbol">/task</span> show bg-<span class="hljs-number">1234</span>   <span class="hljs-comment"># 查看输出</span><br><span class="hljs-symbol">/task</span> cancel bg-<span class="hljs-number">1234</span> <span class="hljs-comment"># 取消任务</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>监控工具</strong>（v2.1.98 新增）让 Claude 监视后台命令的 stdout 并在匹配事件出现时立即反应。轮询每个周期都会消耗完整的 API 往返，而监控在命令静默时零 token 消耗。</p>
+<p>常见模式 — 流过滤器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">tail</span> -f /var/log/app.log | grep --line-buffered <span class="hljs-string">&quot;ERROR&quot;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>警告：</strong> 使用 <code>grep --line-buffered</code> 避免缓冲延迟</p>
+</blockquote>
+<h3 id="3-2-4-定时任务与权限模式"><a href="#3-2-4-定时任务与权限模式" class="headerlink" title="3.2.4 定时任务与权限模式"></a>3.2.4 定时任务与权限模式</h3><p><strong>定时任务：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 显式间隔</span><br>/loop 5m check <span class="hljs-keyword">if</span> the deployment finished<br><br><span class="hljs-comment"># 自然语言</span><br>/loop check build status every 30 minutes<br><br><span class="hljs-comment"># 一次性提醒</span><br>remind me at 3pm to push the release branch<br></code></pre></td></tr></table></figure>
+
+<p>限制：每会话最多 50 个任务；会话结束时清除；循环任务 3 天后自动过期</p>
+<p><strong>6 种权限模式：</strong></p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>default</code></td>
+<td>仅读取文件；其他操作需提示</td>
+</tr>
+<tr>
+<td><code>acceptEdits</code></td>
+<td>自动读取和编辑文件；命令需提示</td>
+</tr>
+<tr>
+<td><code>plan</code></td>
+<td>仅读取文件（研究模式，无编辑）</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td>所有操作经后台安全分类器检查</td>
+</tr>
+<tr>
+<td><code>bypassPermissions</code></td>
+<td>所有操作，无权限检查（危险）</td>
+</tr>
+<tr>
+<td><code>dontAsk</code></td>
+<td>仅预批准工具执行；其他拒绝</td>
+</tr>
+</tbody></table>
+<p>激活方式：<code>Shift + Tab</code> 循环切换、<code>/plan</code>、<code>claude --permission-mode plan</code></p>
+<h3 id="3-2-5-交互功能（快捷键-Vim-模式-语音输入-频道）"><a href="#3-2-5-交互功能（快捷键-Vim-模式-语音输入-频道）" class="headerlink" title="3.2.5 交互功能（快捷键 &#x2F; Vim 模式 &#x2F; 语音输入 &#x2F; 频道）"></a>3.2.5 交互功能（快捷键 &#x2F; Vim 模式 &#x2F; 语音输入 &#x2F; 频道）</h3><p><strong>键盘快捷键：</strong></p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Ctrl+C</code></td>
+<td>取消当前输入&#x2F;生成</td>
+</tr>
+<tr>
+<td><code>Ctrl+D</code></td>
+<td>退出 Claude Code</td>
+</tr>
+<tr>
+<td><code>Ctrl+G</code></td>
+<td>在外部编辑器中编辑计划</td>
+</tr>
+<tr>
+<td><code>Ctrl+L</code></td>
+<td>清除终端屏幕</td>
+</tr>
+<tr>
+<td><code>Ctrl+O</code></td>
+<td>切换详细输出（查看推理）</td>
+</tr>
+<tr>
+<td><code>Ctrl+R</code></td>
+<td>反向搜索历史</td>
+</tr>
+<tr>
+<td><code>Ctrl+T</code></td>
+<td>切换任务列表视图</td>
+</tr>
+<tr>
+<td><code>Ctrl+B</code></td>
+<td>后台运行任务</td>
+</tr>
+<tr>
+<td><code>Esc+Esc</code></td>
+<td>回滚代码&#x2F;对话</td>
+</tr>
+<tr>
+<td><code>Shift+Tab</code> &#x2F; <code>Alt+M</code></td>
+<td>切换权限模式</td>
+</tr>
+<tr>
+<td><code>Option+P</code> &#x2F; <code>Alt+P</code></td>
+<td>切换模型</td>
+</tr>
+<tr>
+<td><code>Option+T</code> &#x2F; <code>Alt+T</code></td>
+<td>切换深度思考</td>
+</tr>
+</tbody></table>
+<p><strong>自定义键绑定</strong> — 运行 <code>/keybindings</code> 打开 <code>~/.claude/keybindings.json</code></p>
+<p><strong>Vim 模式</strong> — 使用 <code>/vim</code> 启用：<code>Esc</code> 进入 NORMAL 模式，<code>i/a/o</code> 进入 INSERT 模式；标准导航 <code>h/l</code>, <code>j/k</code>, <code>w/b/e</code>, <code>0/$</code></p>
+<p><strong>Bash 模式</strong> — 使用 <code>!</code> 前缀直接执行 shell 命令：<code>! npm test</code></p>
+<p><strong>语音输入</strong> — <code>/voice</code> 启用按键说话，支持 20 种语言</p>
+<p><strong>频道</strong>（研究预览）— 通过 MCP 服务器将外部服务的事件推送到运行中的会话：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">claude --channels discord,telegram<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-6-Chrome-集成与远程控制"><a href="#3-2-6-Chrome-集成与远程控制" class="headerlink" title="3.2.6 Chrome 集成与远程控制"></a>3.2.6 Chrome 集成与远程控制</h3><p><strong>Chrome 集成</strong> 将 Claude Code 连接到 Chrome 或 Edge 浏览器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">claude --chrome<br><span class="hljs-comment"># 或在会话中</span><br>/chrome<br></code></pre></td></tr></table></figure>
+
+<p>能力：实时调试、设计验证、表单验证、Web 应用测试、数据提取</p>
+<p><strong>远程控制</strong> 让你从手机、平板或任何浏览器继续本地运行的会话：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># CLI</span><br>claude remote-control<br>claude remote-control --name <span class="hljs-string">&quot;Auth Refactor&quot;</span><br><br><span class="hljs-comment"># 会话中</span><br>/remote-control<br></code></pre></td></tr></table></figure>
+
+<p>连接方式：会话 URL、二维码、按名称查找</p>
+<p><strong>Web 会话：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 从 CLI 创建 Web 会话</span><br>claude --remote <span class="hljs-string">&quot;implement the new API endpoints&quot;</span><br><br><span class="hljs-comment"># 恢复 Web 会话到本地</span><br>claude --teleport<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-7-桌面应用与-Git-Worktrees"><a href="#3-2-7-桌面应用与-Git-Worktrees" class="headerlink" title="3.2.7 桌面应用与 Git Worktrees"></a>3.2.7 桌面应用与 Git Worktrees</h3><p><strong>桌面应用</strong> 提供独立应用，具有可视化差异审查、并行会话和集成连接器。</p>
+<p>核心功能：</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>差异视图</strong></td>
+<td>逐文件可视化审查，内联评论</td>
+</tr>
+<tr>
+<td><strong>应用预览</strong></td>
+<td>自动启动开发服务器和嵌入式浏览器</td>
+</tr>
+<tr>
+<td><strong>PR 监控</strong></td>
+<td>GitHub CLI 集成，自动修复 CI 失败</td>
+</tr>
+<tr>
+<td><strong>并行会话</strong></td>
+<td>侧边栏多会话，自动 Git worktree 隔离</td>
+</tr>
+<tr>
+<td><strong>定时任务</strong></td>
+<td>在应用打开时运行的周期性任务</td>
+</tr>
+</tbody></table>
+<p>从 CLI 切换：<code>/desktop</code></p>
+<p><strong>Git Worktrees</strong> 让你在隔离的 worktree 中启动 Claude Code：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">claude --worktree<br>claude -w<br></code></pre></td></tr></table></figure>
+
+<p>位置：<code>&lt;repo&gt;/.claude/worktrees/&lt;name&gt;</code></p>
+<p>单仓库稀疏检出：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;worktree&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;sparsePaths&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;packages/my-package&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;shared/&quot;</span><span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-8-沙箱与管理设置"><a href="#3-2-8-沙箱与管理设置" class="headerlink" title="3.2.8 沙箱与管理设置"></a>3.2.8 沙箱与管理设置</h3><p><strong>沙箱</strong> 为 Bash 命令提供操作系统级别的文件系统和网络隔离：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">claude --sandbox<br><span class="hljs-comment"># 或</span><br>/sandbox<br></code></pre></td></tr></table></figure>
+
+<p>配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;sandbox&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;enabled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;failIfUnavailable&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;filesystem&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;allowWrite&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;/Users/me/project&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;allowRead&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;/Users/me/project&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;/usr/local/lib&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;denyRead&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;/Users/me/.ssh&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;/Users/me/.aws&quot;</span><span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>管理设置</strong> 让企业管理员使用平台原生管理工具部署配置。</p>
+<p>部署方法：</p>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>方法</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>macOS</td>
+<td>托管 plist 文件 (MDM)</td>
+<td>v2.1.51+</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>Windows 注册表</td>
+<td>v2.1.51+</td>
+</tr>
+<tr>
+<td>跨平台</td>
+<td>托管配置文件</td>
+<td>v2.1.51+</td>
+</tr>
+<tr>
+<td>跨平台</td>
+<td>托管 drop-ins (<code>managed-settings.d/</code>)</td>
+<td>v2.1.83+</td>
+</tr>
+</tbody></table>
+<p>托管 drop-ins 目录：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">~/.claude/managed-settings.d/<br>  <span class="hljs-number">00</span>-org-defaults.json<br>  <span class="hljs-number">10</span>-team-policies.json<br>  <span class="hljs-number">20</span>-project-overrides.json<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-9-代理团队"><a href="#3-2-9-代理团队" class="headerlink" title="3.2.9 代理团队"></a>3.2.9 代理团队</h3><p><strong>代理团队</strong>（实验性功能）让多个 Claude Code 实例协作完成任务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1<br></code></pre></td></tr></table></figure>
+
+<p>工作方式：团队领导协调整体任务，委派子任务；队友独立工作，各有自己的上下文窗口；共享任务列表实现队友间的自协调</p>
+<p>显示模式：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>in-process</code> (默认)</td>
+<td>队友在同一终端进程中运行</td>
+</tr>
+<tr>
+<td><code>tmux</code></td>
+<td>每个队友获得独立的分割窗格</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td>自动选择最佳显示模式</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">claude --teammate-mode tmux<br></code></pre></td></tr></table></figure>
+
+<p><strong>关键环境变量汇总：</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ANTHROPIC_MODEL</code></td>
+<td>覆盖默认模型</td>
+</tr>
+<tr>
+<td><code>MAX_THINKING_TOKENS</code></td>
+<td>思考 token 预算</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_EFFORT_LEVEL</code></td>
+<td>努力级别 (low&#x2F;medium&#x2F;high&#x2F;max)</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_DISABLE_AUTO_MEMORY</code></td>
+<td>禁用自动记忆</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_DISABLE_CRON</code></td>
+<td>禁用定时任务</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS</code></td>
+<td>启用代理团队</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_TASK_LIST_ID</code></td>
+<td>命名任务目录</td>
+</tr>
+<tr>
+<td><code>MAX_MCP_OUTPUT_TOKENS</code></td>
+<td>MCP 输出限制</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN">Claude Code 概述 - Claude Code Docs</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/twardoch/claude-howto">Claude How To - GitHub</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/" class="category-chain-item">代码笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/ClaudeCode/" class="print-no-link">#ClaudeCode</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Claude Code How - 学习笔记</div>
+      <div>https://yangfanbin.cn/代码笔记/Claude Code How - 学习笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yang Fanbin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/AI%20Agent%20%E5%B7%A5%E7%A8%8B%E5%B8%88%20%C2%B7%20FDE%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/" title="AI Agent 工程师 / FDE 学习计划">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">AI Agent 工程师 / FDE 学习计划</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%A3%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20Kubernetes%EF%BC%9A%E4%BB%8E%20ReplicaSet%20%E5%88%B0%20Deployment%20%E7%9A%84%E6%BB%9A%E5%8A%A8%E5%8F%91%E5%B8%83%E6%9C%BA%E5%88%B6%E4%B8%8E%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" title="深入理解 Kubernetes：从 ReplicaSet 到 Deployment 的滚动发布机制与原理解析">
+                        <span class="hidden-mobile">深入理解 Kubernetes：从 ReplicaSet 到 Deployment 的滚动发布机制与原理解析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
